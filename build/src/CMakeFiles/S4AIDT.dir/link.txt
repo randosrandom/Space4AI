@@ -1,0 +1,2 @@
+/usr/bin/ar qc libS4AIDT.a  CMakeFiles/S4AIDT.dir/Graph/Dag.cpp.o CMakeFiles/S4AIDT.dir/System/SystemData.cpp.o
+/usr/bin/ranlib libS4AIDT.a
