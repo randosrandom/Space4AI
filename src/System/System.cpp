@@ -70,11 +70,8 @@ namespace Space4AI
       const auto& partitions=system_data.components[system_data.comp_name_to_idx[comp]].get_partitions();
 
       // create and initialize demands_edge_vm_temp
-      #warning I don't like this hardcoded *2*. Yes, you have to hardcode anyway, since ResourceType::Edge MUST HAVE \
-      index 0, and VM index 1 (because I access the vector). However, to avoid this you should overload the function index, to manage \
-      the return value in {0,1} even if ResourceType::Edge is not 0 ...
 
-      DemandEdgeVMType::value_type demands_edge_vm_temp(2);
+      DemandEdgeVMType::value_type demands_edge_vm_temp(2); // "2" because it's only needed for Edge and VM (Rando: see warning on Runtime_version_2)
 
       for (size_t i=0; i < demands_edge_vm_temp.size(); ++i)
       {
@@ -82,21 +79,21 @@ namespace Space4AI
 
         for(auto& res_vec: demands_edge_vm_temp[i])
           res_vec.resize(
-            system_data.resources.get_number_resources(i),
+            system_data.all_resources.get_number_resources(i),
             std::numeric_limits<TimeType>::quiet_NaN()
           );
       }
 
       // create and initialize perf_temp
       PerformanceType::value_type perf_temp(
-        index(ResourceType::Count)
+        ResIdxFromType(ResourceType::Count)
       );
       for(std::size_t i = 0; i < perf_temp.size(); ++i)
       {
         perf_temp[i].resize( partitions.size() );
 
         for(auto& res_vec : perf_temp[i])
-          res_vec.resize(system_data.resources.get_number_resources(i));
+          res_vec.resize(system_data.all_resources.get_number_resources(i));
       }
 
       for(const auto& [part, part_data]: comp_data.items())
@@ -105,21 +102,21 @@ namespace Space4AI
         {
 
           const std::size_t comp_idx = system_data.comp_name_to_idx[comp];
-          const auto type_idx = index(system_data.res_name_to_type_and_idx[res].first);
+          const auto res_type_idx = ResIdxFromType(system_data.res_name_to_type_and_idx[res].first);
           const std::size_t part_idx = system_data.part_name_to_part_idx[comp+part];
           const auto res_idx = system_data.res_name_to_type_and_idx[res].second;
 
-          if(system_data.compatibility_matrix[comp_idx][type_idx][part_idx][res_idx])
+          if(system_data.compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
           {
             const std::string model = perf_data.at("model").get<std::string>();
 
-            perf_temp[type_idx][part_idx][res_idx] =
-              create_PE(model, perf_data);
+            perf_temp[res_type_idx][part_idx][res_idx] =
+              create_PE(model, perf_data, system_data, comp_idx, res_type_idx, part_idx, res_idx);
 
             // THINK ABOUT HOW TO AVOID THIS ...
             if(model == "QTedge" || model == "QTcloud")
             {
-              demands_edge_vm_temp[type_idx][part_idx][res_idx] = perf_data.at("demand").get<TimeType>();
+              demands_edge_vm_temp[res_type_idx][part_idx][res_idx] = perf_data.at("demand").get<TimeType>();
             }
           }
           else // non compatible
@@ -134,7 +131,9 @@ namespace Space4AI
           }
         }
       }
+
       this->performance.push_back(std::move(perf_temp));
+
       all_demands.push_back(std::move(demands_edge_vm_temp));
     }
 
@@ -162,48 +161,48 @@ namespace Space4AI
 
         for(auto& res_vec: demands_edge_vm_temp[i])
           res_vec.resize(
-            system_data.resources.get_number_resources(i),
+            system_data.all_resources.get_number_resources(i),
             std::numeric_limits<TimeType>::quiet_NaN()
           );
       }
 
       // create and initialize perf_temp
       PerformanceType::value_type perf_temp(
-        index(ResourceType::Count)
+        ResIdxFromType(ResourceType::Count)
       );
       for(std::size_t i = 0; i < perf_temp.size(); ++i)
       {
         perf_temp[i].resize( partitions.size() );
 
         for(auto& res_vec : perf_temp[i])
-          res_vec.resize(system_data.resources.get_number_resources(i));
+          res_vec.resize(system_data.all_resources.get_number_resources(i));
       }
       for(const auto& [part, part_data]: comp_data.items())
       {
         for(const auto& [res, dem_time] : part_data.items())
         {
           const std::size_t comp_idx = system_data.comp_name_to_idx[comp];
-          const auto type_idx = index(system_data.res_name_to_type_and_idx[res].first);
+          const auto res_type_idx = ResIdxFromType(system_data.res_name_to_type_and_idx[res].first);
           const std::size_t part_idx = system_data.part_name_to_part_idx[comp+part];
           const auto res_idx = system_data.res_name_to_type_and_idx[res].second;
 
-          if(system_data.compatibility_matrix[comp_idx][type_idx][part_idx][res_idx])
+          if(system_data.compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
           {
-            if(type_idx == index(ResourceType::Faas))
+            if(res_type_idx == ResIdxFromType(ResourceType::Faas))
             {
-              perf_temp[type_idx][part_idx][res_idx] =
+              perf_temp[res_type_idx][part_idx][res_idx] =
                 std::make_unique<FaasPacsltkStaticPE>(
                   "PACSLTKSTATIC", false, dem_time[0].get<TimeType>(), dem_time[1].get<TimeType>(),
-                  system_data.resources.get_resources<ResourceType::Faas>(res_idx).get_idle_time_before_kill(),
+                  system_data.all_resources.get_resource<ResourceType::Faas>(res_idx).get_idle_time_before_kill(),
                   partitions[part_idx].get_part_lambda()
                 );
             }
             else
             {
-              perf_temp[type_idx][part_idx][res_idx] =
+              perf_temp[res_type_idx][part_idx][res_idx] =
                 std::make_unique<QTPE>("QTcloud", true, dem_time.get<TimeType>());
 
-              demands_edge_vm_temp[type_idx][part_idx][res_idx] = dem_time.get<TimeType>();
+              demands_edge_vm_temp[res_type_idx][part_idx][res_idx] = dem_time.get<TimeType>();
             }
 
           }
@@ -219,7 +218,9 @@ namespace Space4AI
           }
         }
       }
+
       this->performance.push_back(std::move(perf_temp));
+
       all_demands.push_back(std::move(demands_edge_vm_temp));
     }
 

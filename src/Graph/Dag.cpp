@@ -15,7 +15,7 @@
 namespace Space4AI
 {
   void
-  DAG::ReadFromFile(  const nlohmann::json& dag_dict,
+  DAG::read_from_file(  const nlohmann::json& dag_dict,
                       const nlohmann::json& components_json)
   {
 
@@ -53,7 +53,7 @@ namespace Space4AI
     }
 
     // get ordered indexes by component position in DAG
-    std::vector<size_t> ordered_index = FindGraphOrder();
+    std::vector<size_t> ordered_index = find_graph_order();
 
     // assign the new indexes, so that they are ordered
     // E.g., if i<j => component i comes not after than component j!
@@ -84,7 +84,7 @@ namespace Space4AI
   }
 
   std::vector<size_t>
-  DAG::FindGraphOrder() const // Think about the recursive version!
+  DAG::find_graph_order() const // Think about the recursive version!
   {
     const size_t num_nodes = comp_name_to_idx.size();
 
@@ -116,7 +116,7 @@ namespace Space4AI
       {
         for(std::size_t i = 0; i < num_nodes; i++)
         {
-          if(!index_already_permuted[i] && InputEdges(i)[root_idx] > 0)
+          if(!index_already_permuted[i] && input_edges(i)[root_idx] > 0)
           {
             index_already_permuted[i] = true;
             permutation_for_order.push_back(i);
@@ -131,7 +131,7 @@ namespace Space4AI
   }
 
   const DagMatrixType::value_type&
-  DAG::InputEdges(size_t node) const
+  DAG::input_edges(size_t node) const
   {
     if(node < this->size())
       return dag_matrix[node];

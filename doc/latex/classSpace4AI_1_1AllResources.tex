@@ -1,0 +1,162 @@
+\hypertarget{classSpace4AI_1_1AllResources}{}\doxysection{Space4\+AI\+::All\+Resources Class Reference}
+\label{classSpace4AI_1_1AllResources}\index{Space4AI::AllResources@{Space4AI::AllResources}}
+
+
+Class to store all type of the resources as a single \char`\"{}container\char`\"{}.  
+
+
+
+
+{\ttfamily \#include $<$Resources.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::All\+Resources\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classSpace4AI_1_1AllResources__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpace4AI_1_1AllResources_a6496d32bb45cceee355ac162a348353f}{All\+Resources}} ()
+\begin{DoxyCompactList}\small\item\em All\+All\+Resources constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a5dd5abfffe31be725b167f96241e63a4}\label{classSpace4AI_1_1AllResources_a5dd5abfffe31be725b167f96241e63a4}} 
+{\footnotesize template$<$class T $>$ }\\void \mbox{\hyperlink{classSpace4AI_1_1AllResources_a5dd5abfffe31be725b167f96241e63a4}{add\+\_\+resource}} (T \&\&resource)
+\begin{DoxyCompactList}\small\item\em Template method that add the passed resources of type T in the corresponding container. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a5434ae9579c38613de5a77381de28c99}\label{classSpace4AI_1_1AllResources_a5434ae9579c38613de5a77381de28c99}} 
+{\footnotesize template$<$Resource\+Type T$>$ }\\const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}$<$ T $>$ $>$ \& \mbox{\hyperlink{classSpace4AI_1_1AllResources_a5434ae9579c38613de5a77381de28c99}{get\+\_\+resources}} () const
+\begin{DoxyCompactList}\small\item\em Template getter that returns all the resources of type T. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a9c2d53f1f7603c396d6abe861775e881}\label{classSpace4AI_1_1AllResources_a9c2d53f1f7603c396d6abe861775e881}} 
+{\footnotesize template$<$Resource\+Type T$>$ }\\const \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}$<$ T $>$ \& \mbox{\hyperlink{classSpace4AI_1_1AllResources_a9c2d53f1f7603c396d6abe861775e881}{get\+\_\+resource}} (size\+\_\+t) const
+\begin{DoxyCompactList}\small\item\em Template getter that returns the resource of type T with given index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_ac6474b37e944872d4936f208cd592d2c}\label{classSpace4AI_1_1AllResources_ac6474b37e944872d4936f208cd592d2c}} 
+std\+::string {\bfseries get\+\_\+name} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Type, size\+\_\+t res\+\_\+idx) const
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a163d552823c0fa3a18123a3c958e603f}\label{classSpace4AI_1_1AllResources_a163d552823c0fa3a18123a3c958e603f}} 
+std\+::string {\bfseries get\+\_\+description} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Type, size\+\_\+t res\+\_\+idx) const
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a210dbafb11fe9877769e607a7f66742e}\label{classSpace4AI_1_1AllResources_a210dbafb11fe9877769e607a7f66742e}} 
+size\+\_\+t \mbox{\hyperlink{classSpace4AI_1_1AllResources_a210dbafb11fe9877769e607a7f66742e}{get\+\_\+number\+\_\+resources}} (size\+\_\+t type\+\_\+idx) const
+\begin{DoxyCompactList}\small\item\em Method to get the total number of resources of the type corresponding to the type\+\_\+idx (see Resource\+Type num class in \mbox{\hyperlink{TypeTraits_8hpp}{Type\+Traits.\+hpp}}) \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classSpace4AI_1_1AllResources_ac2c9fbe85f36f8d9b6d798dc4f0ddc6c}{get\+\_\+cl\+\_\+name}} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Type, size\+\_\+t res\+\_\+idx) const
+\begin{DoxyCompactList}\small\item\em Method to get the computational layer of the passed resource. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{TypeTraits_8hpp_a3b3c608014fd17f69feee6de11ab1768}{Data\+Type}} \mbox{\hyperlink{classSpace4AI_1_1AllResources_ae67f79f0e327f92e10547a1f620e49fb}{get\+\_\+memory}} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Type, size\+\_\+t res\+\_\+idx) const
+\begin{DoxyCompactList}\small\item\em Method to get the memory of the passed resource. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{TypeTraits_8hpp_a937fa49b59541848e6576efa808d4936}{Cost\+Type}} \mbox{\hyperlink{classSpace4AI_1_1AllResources_a58806c70671055418897ee62fadd9cb0}{get\+\_\+cost}} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Type, size\+\_\+t res\+\_\+idx) const
+\begin{DoxyCompactList}\small\item\em Method to get the cost of the passed resource. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classSpace4AI_1_1AllResources_a6eb69afba2f07d554721d62ad87788f7}{get\+\_\+number\+\_\+avail}} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Type, size\+\_\+t res\+\_\+idx) const
+\begin{DoxyCompactList}\small\item\em Method to get the number\+\_\+avail of the passed resource. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_afe2a84490c50e549548b8631916b80d9}\label{classSpace4AI_1_1AllResources_afe2a84490c50e549548b8631916b80d9}} 
+{\footnotesize template$<$Resource\+Type T$>$ }\\const \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}$<$ T $>$ \& {\bfseries get\+\_\+resource} (std\+::size\+\_\+t idx) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a2312d4398f3196fb1cd3a800c2576d4e}\label{classSpace4AI_1_1AllResources_a2312d4398f3196fb1cd3a800c2576d4e}} 
+std\+::vector$<$ size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1AllResources_a2312d4398f3196fb1cd3a800c2576d4e}{number\+\_\+resources}}
+\begin{DoxyCompactList}\small\item\em Store for each type of resource, the number of resources of that type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a4343074ab0ce78cc3ac1fa3c4959c4e6}\label{classSpace4AI_1_1AllResources_a4343074ab0ce78cc3ac1fa3c4959c4e6}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}$<$ Resource\+Type\+::\+Edge $>$ $>$ \mbox{\hyperlink{classSpace4AI_1_1AllResources_a4343074ab0ce78cc3ac1fa3c4959c4e6}{edge\+\_\+resources}}
+\begin{DoxyCompactList}\small\item\em Edge resources vector. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a96d5ebbacae9594031f63e50d1ab15aa}\label{classSpace4AI_1_1AllResources_a96d5ebbacae9594031f63e50d1ab15aa}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}$<$ Resource\+Type\+::\+VM $>$ $>$ \mbox{\hyperlink{classSpace4AI_1_1AllResources_a96d5ebbacae9594031f63e50d1ab15aa}{vm\+\_\+resources}}
+\begin{DoxyCompactList}\small\item\em VM resources vector. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a99522609be315df37e43e4d575b20f15}\label{classSpace4AI_1_1AllResources_a99522609be315df37e43e4d575b20f15}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}$<$ Resource\+Type\+::\+Faas $>$ $>$ \mbox{\hyperlink{classSpace4AI_1_1AllResources_a99522609be315df37e43e4d575b20f15}{faas\+\_\+resources}}
+\begin{DoxyCompactList}\small\item\em Faas Resources vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to store all type of the resources as a single \char`\"{}container\char`\"{}. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_a6496d32bb45cceee355ac162a348353f}\label{classSpace4AI_1_1AllResources_a6496d32bb45cceee355ac162a348353f}} 
+\index{Space4AI::AllResources@{Space4AI::AllResources}!AllResources@{AllResources}}
+\index{AllResources@{AllResources}!Space4AI::AllResources@{Space4AI::AllResources}}
+\doxysubsubsection{\texorpdfstring{AllResources()}{AllResources()}}
+{\footnotesize\ttfamily Space4\+A\+I\+::\+All\+Resources\+::\+All\+Resources (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+All\+All\+Resources constructor. 
+
+Initialize number\+\_\+resources as a N-\/dimensional vector, where N is the number of different type of resources. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1AllResources_ac2c9fbe85f36f8d9b6d798dc4f0ddc6c}\label{classSpace4AI_1_1AllResources_ac2c9fbe85f36f8d9b6d798dc4f0ddc6c}} 
+\index{Space4AI::AllResources@{Space4AI::AllResources}!get\_cl\_name@{get\_cl\_name}}
+\index{get\_cl\_name@{get\_cl\_name}!Space4AI::AllResources@{Space4AI::AllResources}}
+\doxysubsubsection{\texorpdfstring{get\_cl\_name()}{get\_cl\_name()}}
+{\footnotesize\ttfamily std\+::string Space4\+A\+I\+::\+All\+Resources\+::get\+\_\+cl\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{Type,  }\item[{size\+\_\+t}]{res\+\_\+idx }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Method to get the computational layer of the passed resource. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Type} & \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} Type (either Edge or VM or Faas) \\
+\hline
+{\em res\+\_\+idx} & Index of the resource\\
+\hline
+\end{DoxyParams}
+This method is needed at runtime, when I don\textquotesingle{}t know with which type of resource I am dealing with. \mbox{\Hypertarget{classSpace4AI_1_1AllResources_a58806c70671055418897ee62fadd9cb0}\label{classSpace4AI_1_1AllResources_a58806c70671055418897ee62fadd9cb0}} 
+\index{Space4AI::AllResources@{Space4AI::AllResources}!get\_cost@{get\_cost}}
+\index{get\_cost@{get\_cost}!Space4AI::AllResources@{Space4AI::AllResources}}
+\doxysubsubsection{\texorpdfstring{get\_cost()}{get\_cost()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{TypeTraits_8hpp_a937fa49b59541848e6576efa808d4936}{Cost\+Type}} Space4\+A\+I\+::\+All\+Resources\+::get\+\_\+cost (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{Type,  }\item[{size\+\_\+t}]{res\+\_\+idx }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Method to get the cost of the passed resource. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Type} & \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} Type (either Edge, VM or Faas) \\
+\hline
+{\em res\+\_\+idx} & Index of the resource\\
+\hline
+\end{DoxyParams}
+This method is needed at runtime, when I don\textquotesingle{}t know with which type of resource I am dealing with. \mbox{\Hypertarget{classSpace4AI_1_1AllResources_ae67f79f0e327f92e10547a1f620e49fb}\label{classSpace4AI_1_1AllResources_ae67f79f0e327f92e10547a1f620e49fb}} 
+\index{Space4AI::AllResources@{Space4AI::AllResources}!get\_memory@{get\_memory}}
+\index{get\_memory@{get\_memory}!Space4AI::AllResources@{Space4AI::AllResources}}
+\doxysubsubsection{\texorpdfstring{get\_memory()}{get\_memory()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{TypeTraits_8hpp_a3b3c608014fd17f69feee6de11ab1768}{Data\+Type}} Space4\+A\+I\+::\+All\+Resources\+::get\+\_\+memory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{Type,  }\item[{size\+\_\+t}]{res\+\_\+idx }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Method to get the memory of the passed resource. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Type} & \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} Type (either Edge, VM or Faas) \\
+\hline
+{\em res\+\_\+idx} & Index of the resource\\
+\hline
+\end{DoxyParams}
+This method is needed at runtime, when I don\textquotesingle{}t know with which type of resource I am dealing with. \mbox{\Hypertarget{classSpace4AI_1_1AllResources_a6eb69afba2f07d554721d62ad87788f7}\label{classSpace4AI_1_1AllResources_a6eb69afba2f07d554721d62ad87788f7}} 
+\index{Space4AI::AllResources@{Space4AI::AllResources}!get\_number\_avail@{get\_number\_avail}}
+\index{get\_number\_avail@{get\_number\_avail}!Space4AI::AllResources@{Space4AI::AllResources}}
+\doxysubsubsection{\texorpdfstring{get\_number\_avail()}{get\_number\_avail()}}
+{\footnotesize\ttfamily size\+\_\+t Space4\+A\+I\+::\+All\+Resources\+::get\+\_\+number\+\_\+avail (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{Type,  }\item[{size\+\_\+t}]{res\+\_\+idx }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Method to get the number\+\_\+avail of the passed resource. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Type} & \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} Type (either Edge, VM or Faas) \\
+\hline
+{\em res\+\_\+idx} & Index of the resource\\
+\hline
+\end{DoxyParams}
+This method is needed at runtime, when I don\textquotesingle{}t know with which type of resource I am dealing with. Note that the method accept also Faas resources as input, even though Faas does not have the concept of available objects. Anyway, in such case, 1 is returned. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\mbox{\hyperlink{Resources_8hpp}{Resources.\+hpp}}\end{DoxyCompactItemize}

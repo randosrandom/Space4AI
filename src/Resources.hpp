@@ -7,17 +7,15 @@
 * \author giuliamazzeellee
 */
 
-#ifndef RESOURCES_HPP
-#define RESOURCES_HPP
+#ifndef RESOURCES_HPP_
+#define RESOURCES_HPP_
 
 #include "TypeTraits.hpp"
 
 namespace Space4AI
 {
-  /** Computational layer.
-  *
-  *   Class to represent a computational layer (namely a vector of resources of a
-  *   fixed type).
+  /** Class to represent a computational layer, namely a vector of resources of a
+  *   fixed type.
   */
   class ComputationalLayer
   {
@@ -30,7 +28,7 @@ namespace Space4AI
     * \param type_of_resources_ Type of resources in the layer (either Edge, Vm or Faas)
     */
 
-    ComputationalLayer(std::string name_, ResourceType type_of_resources_):
+    ComputationalLayer(const std::string& name_, ResourceType type_of_resources_):
     name(name_),
     type_of_resources(type_of_resources_),
     res_idxs({})
@@ -82,9 +80,9 @@ namespace Space4AI
     * \param n_cores_ Number of cores of the resource
     */
     Resource(
-      std::string name_,
-      std::string description_,
-      std::string cl_name_,
+      const std::string& name_,
+      const std::string& description_,
+      const std::string& cl_name_,
       CostType cost_,
       DataType memory_,
       size_t number_avail_,
@@ -145,9 +143,8 @@ namespace Space4AI
   };
 
   /**
-  * Template class to manage different type of resources.
-  *
-  * Specialization for Faas resources
+  * Specialization of the template class Resource<ResourceType Type> for FaaS
+  * resources
   */
   template <>
   class Resource<ResourceType::Faas>
@@ -166,9 +163,9 @@ namespace Space4AI
     * \param idle_time_before_kill_ How long does the platform keep the servers up after being idle
     */
     Resource(
-      std::string name_,
-      std::string description_,
-      std::string cl_name_,
+      const std::string& name_,
+      const std::string& description_,
+      const std::string& cl_name_,
       CostType cost_,
       DataType memory_,
       CostType transition_cost_,
@@ -228,19 +225,19 @@ namespace Space4AI
     const TimeType idle_time_before_kill;
   };
 
-  /*
-  * Resources class that store all type of the resources, as a single "container".
+  /**
+  * Class to store all type of the resources as a single "container".
   */
-  class Resources
+  class AllResources
   {
   public:
     /**
-    * Resources constructor.
+    * AllAllResources constructor.
     *
     * Initialize number_resources as a N-dimensional vector, where N is the
     * number of different type of resources.
     */
-    Resources(): number_resources(std::vector<size_t>(index(ResourceType::Count), 0))
+    AllResources(): number_resources(std::vector<size_t>(ResIdxFromType(ResourceType::Count), 0))
     {}
 
     /**
@@ -263,7 +260,7 @@ namespace Space4AI
     */
     template<ResourceType T>
     const Resource<T>&
-    get_resources(size_t) const;
+    get_resource(size_t) const;
 
     std::string
     get_name(ResourceType Type, size_t res_idx) const;
@@ -351,7 +348,7 @@ namespace Space4AI
 
   template <class T>
   void
-  Resources::add_resource(T&& resource)
+  AllResources::add_resource(T&& resource)
   {
     if constexpr(
       std::is_same_v<T, Resource<ResourceType::Edge>> // passed by lvalue
@@ -359,7 +356,7 @@ namespace Space4AI
       std::is_same_v<T, Resource<ResourceType::Edge>&&>) // passed by rvalue
       {
         edge_resources.emplace_back(std::forward<T>(resource));
-        number_resources[index(ResourceType::Edge)]++;
+        number_resources[ResIdxFromType(ResourceType::Edge)]++;
       }
 
     else if constexpr(
@@ -368,7 +365,7 @@ namespace Space4AI
       std::is_same_v<T, Resource<ResourceType::VM>&&>)
       {
         vm_resources.emplace_back(std::forward<T>(resource));
-        number_resources[index(ResourceType::VM)]++;
+        number_resources[ResIdxFromType(ResourceType::VM)]++;
       }
 
     else if constexpr(
@@ -377,7 +374,7 @@ namespace Space4AI
       std::is_same_v<T, Resource<ResourceType::Faas>&&>)
       {
         faas_resources.emplace_back(std::forward<T>(resource));
-        number_resources[index(ResourceType::Faas)]++;
+        number_resources[ResIdxFromType(ResourceType::Faas)]++;
       }
     else
       {
@@ -389,7 +386,7 @@ namespace Space4AI
 
   template<ResourceType T>
   const std::vector<Resource<T>>&
-  Resources::get_resources() const
+  AllResources::get_resources() const
   {
     if constexpr(T == ResourceType::Edge)
       return edge_resources;
@@ -410,7 +407,7 @@ namespace Space4AI
 
   template<ResourceType T>
   const Resource<T>&
-  Resources::get_resources(std::size_t idx) const
+  AllResources::get_resource(std::size_t idx) const
   {
     if constexpr(T == ResourceType::Edge)
       return edge_resources[idx];
@@ -430,7 +427,7 @@ namespace Space4AI
 
   inline
   std::string
-  Resources::get_name(ResourceType Type, size_t res_idx) const
+  AllResources::get_name(ResourceType Type, size_t res_idx) const
   {
     switch (Type)
     {
@@ -447,7 +444,7 @@ namespace Space4AI
 
   inline
   std::string
-  Resources::get_description(ResourceType Type, size_t res_idx) const
+  AllResources::get_description(ResourceType Type, size_t res_idx) const
   {
     switch (Type)
     {
@@ -466,7 +463,7 @@ namespace Space4AI
   // related to the function SystemPerformanceEvaluator::get_network_delay()
   inline
   std::string
-  Resources::get_cl_name(ResourceType Type, size_t res_idx) const
+  AllResources::get_cl_name(ResourceType Type, size_t res_idx) const
   {
     switch(Type)
     {
@@ -482,7 +479,7 @@ namespace Space4AI
 
   inline
   DataType
-  Resources::get_memory(ResourceType Type, size_t res_idx) const
+  AllResources::get_memory(ResourceType Type, size_t res_idx) const
   {
     switch (Type)
     {
@@ -498,7 +495,7 @@ namespace Space4AI
 
   inline
   CostType
-  Resources::get_cost(ResourceType Type, size_t res_idx) const
+  AllResources::get_cost(ResourceType Type, size_t res_idx) const
   {
     switch (Type)
     {
@@ -514,7 +511,7 @@ namespace Space4AI
 
   inline
   size_t
-  Resources::get_number_avail(ResourceType Type, size_t res_idx) const
+  AllResources::get_number_avail(ResourceType Type, size_t res_idx) const
   {
     switch (Type)
     {
@@ -532,4 +529,4 @@ namespace Space4AI
 
 } //namespace Space4AI
 
-#endif /* RESOURCES_HPP */
+#endif /* RESOURCES_HPP_ */

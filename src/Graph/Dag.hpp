@@ -23,9 +23,8 @@
 
 namespace Space4AI
 {
-  /** DAG
-  *
-  *   Class to represent a the transition probabilities of a Directed Acyclic Graph.
+  /** 
+  *   Class to represent the transition probabilities of a Directed Acyclic Graph.
   *
   *   Number of rows (equal to number of columns) represents the number of components.
   *   So, an object of type DAG, dag[i][j] of stores the probability to move
@@ -48,8 +47,8 @@ namespace Space4AI
     *                          extracted from the original configuration file.
     */
     void
-    ReadFromFile( const nlohmann::json& dag_dict,
-                  const nlohmann::json& components_json);
+    read_from_file( const nlohmann::json& dag_dict,
+                    const nlohmann::json& components_json);
 
     /** Method that returns the size of the DAG, namely the number of components */
     size_t
@@ -64,7 +63,7 @@ namespace Space4AI
     *          component indexed by node
     */
     const DagMatrixType::value_type&
-    InputEdges(size_t node) const;
+    input_edges(size_t node) const;
 
     /** dag matrix getter */
     const DagMatrixType&
@@ -93,7 +92,7 @@ namespace Space4AI
     *         alphabetical ordering)
     */
     std::vector<size_t>
-    FindGraphOrder() const;
+    find_graph_order() const;
 
   private:
 

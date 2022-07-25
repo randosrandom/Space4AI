@@ -1,0 +1,76 @@
+\hypertarget{classSpace4AI_1_1LocalConstraint}{}\doxysection{Space4\+AI\+::Local\+Constraint Class Reference}
+\label{classSpace4AI_1_1LocalConstraint}\index{Space4AI::LocalConstraint@{Space4AI::LocalConstraint}}
+
+
+\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}}.  
+
+
+
+
+{\ttfamily \#include $<$Local\+Constraint.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::Local\+Constraint\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classSpace4AI_1_1LocalConstraint__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint_a1267b53b2bad762703f250bb7d647ff6}{Local\+Constraint}} (std\+::size\+\_\+t comp\+\_\+idx\+\_\+, \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} res\+\_\+time\+\_\+)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} class constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_abb5d635857fcf983ae2babdcb07adfa3}\label{classSpace4AI_1_1LocalConstraint_abb5d635857fcf983ae2babdcb07adfa3}} 
+\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint_abb5d635857fcf983ae2babdcb07adfa3}{Local\+Constraint}} (\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} \&\&)=default
+\begin{DoxyCompactList}\small\item\em Bring back default move constructor and move assignment operator. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_a4b78dbd4863f8ed52f855d7e45924b94}\label{classSpace4AI_1_1LocalConstraint_a4b78dbd4863f8ed52f855d7e45924b94}} 
+\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} \& {\bfseries operator=} (\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} \&\&)=default
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_ab4a8bf3351e3aa9092da07283d473f92}\label{classSpace4AI_1_1LocalConstraint_ab4a8bf3351e3aa9092da07283d473f92}} 
+size\+\_\+t \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint_ab4a8bf3351e3aa9092da07283d473f92}{get\+\_\+comp\+\_\+idx}} () const
+\begin{DoxyCompactList}\small\item\em comp\+\_\+idx getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_a65bfb4da88b227a3cecad32142f51dab}\label{classSpace4AI_1_1LocalConstraint_a65bfb4da88b227a3cecad32142f51dab}} 
+\mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint_a65bfb4da88b227a3cecad32142f51dab}{get\+\_\+max\+\_\+res\+\_\+time}} () const
+\begin{DoxyCompactList}\small\item\em max\+\_\+res\+\_\+time getter \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_aa54c1c9be1cd4148cea15260e7e32353}\label{classSpace4AI_1_1LocalConstraint_aa54c1c9be1cd4148cea15260e7e32353}} 
+std\+::size\+\_\+t \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint_aa54c1c9be1cd4148cea15260e7e32353}{comp\+\_\+idx}}
+\begin{DoxyCompactList}\small\item\em Index of the component in the \mbox{\hyperlink{classSpace4AI_1_1SystemData_ac52defeb45b4e8d604363b970702458e}{System\+Data.\+components}} vector. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_aeb30b67bfdaa9d899e042517cdbc0582}\label{classSpace4AI_1_1LocalConstraint_aeb30b67bfdaa9d899e042517cdbc0582}} 
+\mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint_aeb30b67bfdaa9d899e042517cdbc0582}{max\+\_\+res\+\_\+time}}
+\begin{DoxyCompactList}\small\item\em Response time constraint. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}}. 
+
+class to represent a local constraint, i.\+e. a performance constraint for a single component. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1LocalConstraint_a1267b53b2bad762703f250bb7d647ff6}\label{classSpace4AI_1_1LocalConstraint_a1267b53b2bad762703f250bb7d647ff6}} 
+\index{Space4AI::LocalConstraint@{Space4AI::LocalConstraint}!LocalConstraint@{LocalConstraint}}
+\index{LocalConstraint@{LocalConstraint}!Space4AI::LocalConstraint@{Space4AI::LocalConstraint}}
+\doxysubsubsection{\texorpdfstring{LocalConstraint()}{LocalConstraint()}}
+{\footnotesize\ttfamily Space4\+A\+I\+::\+Local\+Constraint\+::\+Local\+Constraint (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{comp\+\_\+idx\+\_\+,  }\item[{\mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}}}]{res\+\_\+time\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} class constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em comp\+\_\+idx\+\_\+} & Index of the component in the \mbox{\hyperlink{classSpace4AI_1_1SystemData_ac52defeb45b4e8d604363b970702458e}{System\+Data.\+components}} vector \\
+\hline
+{\em res\+\_\+time\+\_\+} & Response time constraint \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Constraints/\mbox{\hyperlink{LocalConstraint_8hpp}{Local\+Constraint.\+hpp}}\end{DoxyCompactItemize}

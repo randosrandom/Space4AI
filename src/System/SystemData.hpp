@@ -53,7 +53,7 @@ namespace Space4AI
     *   \param configuration_file json object extracted from system_file
     */
     void
-    ReadJson(const nl::json& configuration_file);
+    read_json(const nl::json& configuration_file);
 
     /** DAG getter */
     const DAG&
@@ -70,6 +70,10 @@ namespace Space4AI
     /** components getter */
     const std::vector<Component>&
     get_components() const { return components; }
+
+    /** component getter by idx */
+    const Component&
+    get_component(size_t comp_idx) const { return components[comp_idx]; }
 
     /** comp_name_to_idx getter */
     const std::unordered_map<std::string, std::size_t>&
@@ -88,8 +92,8 @@ namespace Space4AI
     get_cls() const {return cls;}
 
     /** resources getter */
-    const Resources&
-    get_resources() const {return resources;}
+    const AllResources&
+    get_all_resources() const {return all_resources;}
 
     /** res_name_to_type_and_idx getter */
     const std::unordered_map<std::string, std::pair<ResourceType, std::size_t>>&
@@ -127,7 +131,7 @@ namespace Space4AI
     *                          the description of the components
     */
     void
-    InitializeComponents(const nl::json& components_json);
+    initialize_components(const nl::json& components_json);
 
     /** Method to initialize the resources
     *
@@ -136,7 +140,7 @@ namespace Space4AI
     */
     template<ResourceType Type>
     void
-    InitializeResources(const nl::json& resources_json);
+    initialize_resources(const nl::json& resources_json);
 
     /** Method to initialize the compatibility matrix
     *
@@ -144,7 +148,7 @@ namespace Space4AI
     *                           the description of the compatibility matrix
     */
     void
-    InitializeCompatibilityMatrix(const nl::json& comp_matrix_json);
+    initialize_compatibility_matrix(const nl::json& comp_matrix_json);
 
     /** Method to initialize the network technology
     *
@@ -152,7 +156,7 @@ namespace Space4AI
     *                                  the description of the network technology
     */
     void
-    InitializeNetworkTechnology(const nl::json& network_technology_json);
+    initialize_network_technology(const nl::json& network_technology_json);
 
     /** Method to initialize the local constraints
     *
@@ -160,7 +164,7 @@ namespace Space4AI
     *                                 the description of the local constraints
     */
     void
-    InitializeLocalConstraints(const nl::json& local_constraints_json);
+    initialize_local_constraints(const nl::json& local_constraints_json);
 
     /** Method to initialize the global constraints
     *
@@ -168,7 +172,7 @@ namespace Space4AI
     *                                  the description of the global constraints
     */
     void
-    InitializeGlobalConstraints(const nl::json& global_constraints_json);
+    Initialize_global_constraints(const nl::json& global_constraints_json);
 
   private:
 
@@ -182,7 +186,7 @@ namespace Space4AI
     *                    the partitions of a specific component
     */
     std::map<size_t, std::string>
-    FindOrderParts(const nl::json& parts_json) const;
+    find_order_parts(const nl::json& parts_json) const;
 
   private:
 
@@ -225,11 +229,11 @@ namespace Space4AI
     */
     std::vector<std::vector<ComputationalLayer>> cls;
 
-    /** Object storing all the resources */
-    Resources resources;
+    /** Object storing all the all_resources */
+    AllResources all_resources;
 
-    /** Map to obtain a resource's type and index in Resources.edge_resources or
-    *   Resources.VM_resources or Resources.Faas_resources, depending on its type, knowing its name
+    /** Map to obtain a resource's type and index in AllResources.edge_resources or
+    *   AllResources.VM_resources or AllResources.Faas_resources, depending on its type, knowing its name
     */
     std::unordered_map<std::string, std::pair<ResourceType, std::size_t>>
     res_name_to_type_and_idx;
@@ -271,13 +275,13 @@ namespace Space4AI
 
   template<ResourceType Type>
   void
-  SystemData::InitializeResources(const nl::json& resources_json)
+  SystemData::initialize_resources(const nl::json& resources_json)
   {
     std::size_t res_idx = 0;
 
     for(const auto& [cl, data]: resources_json.items())
     {
-      this->cls[index(Type)].emplace_back(cl, Type);
+      this->cls[ResIdxFromType(Type)].emplace_back(cl, Type);
 
       for(const auto& [res_name, res_data]: data.items())
       {
@@ -305,9 +309,9 @@ namespace Space4AI
           std::make_pair(Type, res_idx)
         );
 
-        this->cls[index(Type)].back().add_resource(res_idx++);
+        this->cls[ResIdxFromType(Type)].back().add_resource(res_idx++);
 
-        this->resources.add_resource(std::move(res));
+        this->all_resources.add_resource(std::move(res));
       }
     }
   }
@@ -315,7 +319,7 @@ namespace Space4AI
   template<>
   inline
   void
-  SystemData::InitializeResources<ResourceType::Faas>(const nl::json& faas_json)
+  SystemData::initialize_resources<ResourceType::Faas>(const nl::json& faas_json)
   {
     std::size_t res_idx = 0;
     double transition_cost = 0;
@@ -329,7 +333,7 @@ namespace Space4AI
         continue;
       }
 
-      this->cls[index(ResourceType::Faas)].emplace_back(key, ResourceType::Faas); // only one computational layer for faas!
+      this->cls[ResIdxFromType(ResourceType::Faas)].emplace_back(key, ResourceType::Faas); // only one computational layer for faas!
 
       for(const auto& [res_name, res_data]: data.items())
       {
@@ -362,9 +366,9 @@ namespace Space4AI
           std::make_pair(ResourceType::Faas, res_idx)
         );
 
-        this->cls[index(ResourceType::Faas)].back().add_resource(res_idx++);
+        this->cls[ResIdxFromType(ResourceType::Faas)].back().add_resource(res_idx++);
 
-        this->resources.add_resource(std::move(res));
+        this->all_resources.add_resource(std::move(res));
       }
     }
   }

@@ -125,6 +125,33 @@ S4AIDT/fast:
 	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/build
 .PHONY : S4AIDT/fast
 
+Algorithms/RandomGreedyDT.o: Algorithms/RandomGreedyDT.cpp.o
+
+.PHONY : Algorithms/RandomGreedyDT.o
+
+# target to build an object file
+Algorithms/RandomGreedyDT.cpp.o:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Algorithms/RandomGreedyDT.cpp.o
+.PHONY : Algorithms/RandomGreedyDT.cpp.o
+
+Algorithms/RandomGreedyDT.i: Algorithms/RandomGreedyDT.cpp.i
+
+.PHONY : Algorithms/RandomGreedyDT.i
+
+# target to preprocess a source file
+Algorithms/RandomGreedyDT.cpp.i:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Algorithms/RandomGreedyDT.cpp.i
+.PHONY : Algorithms/RandomGreedyDT.cpp.i
+
+Algorithms/RandomGreedyDT.s: Algorithms/RandomGreedyDT.cpp.s
+
+.PHONY : Algorithms/RandomGreedyDT.s
+
+# target to generate assembly for a file
+Algorithms/RandomGreedyDT.cpp.s:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Algorithms/RandomGreedyDT.cpp.s
+.PHONY : Algorithms/RandomGreedyDT.cpp.s
+
 Graph/Dag.o: Graph/Dag.cpp.o
 
 .PHONY : Graph/Dag.o
@@ -151,6 +178,141 @@ Graph/Dag.s: Graph/Dag.cpp.s
 Graph/Dag.cpp.s:
 	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Graph/Dag.cpp.s
 .PHONY : Graph/Dag.cpp.s
+
+Performance/PerformanceModels.o: Performance/PerformanceModels.cpp.o
+
+.PHONY : Performance/PerformanceModels.o
+
+# target to build an object file
+Performance/PerformanceModels.cpp.o:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Performance/PerformanceModels.cpp.o
+.PHONY : Performance/PerformanceModels.cpp.o
+
+Performance/PerformanceModels.i: Performance/PerformanceModels.cpp.i
+
+.PHONY : Performance/PerformanceModels.i
+
+# target to preprocess a source file
+Performance/PerformanceModels.cpp.i:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Performance/PerformanceModels.cpp.i
+.PHONY : Performance/PerformanceModels.cpp.i
+
+Performance/PerformanceModels.s: Performance/PerformanceModels.cpp.s
+
+.PHONY : Performance/PerformanceModels.s
+
+# target to generate assembly for a file
+Performance/PerformanceModels.cpp.s:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Performance/PerformanceModels.cpp.s
+.PHONY : Performance/PerformanceModels.cpp.s
+
+Performance/SystemPE.o: Performance/SystemPE.cpp.o
+
+.PHONY : Performance/SystemPE.o
+
+# target to build an object file
+Performance/SystemPE.cpp.o:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Performance/SystemPE.cpp.o
+.PHONY : Performance/SystemPE.cpp.o
+
+Performance/SystemPE.i: Performance/SystemPE.cpp.i
+
+.PHONY : Performance/SystemPE.i
+
+# target to preprocess a source file
+Performance/SystemPE.cpp.i:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Performance/SystemPE.cpp.i
+.PHONY : Performance/SystemPE.cpp.i
+
+Performance/SystemPE.s: Performance/SystemPE.cpp.s
+
+.PHONY : Performance/SystemPE.s
+
+# target to generate assembly for a file
+Performance/SystemPE.cpp.s:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Performance/SystemPE.cpp.s
+.PHONY : Performance/SystemPE.cpp.s
+
+Solution/EliteResult.o: Solution/EliteResult.cpp.o
+
+.PHONY : Solution/EliteResult.o
+
+# target to build an object file
+Solution/EliteResult.cpp.o:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Solution/EliteResult.cpp.o
+.PHONY : Solution/EliteResult.cpp.o
+
+Solution/EliteResult.i: Solution/EliteResult.cpp.i
+
+.PHONY : Solution/EliteResult.i
+
+# target to preprocess a source file
+Solution/EliteResult.cpp.i:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Solution/EliteResult.cpp.i
+.PHONY : Solution/EliteResult.cpp.i
+
+Solution/EliteResult.s: Solution/EliteResult.cpp.s
+
+.PHONY : Solution/EliteResult.s
+
+# target to generate assembly for a file
+Solution/EliteResult.cpp.s:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Solution/EliteResult.cpp.s
+.PHONY : Solution/EliteResult.cpp.s
+
+Solution/Solution.o: Solution/Solution.cpp.o
+
+.PHONY : Solution/Solution.o
+
+# target to build an object file
+Solution/Solution.cpp.o:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Solution/Solution.cpp.o
+.PHONY : Solution/Solution.cpp.o
+
+Solution/Solution.i: Solution/Solution.cpp.i
+
+.PHONY : Solution/Solution.i
+
+# target to preprocess a source file
+Solution/Solution.cpp.i:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Solution/Solution.cpp.i
+.PHONY : Solution/Solution.cpp.i
+
+Solution/Solution.s: Solution/Solution.cpp.s
+
+.PHONY : Solution/Solution.s
+
+# target to generate assembly for a file
+Solution/Solution.cpp.s:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/Solution/Solution.cpp.s
+.PHONY : Solution/Solution.cpp.s
+
+System/System.o: System/System.cpp.o
+
+.PHONY : System/System.o
+
+# target to build an object file
+System/System.cpp.o:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/System/System.cpp.o
+.PHONY : System/System.cpp.o
+
+System/System.i: System/System.cpp.i
+
+.PHONY : System/System.i
+
+# target to preprocess a source file
+System/System.cpp.i:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/System/System.cpp.i
+.PHONY : System/System.cpp.i
+
+System/System.s: System/System.cpp.s
+
+.PHONY : System/System.s
+
+# target to generate assembly for a file
+System/System.cpp.s:
+	cd /home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/build && $(MAKE) -f src/CMakeFiles/S4AIDT.dir/build.make src/CMakeFiles/S4AIDT.dir/System/System.cpp.s
+.PHONY : System/System.cpp.s
 
 System/SystemData.o: System/SystemData.cpp.o
 
@@ -188,9 +350,27 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... S4AIDT"
+	@echo "... Algorithms/RandomGreedyDT.o"
+	@echo "... Algorithms/RandomGreedyDT.i"
+	@echo "... Algorithms/RandomGreedyDT.s"
 	@echo "... Graph/Dag.o"
 	@echo "... Graph/Dag.i"
 	@echo "... Graph/Dag.s"
+	@echo "... Performance/PerformanceModels.o"
+	@echo "... Performance/PerformanceModels.i"
+	@echo "... Performance/PerformanceModels.s"
+	@echo "... Performance/SystemPE.o"
+	@echo "... Performance/SystemPE.i"
+	@echo "... Performance/SystemPE.s"
+	@echo "... Solution/EliteResult.o"
+	@echo "... Solution/EliteResult.i"
+	@echo "... Solution/EliteResult.s"
+	@echo "... Solution/Solution.o"
+	@echo "... Solution/Solution.i"
+	@echo "... Solution/Solution.s"
+	@echo "... System/System.o"
+	@echo "... System/System.i"
+	@echo "... System/System.s"
 	@echo "... System/SystemData.o"
 	@echo "... System/SystemData.i"
 	@echo "... System/SystemData.s"

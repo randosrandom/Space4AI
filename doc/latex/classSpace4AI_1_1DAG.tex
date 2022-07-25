@@ -1,0 +1,142 @@
+\hypertarget{classSpace4AI_1_1DAG}{}\doxysection{Space4\+AI\+::D\+AG Class Reference}
+\label{classSpace4AI_1_1DAG}\index{Space4AI::DAG@{Space4AI::DAG}}
+
+
+Class to represent the transition probabilities of a Directed Acyclic Graph.  
+
+
+
+
+{\ttfamily \#include $<$Dag.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::D\+AG\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classSpace4AI_1_1DAG__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSpace4AI_1_1DAG_a63798234c78e023f32037fc8753f62e7}{read\+\_\+from\+\_\+file}} (const nlohmann\+::json \&dag\+\_\+dict, const nlohmann\+::json \&components\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to generate a \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} object starting from the description provided in a json object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a2282a9a5009f899942ec31aa6cd2e104}\label{classSpace4AI_1_1DAG_a2282a9a5009f899942ec31aa6cd2e104}} 
+size\+\_\+t \mbox{\hyperlink{classSpace4AI_1_1DAG_a2282a9a5009f899942ec31aa6cd2e104}{size}} () const
+\begin{DoxyCompactList}\small\item\em Method that returns the size of the \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}, namely the number of components. \end{DoxyCompactList}\item 
+const Dag\+Matrix\+Type\+::value\+\_\+type \& \mbox{\hyperlink{classSpace4AI_1_1DAG_a218273e70a5324ec66efa11cd57f19d3}{input\+\_\+edges}} (size\+\_\+t node) const
+\begin{DoxyCompactList}\small\item\em Method that returns the transition probabilities of the input edges of a node. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a2ff959f05636d27cb8c75c3133a218ec}\label{classSpace4AI_1_1DAG_a2ff959f05636d27cb8c75c3133a218ec}} 
+const \mbox{\hyperlink{TypeTraits_8hpp_aff7d85774ad00e936056cacf0d531d71}{Dag\+Matrix\+Type}} \& \mbox{\hyperlink{classSpace4AI_1_1DAG_a2ff959f05636d27cb8c75c3133a218ec}{get\+\_\+dag\+\_\+matrix}} () const
+\begin{DoxyCompactList}\small\item\em dag matrix getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a183820ddffe056c2104be5f1c3c36da2}\label{classSpace4AI_1_1DAG_a183820ddffe056c2104be5f1c3c36da2}} 
+const std\+::unordered\+\_\+map$<$ std\+::string, size\+\_\+t $>$ \& \mbox{\hyperlink{classSpace4AI_1_1DAG_a183820ddffe056c2104be5f1c3c36da2}{get\+\_\+comp\+\_\+name\+\_\+to\+\_\+idx}} () const
+\begin{DoxyCompactList}\small\item\em getter of the hash map from component name to component index \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a6230562e56e21119afb104351d2b379b}\label{classSpace4AI_1_1DAG_a6230562e56e21119afb104351d2b379b}} 
+const std\+::map$<$ size\+\_\+t, std\+::string $>$ \& \mbox{\hyperlink{classSpace4AI_1_1DAG_a6230562e56e21119afb104351d2b379b}{get\+\_\+idx\+\_\+to\+\_\+comp\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em getter of the ordered map from component index to component name \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1DAG_a8904744308699b80f74a2dc4397e85b3}{find\+\_\+graph\+\_\+order}} () const
+\begin{DoxyCompactList}\small\item\em Method used to find the right ordering of the component. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{TypeTraits_8hpp_aff7d85774ad00e936056cacf0d531d71}{Dag\+Matrix\+Type}} \mbox{\hyperlink{classSpace4AI_1_1DAG_a95545840ced17800daebeefe0030aeb5}{dag\+\_\+matrix}}
+\begin{DoxyCompactList}\small\item\em Matrix of transition probabilities. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a3ef662fc491e39d35996c8c9baec01cd}\label{classSpace4AI_1_1DAG_a3ef662fc491e39d35996c8c9baec01cd}} 
+std\+::unordered\+\_\+map$<$ std\+::string, size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1DAG_a3ef662fc491e39d35996c8c9baec01cd}{comp\+\_\+name\+\_\+to\+\_\+idx}}
+\begin{DoxyCompactList}\small\item\em Hash map from component name to the assigned index. \end{DoxyCompactList}\item 
+std\+::map$<$ size\+\_\+t, std\+::string $>$ \mbox{\hyperlink{classSpace4AI_1_1DAG_a6329ed39f58bb34c0753f1d91d333d99}{idx\+\_\+to\+\_\+comp\+\_\+name}}
+\begin{DoxyCompactList}\small\item\em Ordered map from index to component name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to represent the transition probabilities of a Directed Acyclic Graph. 
+
+Number of rows (equal to number of columns) represents the number of components. So, an object of type \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}, dag\mbox{[}i\mbox{]}\mbox{[}j\mbox{]} of stores the probability to move from component j to component i. The class have methods that automatically find the order fo the components of the graph from the json, and have data members that assign to each component an representative index. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a8904744308699b80f74a2dc4397e85b3}\label{classSpace4AI_1_1DAG_a8904744308699b80f74a2dc4397e85b3}} 
+\index{Space4AI::DAG@{Space4AI::DAG}!find\_graph\_order@{find\_graph\_order}}
+\index{find\_graph\_order@{find\_graph\_order}!Space4AI::DAG@{Space4AI::DAG}}
+\doxysubsubsection{\texorpdfstring{find\_graph\_order()}{find\_graph\_order()}}
+{\footnotesize\ttfamily std\+::vector$<$ size\+\_\+t $>$ Space4\+A\+I\+::\+D\+A\+G\+::find\+\_\+graph\+\_\+order (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method used to find the right ordering of the component. 
+
+R\+FC 7159 standard states that J\+S\+ON is an unordered collection of elements, and typical parsers travers the elements using aplhabetical order. However, this is quite dangerous since, naming should be assigned taking care of the order. This method instead find the exact order (of course, expoliting appropriate fields of the configuration file) the right order of the components in the \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}, regardless their names.
+
+\begin{DoxyReturn}{Returns}
+Vector of permuted index (wrt to the canonical indexes assigned with alphabetical ordering) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a218273e70a5324ec66efa11cd57f19d3}\label{classSpace4AI_1_1DAG_a218273e70a5324ec66efa11cd57f19d3}} 
+\index{Space4AI::DAG@{Space4AI::DAG}!input\_edges@{input\_edges}}
+\index{input\_edges@{input\_edges}!Space4AI::DAG@{Space4AI::DAG}}
+\doxysubsubsection{\texorpdfstring{input\_edges()}{input\_edges()}}
+{\footnotesize\ttfamily const Dag\+Matrix\+Type\+::value\+\_\+type \& Space4\+A\+I\+::\+D\+A\+G\+::input\+\_\+edges (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{node }\end{DoxyParamCaption}) const}
+
+
+
+Method that returns the transition probabilities of the input edges of a node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Index of the input node node \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector of the transition probabilies from all components to the component indexed by node 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a63798234c78e023f32037fc8753f62e7}\label{classSpace4AI_1_1DAG_a63798234c78e023f32037fc8753f62e7}} 
+\index{Space4AI::DAG@{Space4AI::DAG}!read\_from\_file@{read\_from\_file}}
+\index{read\_from\_file@{read\_from\_file}!Space4AI::DAG@{Space4AI::DAG}}
+\doxysubsubsection{\texorpdfstring{read\_from\_file()}{read\_from\_file()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+D\+A\+G\+::read\+\_\+from\+\_\+file (\begin{DoxyParamCaption}\item[{const nlohmann\+::json \&}]{dag\+\_\+dict,  }\item[{const nlohmann\+::json \&}]{components\+\_\+json }\end{DoxyParamCaption})}
+
+
+
+Method to generate a \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} object starting from the description provided in a json object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dag\+\_\+dict} & Object of type json extracted from configuration\+\_\+file containing data for the \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}\\
+\hline
+{\em components\+\_\+json} & Object of type json containing data about components extracted from the original configuration file. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1DAG_a95545840ced17800daebeefe0030aeb5}\label{classSpace4AI_1_1DAG_a95545840ced17800daebeefe0030aeb5}} 
+\index{Space4AI::DAG@{Space4AI::DAG}!dag\_matrix@{dag\_matrix}}
+\index{dag\_matrix@{dag\_matrix}!Space4AI::DAG@{Space4AI::DAG}}
+\doxysubsubsection{\texorpdfstring{dag\_matrix}{dag\_matrix}}
+{\footnotesize\ttfamily \mbox{\hyperlink{TypeTraits_8hpp_aff7d85774ad00e936056cacf0d531d71}{Dag\+Matrix\+Type}} Space4\+A\+I\+::\+D\+A\+G\+::dag\+\_\+matrix\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Matrix of transition probabilities. 
+
+dag\+\_\+matrix\mbox{[}i\mbox{]}\mbox{[}j\mbox{]} stores the transition probability from node j to node i. \mbox{\Hypertarget{classSpace4AI_1_1DAG_a6329ed39f58bb34c0753f1d91d333d99}\label{classSpace4AI_1_1DAG_a6329ed39f58bb34c0753f1d91d333d99}} 
+\index{Space4AI::DAG@{Space4AI::DAG}!idx\_to\_comp\_name@{idx\_to\_comp\_name}}
+\index{idx\_to\_comp\_name@{idx\_to\_comp\_name}!Space4AI::DAG@{Space4AI::DAG}}
+\doxysubsubsection{\texorpdfstring{idx\_to\_comp\_name}{idx\_to\_comp\_name}}
+{\footnotesize\ttfamily std\+::map$<$size\+\_\+t, std\+::string$>$ Space4\+A\+I\+::\+D\+A\+G\+::idx\+\_\+to\+\_\+comp\+\_\+name\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Ordered map from index to component name. 
+
+It is useful when there is the need to sometihing in order 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Graph/\mbox{\hyperlink{Dag_8hpp}{Dag.\+hpp}}\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Graph/\mbox{\hyperlink{Dag_8cpp}{Dag.\+cpp}}\end{DoxyCompactItemize}

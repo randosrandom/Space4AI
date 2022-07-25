@@ -1,0 +1,327 @@
+\hypertarget{classSpace4AI_1_1SystemData}{}\doxysection{Space4\+AI\+::System\+Data Class Reference}
+\label{classSpace4AI_1_1SystemData}\index{Space4AI::SystemData@{Space4AI::SystemData}}
+
+
+\mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}}.  
+
+
+
+
+{\ttfamily \#include $<$System\+Data.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::System\+Data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classSpace4AI_1_1SystemData__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_ac3e3526aad0b9277d96829683085b261}{read\+\_\+json}} (const nl\+::json \&configuration\+\_\+file)
+\begin{DoxyCompactList}\small\item\em Method to populate all the memebers of \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ac83e488ac6f47540587d3e4dbe88b3ad}\label{classSpace4AI_1_1SystemData_ac83e488ac6f47540587d3e4dbe88b3ad}} 
+const \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_ac83e488ac6f47540587d3e4dbe88b3ad}{get\+\_\+dag}} () const
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} getter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_aee741160eae0dd22852f7af0ab30a96f}\label{classSpace4AI_1_1SystemData_aee741160eae0dd22852f7af0ab30a96f}} 
+\mbox{\hyperlink{TypeTraits_8hpp_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}} \mbox{\hyperlink{classSpace4AI_1_1SystemData_aee741160eae0dd22852f7af0ab30a96f}{get\+\_\+lambda}} () const
+\begin{DoxyCompactList}\small\item\em lambda getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a94d08609b53b83f796e9f751d0d2830f}\label{classSpace4AI_1_1SystemData_a94d08609b53b83f796e9f751d0d2830f}} 
+\mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1SystemData_a94d08609b53b83f796e9f751d0d2830f}{get\+\_\+time}} () const
+\begin{DoxyCompactList}\small\item\em time getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_abf84b882445431eafdbdf7541a2adcd5}\label{classSpace4AI_1_1SystemData_abf84b882445431eafdbdf7541a2adcd5}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_abf84b882445431eafdbdf7541a2adcd5}{get\+\_\+components}} () const
+\begin{DoxyCompactList}\small\item\em components getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a547076740eff9b65cbbf6fd963cb7ab5}\label{classSpace4AI_1_1SystemData_a547076740eff9b65cbbf6fd963cb7ab5}} 
+const \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a547076740eff9b65cbbf6fd963cb7ab5}{get\+\_\+component}} (size\+\_\+t comp\+\_\+idx) const
+\begin{DoxyCompactList}\small\item\em component getter by idx \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a583c009dc5acac3a6c9bdf1b621f8e4f}\label{classSpace4AI_1_1SystemData_a583c009dc5acac3a6c9bdf1b621f8e4f}} 
+const std\+::unordered\+\_\+map$<$ std\+::string, std\+::size\+\_\+t $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a583c009dc5acac3a6c9bdf1b621f8e4f}{get\+\_\+comp\+\_\+name\+\_\+to\+\_\+idx}} () const
+\begin{DoxyCompactList}\small\item\em comp\+\_\+name\+\_\+to\+\_\+idx getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_af33f8737825c5f9ee5ac454a5f17f756}\label{classSpace4AI_1_1SystemData_af33f8737825c5f9ee5ac454a5f17f756}} 
+const std\+::map$<$ size\+\_\+t, std\+::string $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_af33f8737825c5f9ee5ac454a5f17f756}{get\+\_\+idx\+\_\+to\+\_\+comp\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em idx\+\_\+to\+\_\+comp\+\_\+name getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_af60b9ab59d25af921bb9efb2dfe39236}\label{classSpace4AI_1_1SystemData_af60b9ab59d25af921bb9efb2dfe39236}} 
+const std\+::unordered\+\_\+map$<$ std\+::string, std\+::size\+\_\+t $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_af60b9ab59d25af921bb9efb2dfe39236}{get\+\_\+part\+\_\+name\+\_\+to\+\_\+part\+\_\+idx}} () const
+\begin{DoxyCompactList}\small\item\em part\+\_\+name\+\_\+to\+\_\+part\+\_\+idx getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a99f435ac260d8398c4ecce9110854abf}\label{classSpace4AI_1_1SystemData_a99f435ac260d8398c4ecce9110854abf}} 
+const std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer}{Computational\+Layer}} $>$ $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a99f435ac260d8398c4ecce9110854abf}{get\+\_\+cls}} () const
+\begin{DoxyCompactList}\small\item\em cls getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a2a4b880a635fc8f2e530054cf0a47505}\label{classSpace4AI_1_1SystemData_a2a4b880a635fc8f2e530054cf0a47505}} 
+const \mbox{\hyperlink{classSpace4AI_1_1AllResources}{All\+Resources}} \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a2a4b880a635fc8f2e530054cf0a47505}{get\+\_\+all\+\_\+resources}} () const
+\begin{DoxyCompactList}\small\item\em resources getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a799cafc8bcaccbd6ddc90b9bb0e1dc17}\label{classSpace4AI_1_1SystemData_a799cafc8bcaccbd6ddc90b9bb0e1dc17}} 
+const std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ \mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}, std\+::size\+\_\+t $>$ $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a799cafc8bcaccbd6ddc90b9bb0e1dc17}{get\+\_\+res\+\_\+name\+\_\+to\+\_\+type\+\_\+and\+\_\+idx}} () const
+\begin{DoxyCompactList}\small\item\em res\+\_\+name\+\_\+to\+\_\+type\+\_\+and\+\_\+idx getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a9c8c92ed5175eb54e037f45b041d0635}\label{classSpace4AI_1_1SystemData_a9c8c92ed5175eb54e037f45b041d0635}} 
+const Compatibility\+Matrix\+Type \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a9c8c92ed5175eb54e037f45b041d0635}{get\+\_\+compatibility\+\_\+matrix}} () const
+\begin{DoxyCompactList}\small\item\em compatibility matrix getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a2752deeabd16d93c11094ff533c47b5d}\label{classSpace4AI_1_1SystemData_a2752deeabd16d93c11094ff533c47b5d}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1NetworkDomain}{Network\+Domain}} $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a2752deeabd16d93c11094ff533c47b5d}{get\+\_\+network\+\_\+domains}} () const
+\begin{DoxyCompactList}\small\item\em network domains getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_aea541b71f5dace57d19a14430dde4989}\label{classSpace4AI_1_1SystemData_aea541b71f5dace57d19a14430dde4989}} 
+const std\+::unordered\+\_\+map$<$ std\+::string, std\+::vector$<$ std\+::size\+\_\+t $>$ $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_aea541b71f5dace57d19a14430dde4989}{get\+\_\+cl\+\_\+to\+\_\+network\+\_\+domains}} () const
+\begin{DoxyCompactList}\small\item\em cl\+\_\+to\+\_\+network\+\_\+domains getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a10cc34db46ec41f773a29f3ee1467bc5}\label{classSpace4AI_1_1SystemData_a10cc34db46ec41f773a29f3ee1467bc5}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a10cc34db46ec41f773a29f3ee1467bc5}{get\+\_\+local\+\_\+constraints}} () const
+\begin{DoxyCompactList}\small\item\em local constraints getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a11320e3b4d013ca332904c4df3363b86}\label{classSpace4AI_1_1SystemData_a11320e3b4d013ca332904c4df3363b86}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1GlobalConstraint}{Global\+Constraint}} $>$ \& \mbox{\hyperlink{classSpace4AI_1_1SystemData_a11320e3b4d013ca332904c4df3363b86}{get\+\_\+global\+\_\+constraints}} () const
+\begin{DoxyCompactList}\small\item\em global constraints getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ae153824cbc1e0e6cf248db62c1333b44}\label{classSpace4AI_1_1SystemData_ae153824cbc1e0e6cf248db62c1333b44}} 
+const std\+::unordered\+\_\+map$<$ std\+::string, std\+::size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_ae153824cbc1e0e6cf248db62c1333b44}{get\+\_\+gc\+\_\+name\+\_\+to\+\_\+idx}} () const
+\begin{DoxyCompactList}\small\item\em gc\+\_\+name\+\_\+to\+\_\+idx getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a7dfe5e678ea50a187bda4bfca4abc443}\label{classSpace4AI_1_1SystemData_a7dfe5e678ea50a187bda4bfca4abc443}} 
+\mbox{\hyperlink{classSpace4AI_1_1SystemData_a7dfe5e678ea50a187bda4bfca4abc443}{$\sim$\+System\+Data}} ()=default
+\begin{DoxyCompactList}\small\item\em Default destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a53be5ecf7ff859236f21dda17b49c9dc}\label{classSpace4AI_1_1SystemData_a53be5ecf7ff859236f21dda17b49c9dc}} 
+{\bfseries System\+Data} (const \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \&)=default
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_aa0cde529b259977105d590c27ba7925b}\label{classSpace4AI_1_1SystemData_aa0cde529b259977105d590c27ba7925b}} 
+\mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \& {\bfseries operator=} (const \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \&)=default
+\item 
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_a30d3e4cb6adeb63dc5ed1d47cb74b496}{initialize\+\_\+components}} (const nl\+::json \&components\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to initialize the components. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Resource\+Type Type$>$ }\\void \mbox{\hyperlink{classSpace4AI_1_1SystemData_a042e8f4b511726c90e647b506b34c57d}{initialize\+\_\+resources}} (const nl\+::json \&resources\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to initialize the resources. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_a68c78a5ecdea5920fa0d6bb7a2f56144}{initialize\+\_\+compatibility\+\_\+matrix}} (const nl\+::json \&comp\+\_\+matrix\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to initialize the compatibility matrix. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_ae4138f9b474fe561a8cd8f01c60e84d2}{initialize\+\_\+network\+\_\+technology}} (const nl\+::json \&network\+\_\+technology\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to initialize the network technology. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_afb8b86348e646ab51f896047550cfb3d}{initialize\+\_\+local\+\_\+constraints}} (const nl\+::json \&local\+\_\+constraints\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to initialize the local constraints. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_a796bce9cf73cb55993cc084d9c9483e0}{Initialize\+\_\+global\+\_\+constraints}} (const nl\+::json \&global\+\_\+constraints\+\_\+json)
+\begin{DoxyCompactList}\small\item\em Method to initialize the global constraints. \end{DoxyCompactList}\item 
+std\+::map$<$ size\+\_\+t, std\+::string $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_a5d9adf18813a61f1e0121b0f486c868d}{find\+\_\+order\+\_\+parts}} (const nl\+::json \&parts\+\_\+json) const
+\begin{DoxyCompactList}\small\item\em Method to find the order of the partition in the json, and assign to them increasing indexes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a4e55c4e2ea05c66cda75de2e8c9187c3}\label{classSpace4AI_1_1SystemData_a4e55c4e2ea05c66cda75de2e8c9187c3}} 
+\mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} \mbox{\hyperlink{classSpace4AI_1_1SystemData_a4e55c4e2ea05c66cda75de2e8c9187c3}{dag}}
+\begin{DoxyCompactList}\small\item\em Object to represent the Directed Acyclic Graph. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a919b32b83e1307a4a727691a5fdbd12f}\label{classSpace4AI_1_1SystemData_a919b32b83e1307a4a727691a5fdbd12f}} 
+\mbox{\hyperlink{TypeTraits_8hpp_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}} \mbox{\hyperlink{classSpace4AI_1_1SystemData_a919b32b83e1307a4a727691a5fdbd12f}{lambda}}
+\begin{DoxyCompactList}\small\item\em Incoming workload of the \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a7b4942c6d05c493f722c0cbae8052c58}\label{classSpace4AI_1_1SystemData_a7b4942c6d05c493f722c0cbae8052c58}} 
+\mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1SystemData_a7b4942c6d05c493f722c0cbae8052c58}{time}}
+\begin{DoxyCompactList}\small\item\em Object to keep track of the execution time. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ac52defeb45b4e8d604363b970702458e}\label{classSpace4AI_1_1SystemData_ac52defeb45b4e8d604363b970702458e}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_ac52defeb45b4e8d604363b970702458e}{components}}
+\begin{DoxyCompactList}\small\item\em Vector storing all the components in a ordered way. \end{DoxyCompactList}\item 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_a992be7c879d23e814316f9eb216bdf32}{comp\+\_\+name\+\_\+to\+\_\+idx}}
+\begin{DoxyCompactList}\small\item\em Hash map from component name to the assigned index. \end{DoxyCompactList}\item 
+std\+::map$<$ size\+\_\+t, std\+::string $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_a0d483fdf475f9537fff4f1b9833f875d}{idx\+\_\+to\+\_\+comp\+\_\+name}}
+\begin{DoxyCompactList}\small\item\em Ordered map from index to component name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a9520d497acc3ffd67cd4dbaceae6935c}\label{classSpace4AI_1_1SystemData_a9520d497acc3ffd67cd4dbaceae6935c}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_a9520d497acc3ffd67cd4dbaceae6935c}{part\+\_\+name\+\_\+to\+\_\+part\+\_\+idx}}
+\begin{DoxyCompactList}\small\item\em Map to obtain a partition\textquotesingle{}s index in the \mbox{\hyperlink{classSpace4AI_1_1Component_aa37aa50f1a1ad332f0b413e1fd550d96}{Component.\+partitions}} vector knowing its name and its component name\+: the key is comp\+\_\+name+part\+\_\+name. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer}{Computational\+Layer}} $>$ $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_ad5e24e1abf045dd4439bf9b72765b184}{cls}}
+\begin{DoxyCompactList}\small\item\em Object to store the computational layers for each resource type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a747ee91580d760aed4308db11e0ba0e3}\label{classSpace4AI_1_1SystemData_a747ee91580d760aed4308db11e0ba0e3}} 
+\mbox{\hyperlink{classSpace4AI_1_1AllResources}{All\+Resources}} \mbox{\hyperlink{classSpace4AI_1_1SystemData_a747ee91580d760aed4308db11e0ba0e3}{all\+\_\+resources}}
+\begin{DoxyCompactList}\small\item\em Object storing all the all\+\_\+resources. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ae564d4d170363dfa85c3876648332937}\label{classSpace4AI_1_1SystemData_ae564d4d170363dfa85c3876648332937}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ \mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}, std\+::size\+\_\+t $>$ $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_ae564d4d170363dfa85c3876648332937}{res\+\_\+name\+\_\+to\+\_\+type\+\_\+and\+\_\+idx}}
+\begin{DoxyCompactList}\small\item\em Map to obtain a resource\textquotesingle{}s type and index in \mbox{\hyperlink{classSpace4AI_1_1AllResources_a4343074ab0ce78cc3ac1fa3c4959c4e6}{All\+Resources.\+edge\+\_\+resources}} or All\+Resources.\+V\+M\+\_\+resources or All\+Resources.\+Faas\+\_\+resources, depending on its type, knowing its name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_af553768c53dc27eb04ac7b02e5640ac1}\label{classSpace4AI_1_1SystemData_af553768c53dc27eb04ac7b02e5640ac1}} 
+Compatibility\+Matrix\+Type \mbox{\hyperlink{classSpace4AI_1_1SystemData_af553768c53dc27eb04ac7b02e5640ac1}{compatibility\+\_\+matrix}}
+\begin{DoxyCompactList}\small\item\em Object storing the compatibility matrix. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a5e1d08f9d8518e0c81110c41b3cf1dd4}\label{classSpace4AI_1_1SystemData_a5e1d08f9d8518e0c81110c41b3cf1dd4}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1NetworkDomain}{Network\+Domain}} $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_a5e1d08f9d8518e0c81110c41b3cf1dd4}{network\+\_\+domains}}
+\begin{DoxyCompactList}\small\item\em Vector storing all the network domains. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_afdcbbfee6757e9a7324fcb872a2a27b8}\label{classSpace4AI_1_1SystemData_afdcbbfee6757e9a7324fcb872a2a27b8}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::vector$<$ std\+::size\+\_\+t $>$ $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_afdcbbfee6757e9a7324fcb872a2a27b8}{cl\+\_\+to\+\_\+network\+\_\+domains}}
+\begin{DoxyCompactList}\small\item\em Map to obtain the indexes of the network domains (in the network\+\_\+domains vector) that contain a certain computational layer (identified by its name) std\+::vector$<$std\+::size\+\_\+t$>$ should be ordered (since then it\textquotesingle{}ll be used std\+::intersect) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ac5341190fa19a7242c6d3fa9ab3de7cd}\label{classSpace4AI_1_1SystemData_ac5341190fa19a7242c6d3fa9ab3de7cd}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}} $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_ac5341190fa19a7242c6d3fa9ab3de7cd}{local\+\_\+constraints}}
+\begin{DoxyCompactList}\small\item\em Vector storing the local constraints. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a0a8da03da95af4116683f6b147faf1f5}\label{classSpace4AI_1_1SystemData_a0a8da03da95af4116683f6b147faf1f5}} 
+std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1GlobalConstraint}{Global\+Constraint}} $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_a0a8da03da95af4116683f6b147faf1f5}{global\+\_\+constraints}}
+\begin{DoxyCompactList}\small\item\em Vector storing the global constraints. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ab3a17067d031b0f34ff27f463f65103b}\label{classSpace4AI_1_1SystemData_ab3a17067d031b0f34ff27f463f65103b}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemData_ab3a17067d031b0f34ff27f463f65103b}{gc\+\_\+name\+\_\+to\+\_\+idx}}
+\begin{DoxyCompactList}\small\item\em Map to obtain a global constraint\textquotesingle{}s index in the global\+\_\+constraints vector knowing its name (that corresponds to the path\textquotesingle{}s name) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_af18a9ee98e70982bfe2975391d7221a5}\label{classSpace4AI_1_1SystemData_af18a9ee98e70982bfe2975391d7221a5}} 
+class {\bfseries System}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}}. 
+
+Class to store the data structures that define the system configuration described in the .json file except for the performance section 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a5d9adf18813a61f1e0121b0f486c868d}\label{classSpace4AI_1_1SystemData_a5d9adf18813a61f1e0121b0f486c868d}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!find\_order\_parts@{find\_order\_parts}}
+\index{find\_order\_parts@{find\_order\_parts}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{find\_order\_parts()}{find\_order\_parts()}}
+{\footnotesize\ttfamily std\+::map$<$ size\+\_\+t, std\+::string $>$ Space4\+A\+I\+::\+System\+Data\+::find\+\_\+order\+\_\+parts (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{parts\+\_\+json }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to find the order of the partition in the json, and assign to them increasing indexes. 
+
+Note that this ordering method is different from the one of the dag, since here only one partition can come after another, while for the dag, you can have multiple subsequents for each node.
+
+
+\begin{DoxyParams}{Parameters}
+{\em part\+\_\+json} & json object extracted from the configuration file, containing the partitions of a specific component \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a68c78a5ecdea5920fa0d6bb7a2f56144}\label{classSpace4AI_1_1SystemData_a68c78a5ecdea5920fa0d6bb7a2f56144}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!initialize\_compatibility\_matrix@{initialize\_compatibility\_matrix}}
+\index{initialize\_compatibility\_matrix@{initialize\_compatibility\_matrix}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{initialize\_compatibility\_matrix()}{initialize\_compatibility\_matrix()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+System\+Data\+::initialize\+\_\+compatibility\+\_\+matrix (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{comp\+\_\+matrix\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to initialize the compatibility matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em comp\+\_\+matrix\+\_\+json} & json object extracted from configuration\+\_\+file containing the description of the compatibility matrix \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a30d3e4cb6adeb63dc5ed1d47cb74b496}\label{classSpace4AI_1_1SystemData_a30d3e4cb6adeb63dc5ed1d47cb74b496}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!initialize\_components@{initialize\_components}}
+\index{initialize\_components@{initialize\_components}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{initialize\_components()}{initialize\_components()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+System\+Data\+::initialize\+\_\+components (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{components\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to initialize the components. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em components\+\_\+json} & json object extracted from configuration\+\_\+file containing the description of the components \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a796bce9cf73cb55993cc084d9c9483e0}\label{classSpace4AI_1_1SystemData_a796bce9cf73cb55993cc084d9c9483e0}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!Initialize\_global\_constraints@{Initialize\_global\_constraints}}
+\index{Initialize\_global\_constraints@{Initialize\_global\_constraints}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{Initialize\_global\_constraints()}{Initialize\_global\_constraints()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+System\+Data\+::\+Initialize\+\_\+global\+\_\+constraints (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{global\+\_\+constraints\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to initialize the global constraints. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em global\+\_\+constraints\+\_\+json} & json object extracted from configuration\+\_\+file containing the description of the global constraints \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_afb8b86348e646ab51f896047550cfb3d}\label{classSpace4AI_1_1SystemData_afb8b86348e646ab51f896047550cfb3d}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!initialize\_local\_constraints@{initialize\_local\_constraints}}
+\index{initialize\_local\_constraints@{initialize\_local\_constraints}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{initialize\_local\_constraints()}{initialize\_local\_constraints()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+System\+Data\+::initialize\+\_\+local\+\_\+constraints (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{local\+\_\+constraints\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to initialize the local constraints. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+\_\+constraints\+\_\+json} & json object extracted from configuration\+\_\+file containing the description of the local constraints \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ae4138f9b474fe561a8cd8f01c60e84d2}\label{classSpace4AI_1_1SystemData_ae4138f9b474fe561a8cd8f01c60e84d2}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!initialize\_network\_technology@{initialize\_network\_technology}}
+\index{initialize\_network\_technology@{initialize\_network\_technology}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{initialize\_network\_technology()}{initialize\_network\_technology()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+System\+Data\+::initialize\+\_\+network\+\_\+technology (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{network\+\_\+technology\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to initialize the network technology. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em network\+\_\+technology\+\_\+json} & json object extracted from configuration\+\_\+file containing the description of the network technology \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_a042e8f4b511726c90e647b506b34c57d}\label{classSpace4AI_1_1SystemData_a042e8f4b511726c90e647b506b34c57d}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!initialize\_resources@{initialize\_resources}}
+\index{initialize\_resources@{initialize\_resources}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{initialize\_resources()}{initialize\_resources()}}
+{\footnotesize\ttfamily template$<$Resource\+Type Type$>$ \\
+void Space4\+A\+I\+::\+System\+Data\+::initialize\+\_\+resources (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{resources\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Method to initialize the resources. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em resources\+\_\+json} & json object extracted from configuration\+\_\+file containing the description of the resources \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ac3e3526aad0b9277d96829683085b261}\label{classSpace4AI_1_1SystemData_ac3e3526aad0b9277d96829683085b261}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!read\_json@{read\_json}}
+\index{read\_json@{read\_json}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{read\_json()}{read\_json()}}
+{\footnotesize\ttfamily void Space4\+A\+I\+::\+System\+Data\+::read\+\_\+json (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{configuration\+\_\+file }\end{DoxyParamCaption})}
+
+
+
+Method to populate all the memebers of \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em configuration\+\_\+file} & json object extracted from system\+\_\+file \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemData_ad5e24e1abf045dd4439bf9b72765b184}\label{classSpace4AI_1_1SystemData_ad5e24e1abf045dd4439bf9b72765b184}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!cls@{cls}}
+\index{cls@{cls}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{cls}{cls}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$\mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer}{Computational\+Layer}}$>$ $>$ Space4\+A\+I\+::\+System\+Data\+::cls\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Object to store the computational layers for each resource type. 
+
+cls\mbox{[}i\mbox{]}\mbox{[}j\mbox{]} contains the j-\/th computational layer of type i (0,1 or 2 i.\+e. Edge, VM or Faas) \mbox{\Hypertarget{classSpace4AI_1_1SystemData_a992be7c879d23e814316f9eb216bdf32}\label{classSpace4AI_1_1SystemData_a992be7c879d23e814316f9eb216bdf32}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!comp\_name\_to\_idx@{comp\_name\_to\_idx}}
+\index{comp\_name\_to\_idx@{comp\_name\_to\_idx}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{comp\_name\_to\_idx}{comp\_name\_to\_idx}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, std\+::size\+\_\+t$>$ Space4\+A\+I\+::\+System\+Data\+::comp\+\_\+name\+\_\+to\+\_\+idx\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Hash map from component name to the assigned index. 
+
+Actually it is the same to the one stored in the dag, but it makes sense to have it also here for performance efficiency \mbox{\Hypertarget{classSpace4AI_1_1SystemData_a0d483fdf475f9537fff4f1b9833f875d}\label{classSpace4AI_1_1SystemData_a0d483fdf475f9537fff4f1b9833f875d}} 
+\index{Space4AI::SystemData@{Space4AI::SystemData}!idx\_to\_comp\_name@{idx\_to\_comp\_name}}
+\index{idx\_to\_comp\_name@{idx\_to\_comp\_name}!Space4AI::SystemData@{Space4AI::SystemData}}
+\doxysubsubsection{\texorpdfstring{idx\_to\_comp\_name}{idx\_to\_comp\_name}}
+{\footnotesize\ttfamily std\+::map$<$size\+\_\+t, std\+::string$>$ Space4\+A\+I\+::\+System\+Data\+::idx\+\_\+to\+\_\+comp\+\_\+name\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Ordered map from index to component name. 
+
+It is useful when there is the need to sometihing in order Actually it is the same to the one stored in the dag, but it makes sense to have it also here for performance efficiency 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+System/\mbox{\hyperlink{SystemData_8hpp}{System\+Data.\+hpp}}\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+System/System\+Data.\+cpp\end{DoxyCompactItemize}

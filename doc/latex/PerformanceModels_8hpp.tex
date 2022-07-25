@@ -1,0 +1,50 @@
+\hypertarget{PerformanceModels_8hpp}{}\doxysection{/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Performance/\+Performance\+Models.hpp File Reference}
+\label{PerformanceModels_8hpp}\index{/home/rando2/LaureaMagistrale/PACS\_TESI/RunTime/DesignTime\_PACS/src/Performance/PerformanceModels.hpp@{/home/rando2/LaureaMagistrale/PACS\_TESI/RunTime/DesignTime\_PACS/src/Performance/PerformanceModels.hpp}}
+
+
+Defines the classes for the performance evaluators.  
+
+
+{\ttfamily \#include \char`\"{}Performance/\+Performance\+Predictors.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Solution/\+Solution\+Data.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}System/\+System\+Data.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Type\+Traits.\+hpp\char`\"{}}\newline
+Include dependency graph for Performance\+Models.\+hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{PerformanceModels_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{PerformanceModels_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Space4\+A\+I\+::\+Base\+Performance\+Model}}
+\begin{DoxyCompactList}\small\item\em Abstract class to represent the parent of all performance models that will inherit from it. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1QTPE}{Space4\+A\+I\+::\+Q\+T\+PE}}
+\begin{DoxyCompactList}\small\item\em Class to define queue-\/servers performance models. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1FaasPE}{Space4\+A\+I\+::\+Faas\+PE}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1FaasPacsltkPE}{Space4\+A\+I\+::\+Faas\+Pacsltk\+PE}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1FaasPacsltkStaticPE}{Space4\+A\+I\+::\+Faas\+Pacsltk\+Static\+PE}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines the classes for the performance evaluators. 
+
+Polymorphism is used. Note that some Performance Models constructor could accept parameters that will not be used by the class. This trick is required to provide the same interface to the object factory builder. a-\/\+ML library predictor are used as pybind11 classes, implemented with the Meyer\textquotesingle{}s singleton pattern in the file \mbox{\hyperlink{PerformancePredictors_8hpp}{Performance\+Predictors.\+hpp}}
+
+\begin{DoxyAuthor}{Author}
+rando98 
+
+giuliamazzeellee 
+\end{DoxyAuthor}

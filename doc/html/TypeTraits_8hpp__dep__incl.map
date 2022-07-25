@@ -1,0 +1,22 @@
+<map id="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/TypeTraits.hpp" name="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/TypeTraits.hpp">
+<area shape="rect" id="node1" title="Defines the main types and data structures used in the code." alt="" coords="1098,5,1337,61"/>
+<area shape="rect" id="node2" href="$GlobalConstraint_8hpp.html" title="Defines the class to store the Global constraints on a given path of components." alt="" coords="5,109,309,165"/>
+<area shape="rect" id="node3" href="$SystemData_8hpp.html" title="Defines the methods of SystemData class." alt="" coords="629,213,880,269"/>
+<area shape="rect" id="node8" href="$SystemPE_8hpp.html" title="Defines the evaluators to measure the performance of the system." alt="" coords="1589,629,1859,685"/>
+<area shape="rect" id="node13" href="$PerformanceModels_8hpp.html" title="Defines the classes for the performance evaluators." alt="" coords="1177,317,1511,373"/>
+<area shape="rect" id="node14" href="$LocalConstraint_8hpp.html" title="Defines the class to store the Local constraints on the single components." alt="" coords="384,109,680,165"/>
+<area shape="rect" id="node15" href="$Component_8hpp.html" title="Defines the classes Component, Deployment, Partition." alt="" coords="705,109,943,165"/>
+<area shape="rect" id="node16" href="$Dag_8hpp.html" title="Defines the class to represent the DAG, using a transition matrix." alt="" coords="1230,109,1469,165"/>
+<area shape="rect" id="node18" href="$PerformancePredictors_8hpp.html" title="Defines the classes that provide the interface between the Performance Models (C++) and the (Python) ..." alt="" coords="1168,213,1520,269"/>
+<area shape="rect" id="node19" href="$Resources_8hpp.html" title="Defines the classes to manage Edge, VM, Faas Resources." alt="" coords="967,109,1206,165"/>
+<area shape="rect" id="node20" href="$SolutionData_8hpp.html" title="Defines the class to store the main data of the solution." alt="" coords="1595,213,1853,269"/>
+<area shape="rect" id="node4" href="$PerformanceFactory_8hpp.html" title="Defines the object factory for the different types of performance models." alt="" coords="974,421,1306,477"/>
+<area shape="rect" id="node5" href="$System_8hpp.html" title="Define the class to store the general system object." alt="" coords="1143,525,1382,581"/>
+<area shape="rect" id="node6" href="$RandomGreedyDT_8hpp.html" title="Defines the Random Greedy (Design time version) algorithm to solve the problem." alt="" coords="1162,941,1473,997"/>
+<area shape="rect" id="node10" href="$Solution_8hpp.html" title="Defines the class to store the a solution to the system configuration provided." alt="" coords="1302,733,1541,789"/>
+<area shape="rect" id="node11" href="$EliteResult_8hpp.html" title="Defines the class to store to store a fixed&#45;size vector of Solution objects, sorted by minimum cost." alt="" coords="1195,837,1439,893"/>
+<area shape="rect" id="node12" href="$System_8cpp.html" title="Define the methods of the class System." alt="" coords="1326,629,1565,685"/>
+<area shape="rect" id="node7" href="$RandomGreedyDT_8cpp.html" title="Defines the methods of the RandomGreedyDT class." alt="" coords="1163,1045,1472,1101"/>
+<area shape="rect" id="node9" href="$SystemPE_8cpp.html" title="Defines the methods of the classes defined in SystemPE.hpp." alt="" coords="1590,733,1858,789"/>
+<area shape="rect" id="node17" href="$Dag_8cpp.html" title="Definition of the methods of class Graph." alt="" coords="905,213,1143,269"/>
+</map>

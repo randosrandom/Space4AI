@@ -1,0 +1,5 @@
+<map id="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Solution/EliteResult.hpp" name="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Solution/EliteResult.hpp">
+<area shape="rect" id="node1" title="Defines the class to store to store a fixed&#45;size vector of Solution objects, sorted by minimum cost." alt="" coords="39,5,283,61"/>
+<area shape="rect" id="node2" href="$RandomGreedyDT_8hpp.html" title="Defines the Random Greedy (Design time version) algorithm to solve the problem." alt="" coords="5,109,316,165"/>
+<area shape="rect" id="node3" href="$RandomGreedyDT_8cpp.html" title="Defines the methods of the RandomGreedyDT class." alt="" coords="6,213,315,269"/>
+</map>

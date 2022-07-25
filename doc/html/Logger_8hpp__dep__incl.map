@@ -1,0 +1,16 @@
+<map id="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Logger.hpp" name="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Logger.hpp">
+<area shape="rect" id="node1" title="Defines the class to implement the logger." alt="" coords="163,5,402,61"/>
+<area shape="rect" id="node2" href="$Dag_8hpp.html" title="Defines the class to represent the DAG, using a transition matrix." alt="" coords="163,109,402,165"/>
+<area shape="rect" id="node3" href="$Dag_8cpp.html" title="Definition of the methods of class Graph." alt="" coords="29,213,267,269"/>
+<area shape="rect" id="node4" href="$SystemData_8hpp.html" title="Defines the methods of SystemData class." alt="" coords="292,213,543,269"/>
+<area shape="rect" id="node5" href="$PerformanceFactory_8hpp.html" title="Defines the object factory for the different types of performance models." alt="" coords="329,421,661,477"/>
+<area shape="rect" id="node6" href="$System_8hpp.html" title="Define the class to store the general system object." alt="" coords="375,525,614,581"/>
+<area shape="rect" id="node14" href="$PerformanceModels_8hpp.html" title="Defines the classes for the performance evaluators." alt="" coords="455,317,790,373"/>
+<area shape="rect" id="node7" href="$RandomGreedyDT_8hpp.html" title="Defines the Random Greedy (Design time version) algorithm to solve the problem." alt="" coords="205,941,515,997"/>
+<area shape="rect" id="node9" href="$SystemPE_8hpp.html" title="Defines the evaluators to measure the performance of the system." alt="" coords="188,629,457,685"/>
+<area shape="rect" id="node11" href="$Solution_8hpp.html" title="Defines the class to store the a solution to the system configuration provided." alt="" coords="322,733,561,789"/>
+<area shape="rect" id="node12" href="$EliteResult_8hpp.html" title="Defines the class to store to store a fixed&#45;size vector of Solution objects, sorted by minimum cost." alt="" coords="398,837,642,893"/>
+<area shape="rect" id="node13" href="$System_8cpp.html" title="Define the methods of the class System." alt="" coords="637,629,875,685"/>
+<area shape="rect" id="node8" href="$RandomGreedyDT_8cpp.html" title="Defines the methods of the RandomGreedyDT class." alt="" coords="205,1045,515,1101"/>
+<area shape="rect" id="node10" href="$SystemPE_8cpp.html" title="Defines the methods of the classes defined in SystemPE.hpp." alt="" coords="30,733,298,789"/>
+</map>

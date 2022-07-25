@@ -1,0 +1,4 @@
+<map id="Space4AI::QTPE" name="Space4AI::QTPE">
+<area shape="rect" id="node1" title="Class to define queue&#45;servers performance models." alt="" coords="24,219,200,369"/>
+<area shape="rect" id="node2" href="$classSpace4AI_1_1BasePerformanceModel.html" title="Abstract class to represent the parent of all performance models that will inherit from it." alt="" coords="5,5,219,171"/>
+</map>

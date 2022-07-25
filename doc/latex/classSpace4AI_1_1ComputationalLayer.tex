@@ -1,0 +1,75 @@
+\hypertarget{classSpace4AI_1_1ComputationalLayer}{}\doxysection{Space4\+AI\+::Computational\+Layer Class Reference}
+\label{classSpace4AI_1_1ComputationalLayer}\index{Space4AI::ComputationalLayer@{Space4AI::ComputationalLayer}}
+
+
+Class to represent a computational layer, namely a vector of resources of a fixed type.  
+
+
+
+
+{\ttfamily \#include $<$Resources.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::Computational\+Layer\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{classSpace4AI_1_1ComputationalLayer__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_a709e130ad0de0ff79014d2f526292f19}{Computational\+Layer}} (const std\+::string \&name\+\_\+, \mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} type\+\_\+of\+\_\+resources\+\_\+)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer}{Computational\+Layer}} constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_ab21250b8c81d09fb30a6e353d9bf0360}\label{classSpace4AI_1_1ComputationalLayer_ab21250b8c81d09fb30a6e353d9bf0360}} 
+void \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_ab21250b8c81d09fb30a6e353d9bf0360}{add\+\_\+resource}} (size\+\_\+t res\+\_\+idx)
+\begin{DoxyCompactList}\small\item\em method to add the index of a resource in the layer \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_addff53aeb351f727912f7672488e93ff}\label{classSpace4AI_1_1ComputationalLayer_addff53aeb351f727912f7672488e93ff}} 
+std\+::string \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_addff53aeb351f727912f7672488e93ff}{get\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em name getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_a88a6c87b0a63e29566cfdc218765be77}\label{classSpace4AI_1_1ComputationalLayer_a88a6c87b0a63e29566cfdc218765be77}} 
+const std\+::vector$<$ size\+\_\+t $>$ \& \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_a88a6c87b0a63e29566cfdc218765be77}{get\+\_\+res\+\_\+idxs}} () const
+\begin{DoxyCompactList}\small\item\em getter of the resources indexes in the layer \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_a8986dedcd6afca0c2736edafb6e6d70b}\label{classSpace4AI_1_1ComputationalLayer_a8986dedcd6afca0c2736edafb6e6d70b}} 
+const std\+::string \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_a8986dedcd6afca0c2736edafb6e6d70b}{name}}
+\begin{DoxyCompactList}\small\item\em name of the layer \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_ae2639e3cf7568df17aa6c6947d60507d}\label{classSpace4AI_1_1ComputationalLayer_ae2639e3cf7568df17aa6c6947d60507d}} 
+const \mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_ae2639e3cf7568df17aa6c6947d60507d}{type\+\_\+of\+\_\+resources}}
+\begin{DoxyCompactList}\small\item\em type of the resources saved in the layer (either Edge, VM or Faas) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_a10e4f097762c2f899d309b5e1520d4a4}\label{classSpace4AI_1_1ComputationalLayer_a10e4f097762c2f899d309b5e1520d4a4}} 
+std\+::vector$<$ size\+\_\+t $>$ \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer_a10e4f097762c2f899d309b5e1520d4a4}{res\+\_\+idxs}}
+\begin{DoxyCompactList}\small\item\em vector storing the indexes of the resources in the layer \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to represent a computational layer, namely a vector of resources of a fixed type. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1ComputationalLayer_a709e130ad0de0ff79014d2f526292f19}\label{classSpace4AI_1_1ComputationalLayer_a709e130ad0de0ff79014d2f526292f19}} 
+\index{Space4AI::ComputationalLayer@{Space4AI::ComputationalLayer}!ComputationalLayer@{ComputationalLayer}}
+\index{ComputationalLayer@{ComputationalLayer}!Space4AI::ComputationalLayer@{Space4AI::ComputationalLayer}}
+\doxysubsubsection{\texorpdfstring{ComputationalLayer()}{ComputationalLayer()}}
+{\footnotesize\ttfamily Space4\+A\+I\+::\+Computational\+Layer\+::\+Computational\+Layer (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name\+\_\+,  }\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{type\+\_\+of\+\_\+resources\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer}{Computational\+Layer}} constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name\+\_\+} & Name of the layer \\
+\hline
+{\em type\+\_\+of\+\_\+resources\+\_\+} & Type of resources in the layer (either Edge, Vm or Faas) \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\mbox{\hyperlink{Resources_8hpp}{Resources.\+hpp}}\end{DoxyCompactItemize}

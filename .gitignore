@@ -36,3 +36,4 @@
 InputFiles/
 OutputFiles/
 *logs*
+build/

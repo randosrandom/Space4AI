@@ -214,10 +214,10 @@ PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
 PYTHON_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libpython3.8.so
 
 //Settable from command line
-RELEASE_OPT:BOOL=ON
+RELEASE:BOOL=OFF
 
 //Settable from command line
-SHARED_LIB_OPT:BOOL=OFF
+SHARED_LIB:BOOL=OFF
 
 //The directory containing a CMake configuration file for pybind11.
 pybind11_DIR:PATH=/home/rando2/.local/share/cmake/pybind11

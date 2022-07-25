@@ -1,0 +1,62 @@
+\hypertarget{CMakeLists_8txt}{}\doxysection{/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+C\+Make\+Lists.txt File Reference}
+\label{CMakeLists_8txt}\index{/home/rando2/LaureaMagistrale/PACS\_TESI/RunTime/DesignTime\_PACS/src/CMakeLists.txt@{/home/rando2/LaureaMagistrale/PACS\_TESI/RunTime/DesignTime\_PACS/src/CMakeLists.txt}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{CMakeLists_8txt_a59e85f70577e638e1b4649d668855748}{option}} (S\+H\+A\+R\+E\+D\+\_\+\+L\+IB \char`\"{}Settable from command line\char`\"{} O\+FF) option(R\+E\+L\+E\+A\+SE \char`\"{}Settable from command line\char`\"{} O\+FF) if(R\+E\+L\+E\+A\+SE) message(\char`\"{}Compiling R\+E\+L\+E\+A\+SE
+\item 
+optimization flags will be activated \mbox{\hyperlink{CMakeLists_8txt_a6ac62417d99269ef9b75d7285e4eb916}{set}} (C\+M\+A\+K\+E\+\_\+\+B\+U\+I\+L\+D\+\_\+\+T\+Y\+PE Release) else() message(\char`\"{}Compiling in D\+E\+B\+UG mode\char`\"{}) set(C\+M\+A\+K\+E\+\_\+\+B\+U\+I\+L\+D\+\_\+\+T\+Y\+PE Debug) endif() set(C\+M\+A\+K\+E\+\_\+\+C\+X\+X\+\_\+\+F\+L\+A\+GS \char`\"{}\$
+\item 
+Wall Wextra Wsuggest override Wnon virtual dtor \mbox{\hyperlink{CMakeLists_8txt_a10cee92d605dafb083154ec5d3c07540}{set}} (C\+M\+A\+K\+E\+\_\+\+L\+I\+B\+R\+A\+R\+Y\+\_\+\+O\+U\+T\+P\+U\+T\+\_\+\+D\+I\+R\+E\+C\+T\+O\+RY \$\{C\+M\+A\+K\+E\+\_\+\+B\+I\+N\+A\+R\+Y\+\_\+\+D\+IR\}/lib) set(L\+I\+B\+\_\+\+N\+A\+ME \char`\"{}S4\+A\+I\+DT\char`\"{}) set(S\+R\+CS \char`\"{}\$
+\item 
+\mbox{\hyperlink{CMakeLists_8txt_abd10b9ea5f83825603baa40416e1214d}{set}} (I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+I\+RS \char`\"{}\$\{C\+M\+A\+K\+E\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}\char`\"{}) if(S\+H\+A\+R\+E\+D\+\_\+\+L\+IB) message(\char`\"{}Creating Shared Library\char`\"{}) message(W\+A\+R\+N\+I\+NG \char`\"{}Creating shared library requires default visibility
+\item 
+which however might generate warnings when linking the code with pybind11 library \mbox{\hyperlink{CMakeLists_8txt_a5c7f3dbf85f16399677dffa1fde7eee7}{add\+\_\+library}} (\$\{L\+I\+B\+\_\+\+N\+A\+ME\} S\+H\+A\+R\+ED \$\{S\+R\+CS\}) else() message(\char`\"{}Compiling Static Library\char`\"{}) add\+\_\+library(\$
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+Algorithms Random\+Greedy\+DT \mbox{\hyperlink{CMakeLists_8txt_a666fb6e0f8d217c3e474c8102e13abcd}{cpp}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{CMakeLists_8txt_a5c7f3dbf85f16399677dffa1fde7eee7}\label{CMakeLists_8txt_a5c7f3dbf85f16399677dffa1fde7eee7}} 
+\index{CMakeLists.txt@{CMakeLists.txt}!add\_library@{add\_library}}
+\index{add\_library@{add\_library}!CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{add\_library()}{add\_library()}}
+{\footnotesize\ttfamily which however might generate warnings when linking the code with pybind11 library add\+\_\+library (\begin{DoxyParamCaption}\item[{}]{\$\{\+L\+I\+B\+\_\+\+N\+A\+M\+E\} S\+H\+A\+R\+E\+D \$\{\+S\+R\+C\+S\} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{CMakeLists_8txt_a59e85f70577e638e1b4649d668855748}\label{CMakeLists_8txt_a59e85f70577e638e1b4649d668855748}} 
+\index{CMakeLists.txt@{CMakeLists.txt}!option@{option}}
+\index{option@{option}!CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{option()}{option()}}
+{\footnotesize\ttfamily option (\begin{DoxyParamCaption}\item[{S\+H\+A\+R\+E\+D\+\_\+\+L\+IB \char`\"{}Settable from command line\char`\"{}}]{O\+FF }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{CMakeLists_8txt_a6ac62417d99269ef9b75d7285e4eb916}\label{CMakeLists_8txt_a6ac62417d99269ef9b75d7285e4eb916}} 
+\index{CMakeLists.txt@{CMakeLists.txt}!set@{set}}
+\index{set@{set}!CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{set()}{set()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily optimization flags will be activated set (\begin{DoxyParamCaption}\item[{C\+M\+A\+K\+E\+\_\+\+B\+U\+I\+L\+D\+\_\+\+T\+Y\+PE}]{Release }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{CMakeLists_8txt_a10cee92d605dafb083154ec5d3c07540}\label{CMakeLists_8txt_a10cee92d605dafb083154ec5d3c07540}} 
+\index{CMakeLists.txt@{CMakeLists.txt}!set@{set}}
+\index{set@{set}!CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{set()}{set()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Wall Wextra Wsuggest override Wnon virtual dtor set (\begin{DoxyParamCaption}\item[{C\+M\+A\+K\+E\+\_\+\+L\+I\+B\+R\+A\+R\+Y\+\_\+\+O\+U\+T\+P\+U\+T\+\_\+\+D\+I\+R\+E\+C\+T\+O\+RY \$\{C\+M\+A\+K\+E\+\_\+\+B\+I\+N\+A\+R\+Y\+\_\+\+D\+IR\}/}]{lib }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{CMakeLists_8txt_abd10b9ea5f83825603baa40416e1214d}\label{CMakeLists_8txt_abd10b9ea5f83825603baa40416e1214d}} 
+\index{CMakeLists.txt@{CMakeLists.txt}!set@{set}}
+\index{set@{set}!CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{set()}{set()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily set (\begin{DoxyParamCaption}\item[{I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+I\+RS \char`\"{}\$\{C\+M\+A\+K\+E\+\_\+\+C\+U\+R\+R\+E\+N\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{CMakeLists_8txt_a666fb6e0f8d217c3e474c8102e13abcd}\label{CMakeLists_8txt_a666fb6e0f8d217c3e474c8102e13abcd}} 
+\index{CMakeLists.txt@{CMakeLists.txt}!cpp@{cpp}}
+\index{cpp@{cpp}!CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{cpp}{cpp}}
+{\footnotesize\ttfamily Algorithms Random\+Greedy\+DT cpp}
+

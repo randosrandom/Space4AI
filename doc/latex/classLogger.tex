@@ -1,0 +1,139 @@
+\hypertarget{classLogger}{}\doxysection{Logger Class Reference}
+\label{classLogger}\index{Logger@{Logger}}
+
+
+\mbox{\hyperlink{classLogger}{Logger}}.  
+
+
+
+
+{\ttfamily \#include $<$Logger.\+hpp$>$}
+
+
+
+Collaboration diagram for Logger\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classLogger__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classLogger_aebc7e4ccb5164a5e99e489714acda8e0}{Set\+Priority}} (\mbox{\hyperlink{Logger_8hpp_aa8b1c6568df4ee385e4d1d12f7153f02}{Log\+Priority}} new\+\_\+priority)
+\begin{DoxyCompactList}\small\item\em priority setter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_a87be15b07a357f98ad5e63b2178efa2b}\label{classLogger_a87be15b07a357f98ad5e63b2178efa2b}} 
+static void \mbox{\hyperlink{classLogger_a87be15b07a357f98ad5e63b2178efa2b}{Enable\+Terminal\+Output}} (bool Enable\+Terminal\+Output\+\_\+=true)
+\begin{DoxyCompactList}\small\item\em Method to enable logger messages on terminal. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classLogger_a5902d48618115368849f0de22dd3578d}{Enable\+File\+Output}} (bool Enable\+File\+Output\+Flag\+\_\+=true, const std\+::string \&new\+\_\+filepath=\char`\"{}\char`\"{})
+\begin{DoxyCompactList}\small\item\em Method to enable the printing of the logger messages on file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_ab55f2dc424e479d4159eb51f94ac2eeb}\label{classLogger_ab55f2dc424e479d4159eb51f94ac2eeb}} 
+static void \mbox{\hyperlink{classLogger_ab55f2dc424e479d4159eb51f94ac2eeb}{Trace}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em print Trace priority messages \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_acdd30eb8146530d3f01ca0bdefe29072}\label{classLogger_acdd30eb8146530d3f01ca0bdefe29072}} 
+static void \mbox{\hyperlink{classLogger_acdd30eb8146530d3f01ca0bdefe29072}{Debug}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em print Debug priority messages \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_a14a8c8b0ddbe3fd7daa367c0cc6a80cb}\label{classLogger_a14a8c8b0ddbe3fd7daa367c0cc6a80cb}} 
+static void \mbox{\hyperlink{classLogger_a14a8c8b0ddbe3fd7daa367c0cc6a80cb}{Info}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em print Info priority messages \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_a83c912c43e7e80ef46676f94017a4d9a}\label{classLogger_a83c912c43e7e80ef46676f94017a4d9a}} 
+static void \mbox{\hyperlink{classLogger_a83c912c43e7e80ef46676f94017a4d9a}{Warn}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em print Warn priority messages \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_a88b26b7f148d9025ec8d459204257f24}\label{classLogger_a88b26b7f148d9025ec8d459204257f24}} 
+static void \mbox{\hyperlink{classLogger_a88b26b7f148d9025ec8d459204257f24}{Error}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em print Error priority messages \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_af686a60182ad36ef7f9c4daf179eb3c0}\label{classLogger_af686a60182ad36ef7f9c4daf179eb3c0}} 
+static void \mbox{\hyperlink{classLogger_af686a60182ad36ef7f9c4daf179eb3c0}{Critical}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em print Critical priority messages \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classLogger_add0f34d4c753c86af8074840a72366b3}\label{classLogger_add0f34d4c753c86af8074840a72366b3}} 
+{\bfseries Logger} (const \mbox{\hyperlink{classLogger}{Logger}} \&)=delete
+\item 
+\mbox{\Hypertarget{classLogger_a21dc953ea7e5c00656e75a2b4b7ec5cc}\label{classLogger_a21dc953ea7e5c00656e75a2b4b7ec5cc}} 
+\mbox{\hyperlink{classLogger}{Logger}} \& {\bfseries operator=} (const \mbox{\hyperlink{classLogger}{Logger}} \&)=delete
+\item 
+\mbox{\Hypertarget{classLogger_ac9c7eb4b0b286c86174f41586f1c60e0}\label{classLogger_ac9c7eb4b0b286c86174f41586f1c60e0}} 
+void {\bfseries log} (const std\+::string \&message\+\_\+priority\+\_\+str, \mbox{\hyperlink{Logger_8hpp_aa8b1c6568df4ee385e4d1d12f7153f02}{Log\+Priority}} message\+\_\+priority, const std\+::string \&message)
+\item 
+\mbox{\Hypertarget{classLogger_a42eaa26480424d8581a189f013947bee}\label{classLogger_a42eaa26480424d8581a189f013947bee}} 
+void {\bfseries enable\+\_\+file\+\_\+output} ()
+\item 
+\mbox{\Hypertarget{classLogger_a9131cabf6829395a8271fa4b8091ff3d}\label{classLogger_a9131cabf6829395a8271fa4b8091ff3d}} 
+void {\bfseries free\+\_\+file} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classLogger_a130ddc9cae0f9bb0ed4309f2914de6c6}\label{classLogger_a130ddc9cae0f9bb0ed4309f2914de6c6}} 
+static \mbox{\hyperlink{classLogger}{Logger}} \& {\bfseries get\+\_\+instance} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classLogger_ad7b321fea0d776a80926da20f6faf320}\label{classLogger_ad7b321fea0d776a80926da20f6faf320}} 
+\mbox{\hyperlink{Logger_8hpp_aa8b1c6568df4ee385e4d1d12f7153f02}{Log\+Priority}} \mbox{\hyperlink{classLogger_ad7b321fea0d776a80926da20f6faf320}{priority}} = Info\+Priority
+\begin{DoxyCompactList}\small\item\em priority of the logger to be set at the beginning of the program \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_ac92da3167ec7455dfe5599ca74f25be0}\label{classLogger_ac92da3167ec7455dfe5599ca74f25be0}} 
+std\+::mutex {\bfseries log\+\_\+mutex}
+\item 
+\mbox{\Hypertarget{classLogger_a8ce7fe0f769c23b2f30a48e787fa6861}\label{classLogger_a8ce7fe0f769c23b2f30a48e787fa6861}} 
+std\+::string \mbox{\hyperlink{classLogger_a8ce7fe0f769c23b2f30a48e787fa6861}{filepath}}
+\begin{DoxyCompactList}\small\item\em name of the file, if you want to save \mbox{\hyperlink{classLogger}{Logger}} messages on file \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_ae83bffdc4a0e3579b3ca24a6df07e6fd}\label{classLogger_ae83bffdc4a0e3579b3ca24a6df07e6fd}} 
+std\+::ofstream {\bfseries file}
+\item 
+\mbox{\Hypertarget{classLogger_aa5119ab7d5ad7b0239316d4173fb03a0}\label{classLogger_aa5119ab7d5ad7b0239316d4173fb03a0}} 
+bool \mbox{\hyperlink{classLogger_aa5119ab7d5ad7b0239316d4173fb03a0}{Enable\+Terminal\+Output\+Flag}} = false
+\begin{DoxyCompactList}\small\item\em flag to decide whether to print logging on terminal or not \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classLogger_a4529a0b06f07327557227186e7c0d3e1}\label{classLogger_a4529a0b06f07327557227186e7c0d3e1}} 
+bool \mbox{\hyperlink{classLogger_a4529a0b06f07327557227186e7c0d3e1}{Enable\+File\+Output\+Flag}} = false
+\begin{DoxyCompactList}\small\item\em flag to decide whether to print logging on file or nor \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classLogger}{Logger}}. 
+
+Class used to print in terminal and file useful logging messages. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classLogger_a5902d48618115368849f0de22dd3578d}\label{classLogger_a5902d48618115368849f0de22dd3578d}} 
+\index{Logger@{Logger}!EnableFileOutput@{EnableFileOutput}}
+\index{EnableFileOutput@{EnableFileOutput}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{EnableFileOutput()}{EnableFileOutput()}}
+{\footnotesize\ttfamily static void Logger\+::\+Enable\+File\+Output (\begin{DoxyParamCaption}\item[{bool}]{Enable\+File\+Output\+Flag\+\_\+ = {\ttfamily true},  }\item[{const std\+::string \&}]{new\+\_\+filepath = {\ttfamily \char`\"{}\char`\"{}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Method to enable the printing of the logger messages on file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Enable\+File\+Output\+Flag\+\_\+} & true to enable file output, false otherwise \\
+\hline
+{\em new\+\_\+filepath} & Name of the file where to save output messages; mind that eventual folders in the path must already exists. If the filename is not provided, a new file is automatically generated using the current time. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classLogger_aebc7e4ccb5164a5e99e489714acda8e0}\label{classLogger_aebc7e4ccb5164a5e99e489714acda8e0}} 
+\index{Logger@{Logger}!SetPriority@{SetPriority}}
+\index{SetPriority@{SetPriority}!Logger@{Logger}}
+\doxysubsubsection{\texorpdfstring{SetPriority()}{SetPriority()}}
+{\footnotesize\ttfamily static void Logger\+::\+Set\+Priority (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{Logger_8hpp_aa8b1c6568df4ee385e4d1d12f7153f02}{Log\+Priority}}}]{new\+\_\+priority }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+priority setter 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+\_\+priority} & priority to set for the logger \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\mbox{\hyperlink{Logger_8hpp}{Logger.\+hpp}}\end{DoxyCompactItemize}

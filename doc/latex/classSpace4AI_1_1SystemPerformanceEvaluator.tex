@@ -1,0 +1,113 @@
+\hypertarget{classSpace4AI_1_1SystemPerformanceEvaluator}{}\doxysection{Space4\+AI\+::System\+Performance\+Evaluator Class Reference}
+\label{classSpace4AI_1_1SystemPerformanceEvaluator}\index{Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}}
+
+
+\mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator}{System\+Performance\+Evaluator}}.  
+
+
+
+
+{\ttfamily \#include $<$System\+P\+E.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::System\+Performance\+Evaluator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=247pt]{classSpace4AI_1_1SystemPerformanceEvaluator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::vector$<$ \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} $>$ \mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator_aa0ed182e3c4c3ebdbdc4c065536f7c1c}{compute\+\_\+performance}} (const \mbox{\hyperlink{classSpace4AI_1_1System}{System}} \&system, const \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}} \&solution\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Static method to evaluate the response time of the all \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} objects. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator_a4b28c48c99a0414b504dc6b525ab318e}{get\+\_\+perf\+\_\+evaluation}} (size\+\_\+t comp\+\_\+idx, const \mbox{\hyperlink{classSpace4AI_1_1System}{System}} \&system, const \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}} \&solution\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Static method to evaluate the response time of the \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} object identified by the given index. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator_ab44e715a1c77630bc28d7d7c48c5000d}{get\+\_\+network\+\_\+delay}} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} res1\+\_\+type, size\+\_\+t res1\+\_\+idx, \mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} res2\+\_\+type, size\+\_\+t res2\+\_\+idx, double data\+\_\+size, const \mbox{\hyperlink{classSpace4AI_1_1System}{System}} \&system)
+\begin{DoxyCompactList}\small\item\em Static method to compute the network delay due to data transfer operations between two consecutive components (or partitions), executed on different resources in the same network domain. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator}{System\+Performance\+Evaluator}}. 
+
+Class used to evaluate the performance (response time) of the whole system. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemPerformanceEvaluator_aa0ed182e3c4c3ebdbdc4c065536f7c1c}\label{classSpace4AI_1_1SystemPerformanceEvaluator_aa0ed182e3c4c3ebdbdc4c065536f7c1c}} 
+\index{Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}!compute\_performance@{compute\_performance}}
+\index{compute\_performance@{compute\_performance}!Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}}
+\doxysubsubsection{\texorpdfstring{compute\_performance()}{compute\_performance()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} $>$ Space4\+A\+I\+::\+System\+Performance\+Evaluator\+::compute\+\_\+performance (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classSpace4AI_1_1System}{System}} \&}]{system,  }\item[{const \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}} \&}]{solution\+\_\+data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Static method to evaluate the response time of the all \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & \mbox{\hyperlink{classSpace4AI_1_1System}{System}} under analysis \\
+\hline
+{\em solution\+\_\+data} & Store y\+\_\+hat and used\+\_\+resources (main dat aof the solution)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector with the response times of all components 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemPerformanceEvaluator_ab44e715a1c77630bc28d7d7c48c5000d}\label{classSpace4AI_1_1SystemPerformanceEvaluator_ab44e715a1c77630bc28d7d7c48c5000d}} 
+\index{Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}!get\_network\_delay@{get\_network\_delay}}
+\index{get\_network\_delay@{get\_network\_delay}!Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}}
+\doxysubsubsection{\texorpdfstring{get\_network\_delay()}{get\_network\_delay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} Space4\+A\+I\+::\+System\+Performance\+Evaluator\+::get\+\_\+network\+\_\+delay (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{res1\+\_\+type,  }\item[{size\+\_\+t}]{res1\+\_\+idx,  }\item[{\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{res2\+\_\+type,  }\item[{size\+\_\+t}]{res2\+\_\+idx,  }\item[{double}]{data\+\_\+size,  }\item[{const \mbox{\hyperlink{classSpace4AI_1_1System}{System}} \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Static method to compute the network delay due to data transfer operations between two consecutive components (or partitions), executed on different resources in the same network domain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em res1\+\_\+type} & Type fo the first resource \\
+\hline
+{\em res1\+\_\+idx} & First resource index \\
+\hline
+{\em res2\+\_\+type} & Type of the second resource \\
+\hline
+{\em res\+\_\+idx} & Second resource index \\
+\hline
+{\em data\+\_\+size} & Amount of data to be transferred \\
+\hline
+{\em system} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Network transfer time 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSpace4AI_1_1SystemPerformanceEvaluator_a4b28c48c99a0414b504dc6b525ab318e}\label{classSpace4AI_1_1SystemPerformanceEvaluator_a4b28c48c99a0414b504dc6b525ab318e}} 
+\index{Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}!get\_perf\_evaluation@{get\_perf\_evaluation}}
+\index{get\_perf\_evaluation@{get\_perf\_evaluation}!Space4AI::SystemPerformanceEvaluator@{Space4AI::SystemPerformanceEvaluator}}
+\doxysubsubsection{\texorpdfstring{get\_perf\_evaluation()}{get\_perf\_evaluation()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} Space4\+A\+I\+::\+System\+Performance\+Evaluator\+::get\+\_\+perf\+\_\+evaluation (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{comp\+\_\+idx,  }\item[{const \mbox{\hyperlink{classSpace4AI_1_1System}{System}} \&}]{system,  }\item[{const \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}} \&}]{solution\+\_\+data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Static method to evaluate the response time of the \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} object identified by the given index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em comp\+\_\+idx} & Index of the component \\
+\hline
+{\em system} & \\
+\hline
+{\em solution\+\_\+data} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Response time 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Performance/\mbox{\hyperlink{SystemPE_8hpp}{System\+P\+E.\+hpp}}\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Performance/\mbox{\hyperlink{SystemPE_8cpp}{System\+P\+E.\+cpp}}\end{DoxyCompactItemize}

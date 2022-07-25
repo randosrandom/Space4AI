@@ -1,0 +1,96 @@
+\hypertarget{classSpace4AI_1_1QTPE}{}\doxysection{Space4\+AI\+::Q\+T\+PE Class Reference}
+\label{classSpace4AI_1_1QTPE}\index{Space4AI::QTPE@{Space4AI::QTPE}}
+
+
+Class to define queue-\/servers performance models.  
+
+
+
+
+{\ttfamily \#include $<$Performance\+Models.\+hpp$>$}
+
+
+
+Inheritance diagram for Space4\+AI\+::Q\+T\+PE\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{classSpace4AI_1_1QTPE__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Space4\+AI\+::Q\+T\+PE\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classSpace4AI_1_1QTPE__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpace4AI_1_1QTPE_a62951cd50e56fc96acd94d26f6c31a61}{Q\+T\+PE}} (const std\+::string \&keyword\+\_\+, bool allows\+\_\+colocation\+\_\+, \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} demand\+\_\+)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}} constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_a9c87ebdd0dc302fad31c7162b19e9f72}\label{classSpace4AI_1_1QTPE_a9c87ebdd0dc302fad31c7162b19e9f72}} 
+virtual \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1QTPE_a9c87ebdd0dc302fad31c7162b19e9f72}{predict}} (size\+\_\+t comp\+\_\+idx, size\+\_\+t part\+\_\+idx, \mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} res\+\_\+type, size\+\_\+t res\+\_\+idx, const \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \&system\+\_\+data, const \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}} \&solution\+\_\+data) const override
+\begin{DoxyCompactList}\small\item\em Abstract method \mbox{\hyperlink{classSpace4AI_1_1QTPE_a9c87ebdd0dc302fad31c7162b19e9f72}{predict()}} overridden. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_acacb41c844b401ea2186f016ac5d96ef}\label{classSpace4AI_1_1QTPE_acacb41c844b401ea2186f016ac5d96ef}} 
+virtual \mbox{\hyperlink{classSpace4AI_1_1QTPE_acacb41c844b401ea2186f016ac5d96ef}{$\sim$\+Q\+T\+PE}} ()=default
+\begin{DoxyCompactList}\small\item\em virtual destructor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_a07dd69bc719721cff0139aca0555ec10}\label{classSpace4AI_1_1QTPE_a07dd69bc719721cff0139aca0555ec10}} 
+static double \mbox{\hyperlink{classSpace4AI_1_1QTPE_a07dd69bc719721cff0139aca0555ec10}{compute\+\_\+utilization}} (\mbox{\hyperlink{TypeTraits_8hpp_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} res\+\_\+type, size\+\_\+t res\+\_\+idx, const \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \&system\+\_\+data, const \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}} \&solution\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Method to compute the utilization of a specific \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_a5c58d331f0f1868744c8e8e57520b677}\label{classSpace4AI_1_1QTPE_a5c58d331f0f1868744c8e8e57520b677}} 
+{\footnotesize template$<$class T $>$ }\\static void {\bfseries set\+\_\+all\+\_\+demands} (T \&\&all\+\_\+demands\+\_\+)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_a70618c5e7b5b60c86a1934cf26c5e3a1}\label{classSpace4AI_1_1QTPE_a70618c5e7b5b60c86a1934cf26c5e3a1}} 
+const \mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} \mbox{\hyperlink{classSpace4AI_1_1QTPE_a70618c5e7b5b60c86a1934cf26c5e3a1}{demand}}
+\begin{DoxyCompactList}\small\item\em demand time \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_a46e0d7926972442ba19487b0b3d6c76d}\label{classSpace4AI_1_1QTPE_a46e0d7926972442ba19487b0b3d6c76d}} 
+static \mbox{\hyperlink{TypeTraits_8hpp_ab860577071c99d2225b6a9ddaf9d3f37}{Demand\+Edge\+V\+M\+Type}} \mbox{\hyperlink{classSpace4AI_1_1QTPE_a46e0d7926972442ba19487b0b3d6c76d}{all\+\_\+demands}} = \{\}
+\begin{DoxyCompactList}\small\item\em demand times of the other Components and \mbox{\hyperlink{classSpace4AI_1_1Partition}{Partition}} that could be run on the specific resource \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Class to define queue-\/servers performance models. 
+
+Available for Edge and VM. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1QTPE_a62951cd50e56fc96acd94d26f6c31a61}\label{classSpace4AI_1_1QTPE_a62951cd50e56fc96acd94d26f6c31a61}} 
+\index{Space4AI::QTPE@{Space4AI::QTPE}!QTPE@{QTPE}}
+\index{QTPE@{QTPE}!Space4AI::QTPE@{Space4AI::QTPE}}
+\doxysubsubsection{\texorpdfstring{QTPE()}{QTPE()}}
+{\footnotesize\ttfamily Space4\+A\+I\+::\+Q\+T\+P\+E\+::\+Q\+T\+PE (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{keyword\+\_\+,  }\item[{bool}]{allows\+\_\+colocation\+\_\+,  }\item[{\mbox{\hyperlink{TypeTraits_8hpp_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}}}]{demand\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}} constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em keyword\+\_\+} & \\
+\hline
+{\em allows\+\_\+colocation} & \\
+\hline
+{\em demand\+Warm\+\_\+} & Demand time \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Performance/\mbox{\hyperlink{PerformanceModels_8hpp}{Performance\+Models.\+hpp}}\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Performance/Performance\+Models.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,10 @@
+<map id="Space4AI::Component" name="Space4AI::Component">
+<area shape="rect" id="node1" title="Class to represent the components, namely DAG nodes." alt="" coords="238,728,405,879"/>
+<area shape="rect" id="node2" title=" " alt="" coords="371,573,538,665"/>
+<area shape="rect" id="node3" href="$classSpace4AI_1_1Partition.html" title="Class to represent a partition of a component." alt="" coords="359,301,577,511"/>
+<area shape="rect" id="node4" title="STL class." alt="" coords="278,147,365,224"/>
+<area shape="rect" id="node7" href="$classSpace4AI_1_1Deployment.html" title="Class to represent a candidate deployment for a component." alt="" coords="101,353,283,459"/>
+<area shape="rect" id="node5" title="STL class." alt="" coords="252,5,391,97"/>
+<area shape="rect" id="node6" title=" " alt="" coords="115,573,282,665"/>
+<area shape="rect" id="node8" title=" " alt="" coords="5,147,192,224"/>
+</map>

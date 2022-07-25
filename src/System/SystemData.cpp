@@ -14,7 +14,7 @@ namespace Space4AI
 {
 
   void
-  SystemData::ReadJson(const nl::json& configuration_file)
+  SystemData::read_json(const nl::json& configuration_file)
   {
 
     if(configuration_file.contains("DirectedAcyclicGraph") && configuration_file.contains("Components"))
@@ -58,7 +58,7 @@ namespace Space4AI
     if(configuration_file.contains("Components"))
     {
       Logger::Info("Reading components...");
-      this->InitializeComponents(configuration_file.at("Components"));
+      this->initialize_components(configuration_file.at("Components"));
       Logger::Info("Done!");
     }
     else
@@ -68,7 +68,7 @@ namespace Space4AI
     }
 
     Logger::Info("Resizing cls...");
-    this->cls.resize(index(ResourceType::Count));
+    this->cls.resize(ResIdxFromType(ResourceType::Count));
     Logger::Info("Done!");
 
     bool at_least_one_resource_type = false;
@@ -76,7 +76,7 @@ namespace Space4AI
     if(configuration_file.contains("EdgeResources"))
     {
       Logger::Info("Reading EdgeResources...");
-      this->InitializeResources<ResourceType::Edge>(configuration_file.at("EdgeResources"));
+      this->initialize_resources<ResourceType::Edge>(configuration_file.at("EdgeResources"));
       Logger::Info("Done!");
       at_least_one_resource_type = true;
     }
@@ -88,7 +88,7 @@ namespace Space4AI
     if(configuration_file.contains("CloudResources"))
     {
       Logger::Info("Reading CloudResources...");
-      this->InitializeResources<ResourceType::VM>(configuration_file.at("CloudResources"));
+      this->initialize_resources<ResourceType::VM>(configuration_file.at("CloudResources"));
       Logger::Info("Done!");
       at_least_one_resource_type = true;
 
@@ -101,7 +101,7 @@ namespace Space4AI
     if(configuration_file.contains("FaaSResources"))
     {
       Logger::Info("Reading FaaSResources...");
-      this->InitializeResources<ResourceType::Faas>(configuration_file.at("FaaSResources"));
+      this->initialize_resources<ResourceType::Faas>(configuration_file.at("FaaSResources"));
       Logger::Info("Done!");
       at_least_one_resource_type = true;
     }
@@ -119,7 +119,7 @@ namespace Space4AI
     if(configuration_file.contains("CompatibilityMatrix"))
     {
       Logger::Info("Reading CompatibilityMatrix...");
-      this->InitializeCompatibilityMatrix(configuration_file.at("CompatibilityMatrix"));
+      this->initialize_compatibility_matrix(configuration_file.at("CompatibilityMatrix"));
       Logger::Info("Done!");
     }
     else
@@ -131,19 +131,19 @@ namespace Space4AI
     if(configuration_file.contains("LocalConstraints"))
     {
       Logger::Info("Reading LocalConstraints...");
-      this->InitializeLocalConstraints(configuration_file.at("LocalConstraints"));
+      this->initialize_local_constraints(configuration_file.at("LocalConstraints"));
       Logger::Info("Done!");
     }
     else
     {
       Logger::Info("No Local Constraints provided in json file. Initializing them with +inf");
-      this->InitializeLocalConstraints(nl::basic_json());
+      this->initialize_local_constraints(nl::basic_json());
     }
 
     if(configuration_file.contains("GlobalConstraints"))
     {
       Logger::Info("Reading GlobalConstraints...");
-      this->InitializeGlobalConstraints(configuration_file.at("GlobalConstraints"));
+      this->Initialize_global_constraints(configuration_file.at("GlobalConstraints"));
       Logger::Info("Done!");
     }
     else
@@ -155,7 +155,7 @@ namespace Space4AI
     if(configuration_file.contains("NetworkTechnology"))
     {
       Logger::Info("Reading NetworkTechnology...");
-      this->InitializeNetworkTechnology(configuration_file.at("NetworkTechnology"));
+      this->initialize_network_technology(configuration_file.at("NetworkTechnology"));
       Logger::Info("Done!");
     }
     else
@@ -167,7 +167,7 @@ namespace Space4AI
   }
 
   void
-  SystemData::InitializeComponents(const nl::json& components_json)
+  SystemData::initialize_components(const nl::json& components_json)
   {
     std::string debug_message;
 
@@ -189,7 +189,7 @@ namespace Space4AI
       std::vector<Deployment> deployments;
       std::vector<Partition> partitions;
 
-      const auto& input_edges = dag.InputEdges(comp_idx);
+      const auto& input_edges = dag.input_edges(comp_idx);
 
       std::vector<std::size_t> input_comps;
 
@@ -207,9 +207,9 @@ namespace Space4AI
       {
         if(comp_idx != 0)
         {
-          debug_message = "Something went work in ordering: in InitializeComponents first component does not have '0' index";
+          debug_message = "Something went work in ordering: in initialize_components first component does not have '0' index";
           Logger::Error(debug_message);
-          throw std::runtime_error("Something went work in ordering: in InitializeComponents first component does not have '0' index");
+          throw std::runtime_error("Something went work in ordering: in initialize_components first component does not have '0' index");
         }
 
         Logger::Debug("** Initializing first node...");
@@ -250,7 +250,7 @@ namespace Space4AI
         }
 
         // find order of the partition
-        std::map<size_t, std::string> ordered_parts = FindOrderParts(parts);
+        std::map<size_t, std::string> ordered_parts = find_order_parts(parts);
 
         // loop on ordered partitions
         for(const auto& [idx, part]: ordered_parts)
@@ -299,12 +299,10 @@ namespace Space4AI
       Logger::Debug("** Done!");
     } // end loop on components
 
-    Logger::Debug("Done!");
-
   } // end function
 
   std::map<size_t, std::string>
-  SystemData::FindOrderParts(const nl::json& parts_json) const
+  SystemData::find_order_parts(const nl::json& parts_json) const
   {
     std::map<size_t, std::string> idx_to_part_name;
 
@@ -337,7 +335,7 @@ namespace Space4AI
     for(std::size_t i = 0; i < all_parts.size(); ++i)
     {
       if(all_parts.count(root_part) == 0)
-        throw std::logic_error("Error in FindOrderParts: " + root_part + " is not a partition");
+        throw std::logic_error("Error in find_order_parts: " + root_part + " is not a partition");
 
       idx_to_part_name.emplace(i, root_part);
       root_part = parts_json.at(root_part).at("next").get<std::string>();
@@ -347,10 +345,11 @@ namespace Space4AI
   }
 
   void
-  SystemData::InitializeCompatibilityMatrix(const nl::json& comp_matrix_json)
+  SystemData::initialize_compatibility_matrix(const nl::json& comp_matrix_json)
   {
     std::string debug_message;
 
+    // traversing components in order
     for(const auto& [idx, comp]: idx_to_comp_name)
     {
       const auto& comp_data = comp_matrix_json.at(comp);
@@ -359,7 +358,7 @@ namespace Space4AI
       Logger::Debug(debug_message);
       //resize the second level of the compatibility matrix with the number of resource types
       CompatibilityMatrixType::value_type comp_temp_matrix(
-        index(ResourceType::Count)
+        ResIdxFromType(ResourceType::Count)
       );
 
       // get the partitions of the current component
@@ -377,7 +376,7 @@ namespace Space4AI
         {
           // resize the fourth level of the compatibility matrix with the number of resources
           // of type i
-          res_vec.resize(resources.get_number_resources(i));
+          res_vec.resize(all_resources.get_number_resources(i));
         }
       }
 
@@ -388,93 +387,92 @@ namespace Space4AI
           //select compatible resources
           const auto& res_info = res_name_to_type_and_idx[res.get<std::string>()];
 
-          comp_temp_matrix [index(res_info.first)]
-          [part_name_to_part_idx[comp+part]]
+          comp_temp_matrix [ResIdxFromType(res_info.first)]
+          [part_name_to_part_idx.at(comp+part)]
           [res_info.second] = 1;
         }
       }
-      // assuming the same order in the json for components in "compatibility matrix" wrt to "components"
+
+      // I can do the follwing since components are traversed in order!
       this->compatibility_matrix.push_back(std::move(comp_temp_matrix));
-      Logger::Debug("Done!");
     }
   }
 
   void
-  SystemData::InitializeNetworkTechnology(const nl::json& network_technology_json)
+  SystemData::initialize_network_technology(const nl::json& network_technology_json)
   {
     std::string debug_message;
 
     for(const auto& [name, value]: network_technology_json.items())
     {
-      debug_message = "Initializing network domain "+name;
+      debug_message = "Initializing network domain " + name;
       Logger::Debug(debug_message);
+
       std::vector<std::string> cls_names;
 
       for(const auto& cl : value.at("computationallayers"))
       {
         cls_names.push_back(cl.get<std::string>());
-        cl_to_network_domains[cl.get<std::string>()].push_back(network_domains.size());
+        this->cl_to_network_domains[cl.get<std::string>()].push_back(network_domains.size());
       }
 
-      network_domains.emplace_back(
+      this->network_domains.emplace_back(
         name,
         cls_names,
         value.at("AccessDelay").get<TimeType>(),
         value.at("Bandwidth").get<double>()
       );
+
       Logger::Debug("Done!");
+
     }
 
-    // order the cl_to_network_domains
+    // order the cl_to_network_domains because then I will do a std::intersect
     for(auto& [name, vec]: cl_to_network_domains)
       std::sort(vec.begin(), vec.end());
   }
 
   void
-  SystemData::InitializeLocalConstraints(const nl::json& local_constraints_json)
+  SystemData::initialize_local_constraints(const nl::json& local_constraints_json)
   {
-    #warning this->get_comp_name_to_idx() is not working ... WHY?
-    //const auto& comp_name_to_idx = dag.get_comp_name_to_idx();
-
     for(size_t i=0; i<components.size(); ++i)
     {
-      local_constraints.emplace_back(
+      this->local_constraints.emplace_back(
         i,
         std::numeric_limits<TimeType>::infinity()
       );
     }
+
     if(!local_constraints_json.empty())
     {
       for(const auto& [comp, data]: local_constraints_json.items())
       {
-        local_constraints[comp_name_to_idx.at(comp)] = std::move(LocalConstraint(comp_name_to_idx.at(comp), data.at("local_res_time").get<TimeType>()));
+        this->local_constraints.at(comp_name_to_idx.at(comp)) = std::move(LocalConstraint(comp_name_to_idx.at(comp), data.at("local_res_time").get<TimeType>()));
       }
     }
   }
 
   void
-  SystemData::InitializeGlobalConstraints(const nl::json& global_constraints_json)
+  SystemData::Initialize_global_constraints(const nl::json& global_constraints_json)
   {
-    std::size_t idx = 0;
     std::string debug_message;
 
     for(const auto& [name, data]: global_constraints_json.items())
     {
-      debug_message = "Initializing global constraints for path "+name;
+      debug_message = "Initializing global constraints for path " +  name;
       Logger::Debug(debug_message);
       std::vector<std::size_t> comp_idxs;
 
       for(const auto& comp: data.at("components"))
           comp_idxs.push_back(comp_name_to_idx.at(comp.get<std::string>()));
 
-      this->gc_name_to_idx.emplace(name,idx);
+      this->gc_name_to_idx.emplace(name, gc_name_to_idx.size());
 
       this->global_constraints.emplace_back(
         name,
         comp_idxs,
         data.at("global_res_time").get<TimeType>()
       );
-      Logger::Debug("Done!");
     }
   }
 

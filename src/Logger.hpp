@@ -8,9 +8,8 @@
 * \author giuliamazzeellee
 */
 
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
-
+#ifndef LOGGER_HPP_
+#define LOGGER_HPP_
 
 #include <stdio.h>
 #include <iostream>
@@ -212,4 +211,4 @@ private:
 
 };
 
-#endif /*LOGGER_HPP*/
+#endif /*LOGGER_HPP_ */

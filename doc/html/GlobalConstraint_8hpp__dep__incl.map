@@ -1,0 +1,14 @@
+<map id="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Constraints/GlobalConstraint.hpp" name="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Constraints/GlobalConstraint.hpp">
+<area shape="rect" id="node1" title="Defines the class to store the Global constraints on a given path of components." alt="" coords="265,5,569,61"/>
+<area shape="rect" id="node2" href="$SystemData_8hpp.html" title="Defines the methods of SystemData class." alt="" coords="292,109,543,165"/>
+<area shape="rect" id="node3" href="$PerformanceFactory_8hpp.html" title="Defines the object factory for the different types of performance models." alt="" coords="329,317,661,373"/>
+<area shape="rect" id="node4" href="$System_8hpp.html" title="Define the class to store the general system object." alt="" coords="375,421,614,477"/>
+<area shape="rect" id="node12" href="$PerformanceModels_8hpp.html" title="Defines the classes for the performance evaluators." alt="" coords="455,213,790,269"/>
+<area shape="rect" id="node5" href="$RandomGreedyDT_8hpp.html" title="Defines the Random Greedy (Design time version) algorithm to solve the problem." alt="" coords="205,837,515,893"/>
+<area shape="rect" id="node7" href="$SystemPE_8hpp.html" title="Defines the evaluators to measure the performance of the system." alt="" coords="188,525,457,581"/>
+<area shape="rect" id="node9" href="$Solution_8hpp.html" title="Defines the class to store the a solution to the system configuration provided." alt="" coords="322,629,561,685"/>
+<area shape="rect" id="node10" href="$EliteResult_8hpp.html" title="Defines the class to store to store a fixed&#45;size vector of Solution objects, sorted by minimum cost." alt="" coords="398,733,642,789"/>
+<area shape="rect" id="node11" href="$System_8cpp.html" title="Define the methods of the class System." alt="" coords="637,525,875,581"/>
+<area shape="rect" id="node6" href="$RandomGreedyDT_8cpp.html" title="Defines the methods of the RandomGreedyDT class." alt="" coords="205,941,515,997"/>
+<area shape="rect" id="node8" href="$SystemPE_8cpp.html" title="Defines the methods of the classes defined in SystemPE.hpp." alt="" coords="30,629,298,685"/>
+</map>

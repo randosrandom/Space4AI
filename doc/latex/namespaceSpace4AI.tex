@@ -1,0 +1,306 @@
+\hypertarget{namespaceSpace4AI}{}\doxysection{Space4\+AI Namespace Reference}
+\label{namespaceSpace4AI}\index{Space4AI@{Space4AI}}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1AllResources}{All\+Resources}}
+\begin{DoxyCompactList}\small\item\em Class to store all type of the resources as a single \char`\"{}container\char`\"{}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Base\+Performance\+Model}}
+\begin{DoxyCompactList}\small\item\em Abstract class to represent the parent of all performance models that will inherit from it. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}}
+\begin{DoxyCompactList}\small\item\em Class to represent the components, namely \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} nodes. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1ComputationalLayer}{Computational\+Layer}}
+\begin{DoxyCompactList}\small\item\em Class to represent a computational layer, namely a vector of resources of a fixed type. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}
+\begin{DoxyCompactList}\small\item\em Class to represent the transition probabilities of a Directed Acyclic Graph. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Deployment}{Deployment}}
+\begin{DoxyCompactList}\small\item\em Class to represent a candidate deployment for a component. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1EliteResult}{Elite\+Result}}
+\begin{DoxyCompactList}\small\item\em Class to store to store a fixed-\/size list of \mbox{\hyperlink{classSpace4AI_1_1Solution}{Solution}} objects, sorted by minimum cost. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1FaasPacsltkPE}{Faas\+Pacsltk\+PE}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1FaasPacsltkStaticPE}{Faas\+Pacsltk\+Static\+PE}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1FaasPE}{Faas\+PE}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1GlobalConstraint}{Global\+Constraint}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1GlobalConstraint}{Global\+Constraint}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1LocalConstraint}{Local\+Constraint}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1NetworkDomain}{Network\+Domain}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1NetworkDomain}{Network\+Domain}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1NetworkPerformanceEvaluator}{Network\+Performance\+Evaluator}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1NetworkPerformanceEvaluator}{Network\+Performance\+Evaluator}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Pacsltk}{Pacsltk}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Partition}{Partition}}
+\begin{DoxyCompactList}\small\item\em Class to represent a partition of a component. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}}
+\begin{DoxyCompactList}\small\item\em Class to define queue-\/servers performance models. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1RandomGreedyDT}{Random\+Greedy\+DT}}
+\begin{DoxyCompactList}\small\item\em Class to define the Random Greedy algorithm to solve the problem. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}}
+\begin{DoxyCompactList}\small\item\em Template class to manage different type of resources. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Resource_3_01ResourceType_1_1Faas_01_4}{Resource$<$ Resource\+Type\+::\+Faas $>$}}
+\begin{DoxyCompactList}\small\item\em Specialization of the template class Resource$<$\+Resource\+Type Type$>$ for FaaS resources. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1Solution}{Solution}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1Solution}{Solution}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1SolutionData}{Solution\+Data}}
+\item 
+class \mbox{\hyperlink{classSpace4AI_1_1System}{System}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1System}{System}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator}{System\+Performance\+Evaluator}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1SystemPerformanceEvaluator}{System\+Performance\+Evaluator}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{namespaceSpace4AI_a937fa49b59541848e6576efa808d4936}{Cost\+Type}} = double
+\begin{DoxyCompactList}\small\item\em represent the cost type used \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_a0ff8cd54b5bec3b41d183eba9e824e30}{Prob\+Type}} = double
+\begin{DoxyCompactList}\small\item\em represent ransition probabilities of the dag \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_a3b3c608014fd17f69feee6de11ab1768}{Data\+Type}} = double
+\begin{DoxyCompactList}\small\item\em represent data sizes passed between components \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}} = double
+\begin{DoxyCompactList}\small\item\em represent the input exogenous workload \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} = double
+\begin{DoxyCompactList}\small\item\em represent time \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_a571841c23b235a3b6b4cfa28b7ab0735}{Compatibility\+Matrix\+Type}} = std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ bool $>$ $>$$>$ $>$
+\item 
+using \mbox{\hyperlink{namespaceSpace4AI_aff7d85774ad00e936056cacf0d531d71}{Dag\+Matrix\+Type}} = std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{namespaceSpace4AI_a0ff8cd54b5bec3b41d183eba9e824e30}{Prob\+Type}} $>$ $>$
+\begin{DoxyCompactList}\small\item\em Used to save the transition matrix of the \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_ab860577071c99d2225b6a9ddaf9d3f37}{Demand\+Edge\+V\+M\+Type}} = std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{namespaceSpace4AI_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}} $>$ $>$$>$ $>$
+\begin{DoxyCompactList}\small\item\em Demand\+Edge\+V\+M\+Type needed to store demands of resources using of \mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}}. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_af47635507e6796755a2c1b1d93565444}{Performance\+Type}} = std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Base\+Performance\+Model}} $>$ $>$ $>$$>$ $>$
+\begin{DoxyCompactList}\small\item\em Predictors to compute the demand time. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_aa9952495cb1a9e49484a2dd4f89c7cc9}{Y\+Hat\+Type}} = std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::size\+\_\+t $>$ $>$$>$ $>$
+\begin{DoxyCompactList}\small\item\em Type of the \char`\"{}y hat\char`\"{}. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_ac26ac33e947a00907752f1e43ebf8851}{Used\+Resources\+Ordered\+Type}} = std\+::vector$<$ std\+::vector$<$ std\+::tuple$<$ size\+\_\+t, size\+\_\+t, size\+\_\+t $>$ $>$ $>$
+\begin{DoxyCompactList}\small\item\em Save only the deployed resources. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{namespaceSpace4AI_a12cc8060a00ec9850cb78fa3e17fecda}{Used\+Resources\+Number\+Type}} = std\+::vector$<$ std\+::vector$<$ size\+\_\+t $>$ $>$
+\begin{DoxyCompactList}\small\item\em For each \mbox{[}\mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} Type, \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} idx\mbox{]} save the number of instances of such resource deployed in the system. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} \+: size\+\_\+t \{ \mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454ae4a297a0f76119a442c2595ac040673e}{Resource\+Type\+::\+Edge}} = 0, 
+\mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454a583a65df9db4119165f5ea0abaa50281}{Resource\+Type\+::\+VM}} = 1, 
+\mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454aa9b9806909f1afe598375a8a137fd7b7}{Resource\+Type\+::\+Faas}} = 2, 
+\mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454ae93f994f01c537c4e2f7d8528c3eb5e9}{Resource\+Type\+::\+Count}} = 3
+ \}
+\begin{DoxyCompactList}\small\item\em Enum class to identify different types of resources. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Base\+Performance\+Model}} $>$ \mbox{\hyperlink{namespaceSpace4AI_abe435fd167fde681ceed5ae8c1e3b934}{create\+\_\+\+PE}} (const std\+::string \&model, const nl\+::json \&perf\+\_\+json, const \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \&system\+\_\+data, size\+\_\+t comp\+\_\+idx, size\+\_\+t res\+\_\+type\+\_\+idx, size\+\_\+t part\+\_\+idx, size\+\_\+t res\+\_\+idx)
+\item 
+template$<$$>$ void \mbox{\hyperlink{namespaceSpace4AI_a47f2230ab93754ec28d53a8fa9e14ac6}{System\+Data\+::initialize\+\_\+resources$<$ Resource\+Type\+::\+Faas $>$}} (const nl\+::json \&faas\+\_\+json)
+\item 
+size\+\_\+t \mbox{\hyperlink{namespaceSpace4AI_a76e7ddb6c59c7ee40d5c50e2f13cf4fd}{Res\+Idx\+From\+Type}} (\mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Res\+Type)
+\begin{DoxyCompactList}\small\item\em Function that convert a Resource\+Type\+::member to the corresponding index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} \mbox{\hyperlink{namespaceSpace4AI_a972cf0b09c76ff1885f4f56b8b691d37}{Res\+Type\+From\+Idx}} (size\+\_\+t type\+\_\+idx)
+\begin{DoxyCompactList}\small\item\em function to convert an index to the corresponding Resource\+Type\+::member \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{namespaceSpace4AI_a571841c23b235a3b6b4cfa28b7ab0735}\label{namespaceSpace4AI_a571841c23b235a3b6b4cfa28b7ab0735}} 
+\index{Space4AI@{Space4AI}!CompatibilityMatrixType@{CompatibilityMatrixType}}
+\index{CompatibilityMatrixType@{CompatibilityMatrixType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{CompatibilityMatrixType}{CompatibilityMatrixType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_a571841c23b235a3b6b4cfa28b7ab0735}{Space4\+A\+I\+::\+Compatibility\+Matrix\+Type}} = typedef std\+::vector$<$std\+::vector$<$std\+::vector$<$std\+::vector$<$bool$>$ $>$$>$ $>$}
+
+\mbox{\Hypertarget{namespaceSpace4AI_a937fa49b59541848e6576efa808d4936}\label{namespaceSpace4AI_a937fa49b59541848e6576efa808d4936}} 
+\index{Space4AI@{Space4AI}!CostType@{CostType}}
+\index{CostType@{CostType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{CostType}{CostType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_a937fa49b59541848e6576efa808d4936}{Space4\+A\+I\+::\+Cost\+Type}} = typedef double}
+
+
+
+represent the cost type used 
+
+\mbox{\Hypertarget{namespaceSpace4AI_aff7d85774ad00e936056cacf0d531d71}\label{namespaceSpace4AI_aff7d85774ad00e936056cacf0d531d71}} 
+\index{Space4AI@{Space4AI}!DagMatrixType@{DagMatrixType}}
+\index{DagMatrixType@{DagMatrixType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{DagMatrixType}{DagMatrixType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_aff7d85774ad00e936056cacf0d531d71}{Space4\+A\+I\+::\+Dag\+Matrix\+Type}} = typedef std\+::vector$<$std\+::vector$<$\mbox{\hyperlink{namespaceSpace4AI_a0ff8cd54b5bec3b41d183eba9e824e30}{Prob\+Type}}$>$ $>$}
+
+
+
+Used to save the transition matrix of the \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}}. 
+
+Two dimensional vector of Prob\+Type (indexed by \mbox{[}i\mbox{]}\mbox{[}j\mbox{]}) storing the transition probability from component j to component i. \mbox{\Hypertarget{namespaceSpace4AI_a3b3c608014fd17f69feee6de11ab1768}\label{namespaceSpace4AI_a3b3c608014fd17f69feee6de11ab1768}} 
+\index{Space4AI@{Space4AI}!DataType@{DataType}}
+\index{DataType@{DataType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{DataType}{DataType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_a3b3c608014fd17f69feee6de11ab1768}{Space4\+A\+I\+::\+Data\+Type}} = typedef double}
+
+
+
+represent data sizes passed between components 
+
+\mbox{\Hypertarget{namespaceSpace4AI_ab860577071c99d2225b6a9ddaf9d3f37}\label{namespaceSpace4AI_ab860577071c99d2225b6a9ddaf9d3f37}} 
+\index{Space4AI@{Space4AI}!DemandEdgeVMType@{DemandEdgeVMType}}
+\index{DemandEdgeVMType@{DemandEdgeVMType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{DemandEdgeVMType}{DemandEdgeVMType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_ab860577071c99d2225b6a9ddaf9d3f37}{Space4\+A\+I\+::\+Demand\+Edge\+V\+M\+Type}} = typedef std\+::vector$<$std\+::vector$<$std\+::vector$<$std\+::vector$<$\mbox{\hyperlink{namespaceSpace4AI_aa3f147f6e76960aae00fe4732c7e8802}{Time\+Type}}$>$ $>$$>$ $>$}
+
+
+
+Demand\+Edge\+V\+M\+Type needed to store demands of resources using of \mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}}. 
+
+\mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}} is the only PE that must know demands from the other instances of the PE (other components and partition running on the same resource). The design choice we choose is to save a static 4-\/dim vector (indexed by \mbox{[}comp\+\_\+idx\mbox{]}\mbox{[}type\+\_\+idx\mbox{]}\mbox{[}part\+\_\+idx\mbox{]}\mbox{[}res\+\_\+idx\mbox{]}) and we save Nans when the specific resources running the specific partition does not use \mbox{\hyperlink{classSpace4AI_1_1QTPE}{Q\+T\+PE}}. Other design choice are available but to use less memory would require shared\+\_\+ptr but in this case just a copy is better. \mbox{\Hypertarget{namespaceSpace4AI_a8787e6cae8f22227c143322a18ff75f8}\label{namespaceSpace4AI_a8787e6cae8f22227c143322a18ff75f8}} 
+\index{Space4AI@{Space4AI}!LoadType@{LoadType}}
+\index{LoadType@{LoadType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{LoadType}{LoadType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_a8787e6cae8f22227c143322a18ff75f8}{Space4\+A\+I\+::\+Load\+Type}} = typedef double}
+
+
+
+represent the input exogenous workload 
+
+\mbox{\Hypertarget{namespaceSpace4AI_af47635507e6796755a2c1b1d93565444}\label{namespaceSpace4AI_af47635507e6796755a2c1b1d93565444}} 
+\index{Space4AI@{Space4AI}!PerformanceType@{PerformanceType}}
+\index{PerformanceType@{PerformanceType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{PerformanceType}{PerformanceType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_af47635507e6796755a2c1b1d93565444}{Space4\+A\+I\+::\+Performance\+Type}} = typedef std\+::vector$<$std\+::vector$<$std\+::vector$<$std\+::vector$<$ std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Base\+Performance\+Model}}$>$ $>$ $>$$>$ $>$}
+
+
+
+Predictors to compute the demand time. 
+
+For each partition and each component, running on a specific resource of a specific type, we save an unique\+\_\+ptr to the \mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Base\+Performance\+Model}} class, exploiting Inheritance and Polymorphism. \mbox{\Hypertarget{namespaceSpace4AI_a0ff8cd54b5bec3b41d183eba9e824e30}\label{namespaceSpace4AI_a0ff8cd54b5bec3b41d183eba9e824e30}} 
+\index{Space4AI@{Space4AI}!ProbType@{ProbType}}
+\index{ProbType@{ProbType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{ProbType}{ProbType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_a0ff8cd54b5bec3b41d183eba9e824e30}{Space4\+A\+I\+::\+Prob\+Type}} = typedef double}
+
+
+
+represent ransition probabilities of the dag 
+
+\mbox{\Hypertarget{namespaceSpace4AI_aa3f147f6e76960aae00fe4732c7e8802}\label{namespaceSpace4AI_aa3f147f6e76960aae00fe4732c7e8802}} 
+\index{Space4AI@{Space4AI}!TimeType@{TimeType}}
+\index{TimeType@{TimeType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{TimeType}{TimeType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_aa3f147f6e76960aae00fe4732c7e8802}{Space4\+A\+I\+::\+Time\+Type}} = typedef double}
+
+
+
+represent time 
+
+\mbox{\Hypertarget{namespaceSpace4AI_a12cc8060a00ec9850cb78fa3e17fecda}\label{namespaceSpace4AI_a12cc8060a00ec9850cb78fa3e17fecda}} 
+\index{Space4AI@{Space4AI}!UsedResourcesNumberType@{UsedResourcesNumberType}}
+\index{UsedResourcesNumberType@{UsedResourcesNumberType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{UsedResourcesNumberType}{UsedResourcesNumberType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_a12cc8060a00ec9850cb78fa3e17fecda}{Space4\+A\+I\+::\+Used\+Resources\+Number\+Type}} = typedef std\+::vector$<$std\+::vector$<$size\+\_\+t$>$ $>$}
+
+
+
+For each \mbox{[}\mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} Type, \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} idx\mbox{]} save the number of instances of such resource deployed in the system. 
+
+\mbox{\Hypertarget{namespaceSpace4AI_ac26ac33e947a00907752f1e43ebf8851}\label{namespaceSpace4AI_ac26ac33e947a00907752f1e43ebf8851}} 
+\index{Space4AI@{Space4AI}!UsedResourcesOrderedType@{UsedResourcesOrderedType}}
+\index{UsedResourcesOrderedType@{UsedResourcesOrderedType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{UsedResourcesOrderedType}{UsedResourcesOrderedType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_ac26ac33e947a00907752f1e43ebf8851}{Space4\+A\+I\+::\+Used\+Resources\+Ordered\+Type}} = typedef std\+::vector$<$std\+::vector$<$ std\+::tuple$<$size\+\_\+t, size\+\_\+t, size\+\_\+t$>$ $>$ $>$}
+
+
+
+Save only the deployed resources. 
+
+For each component (indexing the first vector) we save a vector of tuples, (partition index, Resource\+Type index, \mbox{\hyperlink{classSpace4AI_1_1Resource}{Resource}} index) used on that component. Actually it could be sufficient to use just Y\+Hat, but since the number of chosen resources can be much smaller than available resources, it is better to have a data structure that keeps track only of the used resources.
+
+There is Ordered in name, since the inner vector must be ordered by part\+\_\+idx at some point. Using a std\+::set would not be efficient since order it\textquotesingle{}s not necessary to keep the order for each insert (See report for details) \mbox{\Hypertarget{namespaceSpace4AI_aa9952495cb1a9e49484a2dd4f89c7cc9}\label{namespaceSpace4AI_aa9952495cb1a9e49484a2dd4f89c7cc9}} 
+\index{Space4AI@{Space4AI}!YHatType@{YHatType}}
+\index{YHatType@{YHatType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{YHatType}{YHatType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{namespaceSpace4AI_aa9952495cb1a9e49484a2dd4f89c7cc9}{Space4\+A\+I\+::\+Y\+Hat\+Type}} = typedef std\+::vector$<$std\+::vector$<$std\+::vector$<$std\+::vector$<$ std\+::size\+\_\+t $>$ $>$$>$ $>$}
+
+
+
+Type of the \char`\"{}y hat\char`\"{}. 
+
+Indexing equivalent to Compatibility\+Matrix\+Type. It stores the number of resources of a certain type, running a certain component-\/partition couple. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}\label{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}} 
+\index{Space4AI@{Space4AI}!ResourceType@{ResourceType}}
+\index{ResourceType@{ResourceType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{ResourceType}{ResourceType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}{Space4\+A\+I\+::\+Resource\+Type}} \+: size\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Enum class to identify different types of resources. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Edge@{Edge}!Space4AI@{Space4AI}}\index{Space4AI@{Space4AI}!Edge@{Edge}}}\mbox{\Hypertarget{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454ae4a297a0f76119a442c2595ac040673e}\label{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454ae4a297a0f76119a442c2595ac040673e}} 
+Edge&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{VM@{VM}!Space4AI@{Space4AI}}\index{Space4AI@{Space4AI}!VM@{VM}}}\mbox{\Hypertarget{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454a583a65df9db4119165f5ea0abaa50281}\label{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454a583a65df9db4119165f5ea0abaa50281}} 
+VM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Faas@{Faas}!Space4AI@{Space4AI}}\index{Space4AI@{Space4AI}!Faas@{Faas}}}\mbox{\Hypertarget{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454aa9b9806909f1afe598375a8a137fd7b7}\label{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454aa9b9806909f1afe598375a8a137fd7b7}} 
+Faas&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Count@{Count}!Space4AI@{Space4AI}}\index{Space4AI@{Space4AI}!Count@{Count}}}\mbox{\Hypertarget{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454ae93f994f01c537c4e2f7d8528c3eb5e9}\label{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454ae93f994f01c537c4e2f7d8528c3eb5e9}} 
+Count&total number of resource types \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceSpace4AI_abe435fd167fde681ceed5ae8c1e3b934}\label{namespaceSpace4AI_abe435fd167fde681ceed5ae8c1e3b934}} 
+\index{Space4AI@{Space4AI}!create\_PE@{create\_PE}}
+\index{create\_PE@{create\_PE}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{create\_PE()}{create\_PE()}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classSpace4AI_1_1BasePerformanceModel}{Base\+Performance\+Model}}$>$ Space4\+A\+I\+::create\+\_\+\+PE (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{model,  }\item[{const nl\+::json \&}]{perf\+\_\+json,  }\item[{const \mbox{\hyperlink{classSpace4AI_1_1SystemData}{System\+Data}} \&}]{system\+\_\+data,  }\item[{size\+\_\+t}]{comp\+\_\+idx,  }\item[{size\+\_\+t}]{res\+\_\+type\+\_\+idx,  }\item[{size\+\_\+t}]{part\+\_\+idx,  }\item[{size\+\_\+t}]{res\+\_\+idx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{namespaceSpace4AI_a76e7ddb6c59c7ee40d5c50e2f13cf4fd}\label{namespaceSpace4AI_a76e7ddb6c59c7ee40d5c50e2f13cf4fd}} 
+\index{Space4AI@{Space4AI}!ResIdxFromType@{ResIdxFromType}}
+\index{ResIdxFromType@{ResIdxFromType}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{ResIdxFromType()}{ResIdxFromType()}}
+{\footnotesize\ttfamily size\+\_\+t Space4\+A\+I\+::\+Res\+Idx\+From\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}}}]{Res\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Function that convert a Resource\+Type\+::member to the corresponding index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Res\+Type} & a Resource\+Type\+::member \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+index of the Resource\+Type\+::member 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceSpace4AI_a972cf0b09c76ff1885f4f56b8b691d37}\label{namespaceSpace4AI_a972cf0b09c76ff1885f4f56b8b691d37}} 
+\index{Space4AI@{Space4AI}!ResTypeFromIdx@{ResTypeFromIdx}}
+\index{ResTypeFromIdx@{ResTypeFromIdx}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{ResTypeFromIdx()}{ResTypeFromIdx()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454}{Resource\+Type}} Space4\+A\+I\+::\+Res\+Type\+From\+Idx (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{type\+\_\+idx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+function to convert an index to the corresponding Resource\+Type\+::member 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type\+\_\+idx} & an index of a Resource\+Type\+::member \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Resource\+Type\+::member corresponding to type\+\_\+idx 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceSpace4AI_a47f2230ab93754ec28d53a8fa9e14ac6}\label{namespaceSpace4AI_a47f2230ab93754ec28d53a8fa9e14ac6}} 
+\index{Space4AI@{Space4AI}!SystemData::initialize\_resources$<$ ResourceType::Faas $>$@{SystemData::initialize\_resources$<$ ResourceType::Faas $>$}}
+\index{SystemData::initialize\_resources$<$ ResourceType::Faas $>$@{SystemData::initialize\_resources$<$ ResourceType::Faas $>$}!Space4AI@{Space4AI}}
+\doxysubsubsection{\texorpdfstring{SystemData::initialize\_resources$<$ ResourceType::Faas $>$()}{SystemData::initialize\_resources< ResourceType::Faas >()}}
+{\footnotesize\ttfamily template$<$$>$ \\
+void \mbox{\hyperlink{classSpace4AI_1_1SystemData_a042e8f4b511726c90e647b506b34c57d}{Space4\+A\+I\+::\+System\+Data\+::initialize\+\_\+resources}}$<$ \mbox{\hyperlink{namespaceSpace4AI_a67802e3bb61e9478e829e29b701fd454aa9b9806909f1afe598375a8a137fd7b7}{Resource\+Type\+::\+Faas}} $>$ (\begin{DoxyParamCaption}\item[{const nl\+::json \&}]{faas\+\_\+json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+

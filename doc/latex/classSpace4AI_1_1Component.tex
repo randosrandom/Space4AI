@@ -1,0 +1,89 @@
+\hypertarget{classSpace4AI_1_1Component}{}\doxysection{Space4\+AI\+::Component Class Reference}
+\label{classSpace4AI_1_1Component}\index{Space4AI::Component@{Space4AI::Component}}
+
+
+Class to represent the components, namely \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} nodes.  
+
+
+
+
+{\ttfamily \#include $<$Component.\+hpp$>$}
+
+
+
+Collaboration diagram for Space4\+AI\+::Component\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classSpace4AI_1_1Component__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class D , class P $>$ }\\\mbox{\hyperlink{classSpace4AI_1_1Component_a77831b76d4189969fdff09f07ce38e36}{Component}} (const std\+::string \&name\+\_\+, D \&\&deployments\+\_\+, P \&\&partitions\+\_\+, \mbox{\hyperlink{TypeTraits_8hpp_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}} comp\+\_\+lambda\+\_\+)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} class constructor (move semantic used) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a7736300688235a7494c57252f2731276}\label{classSpace4AI_1_1Component_a7736300688235a7494c57252f2731276}} 
+std\+::string \mbox{\hyperlink{classSpace4AI_1_1Component_a7736300688235a7494c57252f2731276}{get\+\_\+name}} () const
+\begin{DoxyCompactList}\small\item\em name getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a7df4fff164c1b2b5a214b838efc21ca8}\label{classSpace4AI_1_1Component_a7df4fff164c1b2b5a214b838efc21ca8}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Deployment}{Deployment}} $>$ \& \mbox{\hyperlink{classSpace4AI_1_1Component_a7df4fff164c1b2b5a214b838efc21ca8}{get\+\_\+deployments}} () const
+\begin{DoxyCompactList}\small\item\em deployments vector getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_ad486abc73aa137955e2ab4ec9098b82c}\label{classSpace4AI_1_1Component_ad486abc73aa137955e2ab4ec9098b82c}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Partition}{Partition}} $>$ \& \mbox{\hyperlink{classSpace4AI_1_1Component_ad486abc73aa137955e2ab4ec9098b82c}{get\+\_\+partitions}} () const
+\begin{DoxyCompactList}\small\item\em partitions vector getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a6a6e882270875cc572c6c3eeb37e911a}\label{classSpace4AI_1_1Component_a6a6e882270875cc572c6c3eeb37e911a}} 
+const \mbox{\hyperlink{classSpace4AI_1_1Partition}{Partition}} \& \mbox{\hyperlink{classSpace4AI_1_1Component_a6a6e882270875cc572c6c3eeb37e911a}{get\+\_\+partition}} (size\+\_\+t idx) const
+\begin{DoxyCompactList}\small\item\em single partition getter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a29d499bbd49cf3e898723d16f47a3c78}\label{classSpace4AI_1_1Component_a29d499bbd49cf3e898723d16f47a3c78}} 
+\mbox{\hyperlink{TypeTraits_8hpp_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}} \mbox{\hyperlink{classSpace4AI_1_1Component_a29d499bbd49cf3e898723d16f47a3c78}{get\+\_\+comp\+\_\+lambda}} () const
+\begin{DoxyCompactList}\small\item\em comp\+\_\+lambda getter \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a5f73957af743aa54e73f76458eae55b9}\label{classSpace4AI_1_1Component_a5f73957af743aa54e73f76458eae55b9}} 
+const std\+::string \mbox{\hyperlink{classSpace4AI_1_1Component_a5f73957af743aa54e73f76458eae55b9}{name}}
+\begin{DoxyCompactList}\small\item\em Name of the component. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a73d99ddbcfc5abb87d5d0c430aecea06}\label{classSpace4AI_1_1Component_a73d99ddbcfc5abb87d5d0c430aecea06}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Deployment}{Deployment}} $>$ \mbox{\hyperlink{classSpace4AI_1_1Component_a73d99ddbcfc5abb87d5d0c430aecea06}{deployments}}
+\begin{DoxyCompactList}\small\item\em Vector of \mbox{\hyperlink{classSpace4AI_1_1Deployment}{Deployment}} objects. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_aa37aa50f1a1ad332f0b413e1fd550d96}\label{classSpace4AI_1_1Component_aa37aa50f1a1ad332f0b413e1fd550d96}} 
+const std\+::vector$<$ \mbox{\hyperlink{classSpace4AI_1_1Partition}{Partition}} $>$ \mbox{\hyperlink{classSpace4AI_1_1Component_aa37aa50f1a1ad332f0b413e1fd550d96}{partitions}}
+\begin{DoxyCompactList}\small\item\em Vector of Partitions objects. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a3b9c60b6f978409b11df9874cd5418ac}\label{classSpace4AI_1_1Component_a3b9c60b6f978409b11df9874cd5418ac}} 
+const \mbox{\hyperlink{TypeTraits_8hpp_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}} \mbox{\hyperlink{classSpace4AI_1_1Component_a3b9c60b6f978409b11df9874cd5418ac}{comp\+\_\+lambda}}
+\begin{DoxyCompactList}\small\item\em Load factor of the component. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to represent the components, namely \mbox{\hyperlink{classSpace4AI_1_1DAG}{D\+AG}} nodes. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpace4AI_1_1Component_a77831b76d4189969fdff09f07ce38e36}\label{classSpace4AI_1_1Component_a77831b76d4189969fdff09f07ce38e36}} 
+\index{Space4AI::Component@{Space4AI::Component}!Component@{Component}}
+\index{Component@{Component}!Space4AI::Component@{Space4AI::Component}}
+\doxysubsubsection{\texorpdfstring{Component()}{Component()}}
+{\footnotesize\ttfamily template$<$class D , class P $>$ \\
+Space4\+A\+I\+::\+Component\+::\+Component (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name\+\_\+,  }\item[{D \&\&}]{deployments\+\_\+,  }\item[{P \&\&}]{partitions\+\_\+,  }\item[{\mbox{\hyperlink{TypeTraits_8hpp_a8787e6cae8f22227c143322a18ff75f8}{Load\+Type}}}]{comp\+\_\+lambda\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} class constructor (move semantic used) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name\+\_\+} & \mbox{\hyperlink{classSpace4AI_1_1Component}{Component}} name \\
+\hline
+{\em deployments\+\_\+} & Vector of \mbox{\hyperlink{classSpace4AI_1_1Deployment}{Deployment}} objects \\
+\hline
+{\em partitions\+\_\+} & Vector of \mbox{\hyperlink{classSpace4AI_1_1Partition}{Partition}} objects \\
+\hline
+{\em comp\+\_\+lambda\+\_\+} & Load factor \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/rando2/\+Laurea\+Magistrale/\+P\+A\+C\+S\+\_\+\+T\+E\+S\+I/\+Run\+Time/\+Design\+Time\+\_\+\+P\+A\+C\+S/src/\+Graph/\mbox{\hyperlink{Component_8hpp}{Component.\+hpp}}\end{DoxyCompactItemize}

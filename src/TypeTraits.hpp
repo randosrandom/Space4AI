@@ -71,11 +71,11 @@ namespace Space4AI
 
   /** Predictors to compute the demand time.
   *
-  *   For ach partition or each component, running on a specific resource of a
+  *   For each partition and each component, running on a specific resource of a
   *   specific type, we save an unique_ptr to the BasePerformanceModel class,
   *   exploiting Inheritance and Polymorphism.
   */
-  using PerformancePredictorsType =
+  using PerformanceType =
     std::vector<std::vector<std::vector<std::vector<
       std::unique_ptr<BasePerformanceModel>
     >>>>;
@@ -118,7 +118,7 @@ namespace Space4AI
   */
   inline
   size_t
-  ResourceIndexFromType(ResourceType ResType)
+  ResIdxFromType(ResourceType ResType)
   {
     return static_cast<std::size_t>(ResType);
   }
@@ -130,7 +130,7 @@ namespace Space4AI
   */
   inline
   ResourceType
-  ResourceTypeFromIndex(size_t type_idx)
+  ResTypeFromIdx(size_t type_idx)
   {
     return static_cast<ResourceType>(type_idx);
   }

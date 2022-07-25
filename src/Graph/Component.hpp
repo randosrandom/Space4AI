@@ -19,8 +19,6 @@
 namespace Space4AI
 {
   /**
-  * Partition.
-  *
   * Class to represent a partition of a component.
   */
   class Partition
@@ -37,11 +35,11 @@ namespace Space4AI
      *  \param data_size_ Amount of data transferred to the subsequent partition
      */
     Partition(
-      std::string name_,
+      const std::string& name_,
       DataType memory_,
       LoadType part_lambda_,
       ProbType early_exit_probability_,
-      std::string next_,
+      const std::string& next_,
       DataType data_size_
     ):
     name(name_), memory(memory_), part_lambda(part_lambda_),
@@ -88,9 +86,8 @@ namespace Space4AI
 
   };
 
-  /** Deployment.
-   *
-   * Class to represent a candidate deployment for a component.
+  /**
+   *  Class to represent a candidate deployment for a component.
    */
   class Deployment
   {
@@ -102,7 +99,7 @@ namespace Space4AI
      *  \param partition_indices_ Vector of indices of partitions objects
      */
     Deployment(
-      std::string name_,
+      const std::string& name_,
       const std::vector<std::size_t>& partitions_indices_
     ):
     name(name_), partitions_indices(partitions_indices_)
@@ -125,8 +122,7 @@ namespace Space4AI
 
   };
 
-  /** Component.
-  *
+  /** 
   *   Class to represent the components, namely DAG nodes.
   */
   class Component
@@ -142,7 +138,7 @@ namespace Space4AI
      */
     template<class D, class P>
     Component(
-      std::string name_,
+      const std::string& name_,
       D&& deployments_,
       P&& partitions_,
       LoadType comp_lambda_
@@ -166,7 +162,7 @@ namespace Space4AI
     }
 
     /** single partition getter */
-    const Partition& get_partitions(size_t idx) const {
+    const Partition& get_partition(size_t idx) const {
       return partitions[idx];
     }
 
