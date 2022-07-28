@@ -10,7 +10,7 @@
 #include <iostream>
 #include <numeric>
 
-#include "Dag.hpp"
+#include "src/Graph/Dag.hpp"
 
 namespace Space4AI
 {

@@ -10,7 +10,7 @@
 #ifndef RESOURCES_HPP_
 #define RESOURCES_HPP_
 
-#include "TypeTraits.hpp"
+#include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {

@@ -16,14 +16,15 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Graph/Component.hpp"
-#include "Graph/Dag.hpp"
-#include "Constraints/GlobalConstraint.hpp"
-#include "nlohmann/json.hpp"
-#include "Constraints/LocalConstraint.hpp"
-#include "NetworkTechnology.hpp"
-#include "Resources.hpp"
-#include "TypeTraits.hpp"
+#include "external/nlohmann/json.hpp"
+
+#include "src/Constraints/GlobalConstraint.hpp"
+#include "src/Constraints/LocalConstraint.hpp"
+#include "src/Graph/Component.hpp"
+#include "src/Graph/Dag.hpp"
+#include "src/NetworkTechnology.hpp"
+#include "src/Resources.hpp"
+#include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {

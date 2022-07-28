@@ -14,7 +14,7 @@
 #include <string>
 #include <utility>
 
-#include "TypeTraits.hpp"
+#include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {
@@ -122,7 +122,7 @@ namespace Space4AI
 
   };
 
-  /** 
+  /**
   *   Class to represent the components, namely DAG nodes.
   */
   class Component

@@ -7,7 +7,7 @@
 * \author giuliamazzeellee
 */
 
-#include "Algorithms/RandomGreedyDT.hpp"
+#include "src/Algorithms/RandomGreedyDT.hpp"
 
 #include <random>
 //#include <omp.h>

@@ -10,21 +10,25 @@
 #ifndef PERFORMANCEFACTORY_HPP_
 #define PERFORMANCEFACTORY_HPP_
 
+#include <limits>
 #include <memory>
 #include <string>
 
-#include "Performance/PerformanceModels.hpp"
-#include "System/SystemData.hpp"
+
+#include "src/Performance/PerformanceModels.hpp"
+#include "src/System/SystemData.hpp"
 
 namespace Space4AI
 {
-  
+
   inline
   std::unique_ptr<BasePerformanceModel>
   create_PE(
     const std::string& model, const nl::json& perf_json,
     const SystemData& system_data,
-    size_t comp_idx, size_t res_type_idx, size_t part_idx, size_t res_idx
+    size_t comp_idx = std::numeric_limits<size_t>::quiet_NaN(),
+    size_t part_idx = std::numeric_limits<size_t>::quiet_NaN(),
+    size_t res_idx = std::numeric_limits<size_t>::quiet_NaN()
   )
   {
     if(model == "QTedge" || model == "QTcloud")

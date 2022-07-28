@@ -10,9 +10,9 @@
 #ifndef SYSTEMPE_HPP_
 #define SYSTEMPE_HPP_
 
-#include "Solution/SolutionData.hpp"
-#include "System/System.hpp"
-#include "TypeTraits.hpp"
+#include "src/Solution/SolutionData.hpp"
+#include "src/System/System.hpp"
+#include "src/TypeTraits.hpp"
 
 
 namespace Space4AI

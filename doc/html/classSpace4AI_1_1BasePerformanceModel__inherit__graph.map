@@ -1,7 +1,0 @@
-<map id="Space4AI::BasePerformanceModel" name="Space4AI::BasePerformanceModel">
-<area shape="rect" id="node1" title="Abstract class to represent the parent of all performance models that will inherit from it." alt="" coords="199,5,412,171"/>
-<area shape="rect" id="node2" href="$classSpace4AI_1_1FaasPE.html" title=" " alt="" coords="125,233,291,355"/>
-<area shape="rect" id="node5" href="$classSpace4AI_1_1QTPE.html" title="Class to define queue&#45;servers performance models." alt="" coords="316,219,492,369"/>
-<area shape="rect" id="node3" href="$classSpace4AI_1_1FaasPacsltkPE.html" title=" " alt="" coords="5,417,187,524"/>
-<area shape="rect" id="node4" href="$classSpace4AI_1_1FaasPacsltkStaticPE.html" title=" " alt="" coords="211,417,429,524"/>
-</map>

@@ -170,7 +170,7 @@ private:
 
 	void log(const std::string& message_priority_str, LogPriority message_priority, const std::string& message)
 	{
-		if (priority <= message_priority)
+		if(priority <= message_priority)
 		{
 			std::time_t current_time = std::time(nullptr);
 			std::tm* timestamp = std::localtime(&current_time);

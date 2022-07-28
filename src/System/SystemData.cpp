@@ -7,8 +7,8 @@
 * \author giuliamazzeellee
 */
 
-#include "SystemData.hpp"
-#include "Logger.hpp"
+#include "src/System/SystemData.hpp"
+#include "src/Logger.hpp"
 
 namespace Space4AI
 {

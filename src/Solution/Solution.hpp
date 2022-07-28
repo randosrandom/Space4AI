@@ -10,13 +10,13 @@
 #ifndef SOLUTION_HPP_
 #define SOLUTION_HPP_
 
-#include "System/System.hpp"
-#include "Performance/SystemPE.hpp"
-
 #include <algorithm>
 #include <chrono>
 #include <fstream>
 #include <limits>
+
+#include "src/System/System.hpp"
+#include "src/Performance/SystemPE.hpp"
 
 namespace Space4AI
 {
@@ -29,6 +29,14 @@ namespace Space4AI
   {
 
   public:
+
+    /** Solution default constructor that initialize cost to -1, and sol_performance
+    *   to (not feasible, empty, empty)
+    */
+    Solution():
+      feasibility(false),
+      total_cost(-1)
+    {}
 
     /** Method that reads the configuration of the solution, if you want to load
     *   a previous solution saved in file.
@@ -84,19 +92,17 @@ namespace Space4AI
     const YHatType&
     get_y_hat() const {return solution_data.y_hat;}
 
-    /** used_resources getter */
+    /** used_resources getter from sol_data*/
     const UsedResourcesOrderedType&
     get_used_resources() const {return solution_data.used_resources;}
 
+    /** n_used_resources getter from solution_data*/
     const UsedResourcesNumberType&
     get_n_used_resources() const {return solution_data.n_used_resources;}
 
-    /** sol_performance getter */
-    const std::tuple<bool, std::vector<TimeType>, std::vector<TimeType>>&
-    get_sol_performance() const {return sol_performance;}
-
+    /** feasibility getter */
     bool
-    get_feasibility() const { return std::get<0>(sol_performance); }
+    get_feasibility() const { return feasibility; }
 
     /** y_hat setter */
     template <class T>
@@ -211,6 +217,9 @@ namespace Space4AI
 
   private:
 
+    /** feasibility of the solution */
+    bool feasibility;
+
     /** solution_data storing: y_hat, used_resources, and n_used_resources */
     SolutionData solution_data;
 
@@ -223,9 +232,11 @@ namespace Space4AI
     /** For each global path listed in the config file, saves difference between the constraint of max time and the actual performance time */
     std::vector<TimeType> global_slack_values;
 
-    /* store tuple (feasibility, components_performance, global_path_performance) */
-    std::tuple<bool, std::vector<TimeType>, std::vector<TimeType>>
-    sol_performance;
+    /** component performance times */
+    std::vector<TimeType> comp_perfs;
+
+    /** paths performance times */
+    std::vector<TimeType> path_perfs;
 
   };
 

@@ -1,5 +1,0 @@
-<map id="Space4AI::BasePerformanceModel" name="Space4AI::BasePerformanceModel">
-<area shape="rect" id="node1" title="Abstract class to represent the parent of all performance models that will inherit from it." alt="" coords="5,287,219,437"/>
-<area shape="rect" id="node2" title="STL class." alt="" coords="69,147,155,224"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="43,5,181,97"/>
-</map>

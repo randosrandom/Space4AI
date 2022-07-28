@@ -10,8 +10,8 @@
 #ifndef ELITE_RESULT_HPP_
 #define ELITE_RESULT_HPP_
 
-#include "Solution/Solution.hpp"
-#include "System/System.hpp"
+#include "src/Solution/Solution.hpp"
+#include "src/System/System.hpp"
 
 #include <algorithm>
 
@@ -41,8 +41,8 @@ namespace Space4AI
     /** Solution getter
     *   \param rank Rank of the solution to be returned
     */
-    const Solution&
-    get_solution(size_t rank = 0) const;
+    const std::vector<Solution>&
+    get_elite_results() const {return elite_results; }
 
     /** Current number of saved solutions */
     size_t
@@ -54,7 +54,6 @@ namespace Space4AI
     template<class T>
     void
     add(T&& solution);
-
 
   private:
 

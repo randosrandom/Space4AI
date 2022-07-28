@@ -12,9 +12,10 @@
 #include <map>
 #include <unordered_map>
 
-#include "Logger.hpp"
-#include "nlohmann/json.hpp"
-#include "TypeTraits.hpp"
+#include "external/nlohmann/json.hpp"
+
+#include "src/Logger.hpp"
+#include "src/TypeTraits.hpp"
 
 /** Disable implicit conversions FROM a JSON value */
 #ifndef JSON_USE_IMPLICIT_CONVERSIONS
@@ -23,7 +24,7 @@
 
 namespace Space4AI
 {
-  /** 
+  /**
   *   Class to represent the transition probabilities of a Directed Acyclic Graph.
   *
   *   Number of rows (equal to number of columns) represents the number of components.

@@ -10,9 +10,9 @@
 #ifndef RANDOM_GREEDY_DT_HPP_
 #define RANDOM_GREEDY_DT_HPP_
 
-#include "System/System.hpp"
-#include "Solution/Solution.hpp"
-#include "Solution/EliteResult.hpp"
+#include "src/System/System.hpp"
+#include "src/Solution/Solution.hpp"
+#include "src/Solution/EliteResult.hpp"
 
 namespace Space4AI
 {

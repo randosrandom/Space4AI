@@ -1,8 +1,0 @@
-<map id="Space4AI::FaasPacsltkPE" name="Space4AI::FaasPacsltkPE">
-<area shape="rect" id="node1" title=" " alt="" coords="155,685,336,792"/>
-<area shape="rect" id="node2" href="$classSpace4AI_1_1FaasPE.html" title=" " alt="" coords="29,494,195,615"/>
-<area shape="rect" id="node3" href="$classSpace4AI_1_1BasePerformanceModel.html" title="Abstract class to represent the parent of all performance models that will inherit from it." alt="" coords="5,287,219,437"/>
-<area shape="rect" id="node4" title="STL class." alt="" coords="69,147,155,224"/>
-<area shape="rect" id="node5" title="STL class." alt="" coords="43,5,181,97"/>
-<area shape="rect" id="node6" href="$classSpace4AI_1_1Pacsltk.html" title=" " alt="" coords="219,487,362,623"/>
-</map>

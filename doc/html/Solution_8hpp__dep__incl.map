@@ -1,6 +1,0 @@
-<map id="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Solution/Solution.hpp" name="/home/rando2/LaureaMagistrale/PACS_TESI/RunTime/DesignTime_PACS/src/Solution/Solution.hpp">
-<area shape="rect" id="node1" title="Defines the class to store the a solution to the system configuration provided." alt="" coords="41,5,280,61"/>
-<area shape="rect" id="node2" href="$RandomGreedyDT_8hpp.html" title="Defines the Random Greedy (Design time version) algorithm to solve the problem." alt="" coords="5,213,316,269"/>
-<area shape="rect" id="node4" href="$EliteResult_8hpp.html" title="Defines the class to store to store a fixed&#45;size vector of Solution objects, sorted by minimum cost." alt="" coords="119,109,363,165"/>
-<area shape="rect" id="node3" href="$RandomGreedyDT_8cpp.html" title="Defines the methods of the RandomGreedyDT class." alt="" coords="6,317,315,373"/>
-</map>

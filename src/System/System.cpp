@@ -7,12 +7,12 @@
 * \author giuliamazzeellee
 */
 
-#include "System.hpp"
+#include "src/System/System.hpp"
 
 namespace Space4AI
 {
   void
-  System::read_configuration_file(std::string system_file)
+  System::read_configuration_file(const std::string& system_file)
   {
       std::ifstream file(system_file);
 
@@ -26,7 +26,7 @@ namespace Space4AI
       }
       else
       {
-        Logger::Info("****** READING CONFIGURATION FILE... ******");
+        Logger::Info("****** READING CONFIGURATION FILE: " + system_file + " ... ******");
         file >> configuration_file;
       }
 
@@ -111,7 +111,7 @@ namespace Space4AI
             const std::string model = perf_data.at("model").get<std::string>();
 
             perf_temp[res_type_idx][part_idx][res_idx] =
-              create_PE(model, perf_data, system_data, comp_idx, res_type_idx, part_idx, res_idx);
+              create_PE(model, perf_data, system_data);
 
             // THINK ABOUT HOW TO AVOID THIS ...
             if(model == "QTedge" || model == "QTcloud")

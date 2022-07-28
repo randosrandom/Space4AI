@@ -1,4 +1,4 @@
-#include "Solution.hpp"
+#include "src/Solution/Solution.hpp"
 
 namespace Space4AI
 {
@@ -35,11 +35,8 @@ namespace Space4AI
     solution_data.y_hat.resize(comp_num);
     solution_data.used_resources.resize(comp_num);
 
-    auto& this_local_responses = std::get<1>(sol_performance);
-    auto& this_global_responses = std::get<2>(sol_performance);
-
-    this_local_responses.resize(comp_num);
-    this_global_responses.resize(gc_name_to_idx.size());
+    this->comp_perfs.resize(comp_num);
+    this->path_perfs.resize(gc_name_to_idx.size());
 
     // loop on components
     for(std::size_t i=0; i<comp_num; ++i)
@@ -71,7 +68,7 @@ namespace Space4AI
       {
         if(part == "response_time")
         {
-          this_local_responses[comp_idx] = part_data.get<TimeType>();
+          comp_perfs[comp_idx] = part_data.get<TimeType>();
           continue;
         }
         if(part == "response_time_threshold")
@@ -105,7 +102,7 @@ namespace Space4AI
       const std::size_t path_idx = gc_name_to_idx.at(path);
 
       if(path_data.at("path_response_time").is_number())
-        this_global_responses[path_idx] = path_data.at("path_response_time").get<TimeType>();
+      this->path_perfs[path_idx] = path_data.at("path_response_time").get<TimeType>();
       else
       {
         Logger::Info("In *Solution::read_configuration_file(...): path response_time not a number ...");
@@ -125,11 +122,6 @@ namespace Space4AI
     const auto& components = system_data.get_components();
     const auto& all_resources = system_data.get_all_resources();
     const auto& local_constraints = system_data.get_local_constraints();
-
-    //get component's performance
-    const auto& comp_perf = std::get<1>(sol_performance);
-    //get paths' performance
-    const auto& path_perf = std::get<2>(sol_performance);
 
     nl::json jsolution;
 
@@ -214,7 +206,7 @@ namespace Space4AI
       }
 
       //get response time of the component i
-      jcomponents[comp_name]["response_time"] = comp_perf[i];
+      jcomponents[comp_name]["response_time"] = comp_perfs[i];
 
       jcomponents[comp_name]["response_time_threshold"] = local_constraints[i].get_max_res_time();
 
@@ -252,7 +244,7 @@ namespace Space4AI
       jgc[path_name]["components"] = jpath_comps;
 
       //get path_response_time
-      jgc[path_name]["path_response_time"] = path_perf[k];
+      jgc[path_name]["path_response_time"] = path_perfs[k];
 
       //get path_response_time_threshold
       jgc[path_name]["path_response_time_threshold"] = global_constraints[k].get_max_res_time();
@@ -487,14 +479,12 @@ namespace Space4AI
 
     const auto& local_constraints = system.get_system_data().get_local_constraints();
 
-    auto& response_times = std::get<1>(sol_performance);
-
-    response_times.resize(local_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
+    comp_perfs.resize(local_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
     local_slack_values.resize(local_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
 
     for (size_t i = 0; i < local_constraints.size(); ++i)
     {
-      response_times[i] =
+      comp_perfs[i] =
         SystemPerformanceEvaluator::get_perf_evaluation(
           local_constraints[i].get_comp_idx(),
           system,
@@ -504,13 +494,13 @@ namespace Space4AI
         // this takes into account the compute_utilization.
         // If utiilization > 1, response_time is negative- (get_perf_evaluation return -1)
         // Check lables of response_time (when is negative, NaN, +inf, max ...)
-        if (response_times[i] < 0)
+        if (comp_perfs[i] < 0)
         {
           feasible = false;
         }
         else
         {
-          this->local_slack_values[i] = local_constraints[i].get_max_res_time() - response_times[i];
+          this->local_slack_values[i] = local_constraints[i].get_max_res_time() - comp_perfs[i];
 
           if(this->local_slack_values[i] < 0 )
             feasible = false;
@@ -529,9 +519,8 @@ namespace Space4AI
     bool feasible = true;
 
     const auto& global_constraints = system.get_system_data().get_global_constraints();
-    auto& response_times = std::get<2>(sol_performance);
 
-    response_times.resize(global_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
+    path_perfs.resize(global_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
     this->global_slack_values.resize(global_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
 
     for (size_t i = 0; i < global_constraints.size(); ++i)
@@ -543,9 +532,9 @@ namespace Space4AI
         );
 
       feasible = feasible && path_feasible;
-      response_times[i] = path_response_time;
+      path_perfs[i] = path_response_time;
 
-      global_slack_values[i] = global_constraints[i].get_max_res_time() - response_times[i];
+      global_slack_values[i] = global_constraints[i].get_max_res_time() - this->path_perfs[i];
       feasible = feasible && (global_slack_values[i] >= 0);
 
     }
@@ -561,14 +550,13 @@ namespace Space4AI
   {
 
     std::vector<double> perf_components_path(comp_idxs.size(), 0.0);
-    const auto& perf_components = std::get<1>(sol_performance);
 
     const auto& components = system.get_system_data().get_components();
 
     for (size_t i = 0; i < comp_idxs.size(); ++i)
     {
 
-      perf_components_path[i] = perf_components[comp_idxs[i]];
+      perf_components_path[i] = comp_perfs[comp_idxs[i]];
 
       if(isnan(perf_components_path[i]))
         return std::make_pair(false, std::numeric_limits<double>::quiet_NaN());
@@ -684,7 +672,7 @@ namespace Space4AI
       Logger::Debug("check_feasibility: Done feasibility check: Solution is feasible!");
     }
 
-    std::get<0>(sol_performance) = feasible;
+    this->feasibility = feasible;
 
     return feasible;
   }

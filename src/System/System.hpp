@@ -12,9 +12,9 @@
 
 #include <limits>
 
-#include "Performance/PerformanceModels.hpp"
-#include "Performance/PerformanceFactory.hpp"
-#include "SystemData.hpp"
+#include "src/Performance/PerformanceModels.hpp"
+#include "src/Performance/PerformanceFactory.hpp"
+#include "src/System/SystemData.hpp"
 
 namespace Space4AI
 {
@@ -32,6 +32,11 @@ namespace Space4AI
 
   public:
 
+    System()
+    {
+      static py::scoped_interpreter guard{};
+    }
+
     /** Method to read the .json file that describes
     *   the system and convert it to a nl::json object.
     *
@@ -39,7 +44,7 @@ namespace Space4AI
     *                      that describes the system
     */
     void
-    read_configuration_file(std::string system_file);
+    read_configuration_file(const std::string& system_file);
 
     /** performance getter */
     const PerformanceType&

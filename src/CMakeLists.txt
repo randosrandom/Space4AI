@@ -1,47 +1,39 @@
-# My Variables
+# Variables related to library
 
-option(SHARED_LIB "Settable from command line" OFF)
-option(RELEASE "Settable from command line" OFF)
+option(SHARED "Settable from command line" OFF)
 
-if(RELEASE)
-	message("Compiling RELEASE, optimization flags will be activated")
-	set(CMAKE_BUILD_TYPE Release)
-else()
-	message("Compiling in DEBUG mode")
-	set(CMAKE_BUILD_TYPE Debug)
-endif()
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib) # shared library output folder
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib) # static library output folder
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wsuggest-override -Wnon-virtual-dtor")
+set(INCLUDE_DIRS "${CMAKE_SOURCE_DIR};${CMAKE_BINARY_DIR}")
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-# SRCS, TARGETS AND INCLUDES
-
-set(LIB_NAME "S4AIDT")
+set(PYTHONDIR ${CMAKE_SOURCE_DIR}/extras/Python) # PYTHONDIR needed in PerformancePredictors.hpp.in
+configure_file(${CMAKE_SOURCE_DIR}/src/Performance/PerformancePredictors.hpp.in ${CMAKE_BINARY_DIR}/src/Performance/PerformancePredictors.hpp @ONLY)
 
 set(SRCS
-"${CMAKE_CURRENT_SOURCE_DIR}/Algorithms/RandomGreedyDT.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/Graph/Dag.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/Performance/PerformanceModels.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/Performance/SystemPE.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/Solution/EliteResult.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/Solution/Solution.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/System/SystemData.cpp;\
-${CMAKE_CURRENT_SOURCE_DIR}/System/System.cpp;")
+"${CMAKE_SOURCE_DIR}/src/Algorithms/RandomGreedyDT.cpp;\
+${CMAKE_SOURCE_DIR}/src/Graph/Dag.cpp;\
+${CMAKE_SOURCE_DIR}/src/Performance/PerformanceModels.cpp;\
+${CMAKE_SOURCE_DIR}/src/Performance/SystemPE.cpp;\
+${CMAKE_SOURCE_DIR}/src/Solution/EliteResult.cpp;\
+${CMAKE_SOURCE_DIR}/src/Solution/Solution.cpp;\
+${CMAKE_SOURCE_DIR}/src/System/SystemData.cpp;\
+${CMAKE_SOURCE_DIR}/src/System/System.cpp;")
 
-set(INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}") # You can add others if you need ...
+set(EXT_SRCS
+"${CMAKE_SOURCE_DIR}/external/chrono/chrono.cpp")
 
-if(SHARED_LIB)
+if(SHARED)
 	message("Creating Shared Library")
-	message(WARNING "Creating shared library requires default visibility, which however might generate warnings when linking the code with pybind11 library")
-	add_library(${LIB_NAME} SHARED ${SRCS})
+	# message(WARNING "Creating shared library requires default visibility, which however might generate warnings when linking the code with pybind11 library")
+	add_library(${LIB_NAME} SHARED ${SRCS} ${EXT_SRCS})
 else()
-	message("Compiling Static Library")
-	add_library(${LIB_NAME} STATIC ${SRCS})
+	message("Creating Static Library")
+	add_library(${LIB_NAME} STATIC ${SRCS} ${EXT_SRCS})
 	set_target_properties(${LIB_NAME} PROPERTIES CXX_VISIBILITY_PRESET "hidden" CUDA_VISIBILITY_PRESET "hidden")
 endif()
 
 # target compile and linking target features
+
 target_include_directories(${LIB_NAME} PUBLIC ${INCLUDE_DIRS})
-target_compile_features(${LIB_NAME} PUBLIC cxx_std_17)
-target_link_libraries(${LIB_NAME} PRIVATE pybind11::embed)
+target_link_libraries(${LIB_NAME} PUBLIC pybind11::embed)

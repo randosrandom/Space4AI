@@ -10,7 +10,7 @@
 #ifndef SOLUTION_DATA_HPP_
 #define SOLUTION_DATA_HPP_
 
-#include "TypeTraits.hpp"
+#include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {

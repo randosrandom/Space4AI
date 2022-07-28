@@ -16,11 +16,10 @@
 #ifndef PERFORMANCEMODELS_HPP_
 #define PERFORMANCEMODELS_HPP_
 
-#include "Performance/PerformancePredictors.hpp"
-
-#include "Solution/SolutionData.hpp"
-#include "System/SystemData.hpp"
-#include "TypeTraits.hpp"
+#include "src/Performance/PerformancePredictors.hpp"
+#include "src/Solution/SolutionData.hpp"
+#include "src/System/SystemData.hpp"
+#include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {
@@ -198,7 +197,7 @@ namespace Space4AI
   class FaasPE: public BasePerformanceModel
   {
   public:
-    
+
     FaasPE(
       const std::string& keyword_,
       bool allows_colocation_,
@@ -217,6 +216,7 @@ namespace Space4AI
     TimeType
     get_demandCold() const {return demandCold; }
 
+    virtual ~FaasPE() = default;
 
   protected:
 
@@ -226,8 +226,9 @@ namespace Space4AI
 
   };
 
-  class FaasPacsltkPE: public FaasPE
+  class __attribute__((__visibility__("hidden"))) FaasPacsltkPE: public FaasPE
   {
+
   public:
 
     FaasPacsltkPE(
@@ -248,9 +249,7 @@ namespace Space4AI
       const SolutionData& solution_data
     ) const override;
 
-
     virtual ~FaasPacsltkPE() = default;
-
 
   private:
 

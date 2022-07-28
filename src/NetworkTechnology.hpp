@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "src/TypeTraits.hpp"
+
 namespace Space4AI
 {
   /** NetworkDomain

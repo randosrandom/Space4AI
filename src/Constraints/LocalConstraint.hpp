@@ -10,7 +10,7 @@
 #ifndef LOCALCONSTRAINT_HPP
 #define LOCALCONSTRAINT_HPP
 
-#include "TypeTraits.hpp"
+#include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {
