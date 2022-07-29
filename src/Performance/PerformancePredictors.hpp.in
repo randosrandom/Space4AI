@@ -1,5 +1,5 @@
 /**
-* \file PerformancePredictors.hpp
+* \file PerformancePredictors.hpp.in
 *
 * \brief Defines the classes that provide the interface between the Performance
 *        Models (C++) and the (Python) functions of the a-ML library.

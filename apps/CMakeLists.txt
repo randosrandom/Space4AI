@@ -1,5 +1,3 @@
-add_executable(main main.cpp)
-add_executable(main_json main_json.cpp)
+add_executable(main_app main_app.cpp)
 
-target_link_libraries(main PRIVATE ${LIB_NAME})
-target_link_libraries(main_json PRIVATE ${LIB_NAME})
+target_link_libraries(main_app PRIVATE ${LIB_NAME})

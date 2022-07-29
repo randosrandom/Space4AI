@@ -2,7 +2,17 @@
 ## Some Common Variables
 ###############################################################
 
-set(LIB_NAME S4AIDT) # library name
+option(PARALLELIZATION "Set ON if you want the parallel version" OFF)
+
+if(NOT PARALLELIZATION)
+	message("Compiling Serial version of the library")
+	set(LIB_NAME s4aidt) # library name
+else()
+	message("Compiling Parallel version of the library")
+	set(LIB_NAME s4aidt_parallel)
+endif()
+
+option(SHARED "Set ON if you want the shared library" OFF)
 
 set(MY_CXX_FLAGS -Wall -Wextra -Wsuggest-override -Wnon-virtual-dtor)
 set (CMAKE_CXX_STANDARD 17)
@@ -12,8 +22,7 @@ if(NOT CMAKE_BUILD_TYPE)
 	"Choose the type of build, options are: Debug MinSizeRel Release RelWithDebInfo."
 	FORCE)
 endif()
-
-set(SHARE_DIR "${CMAKE_SOURCE_DIR}/config")    # Directory containing test and configuration files.
+message("Compiling code in mode: " ${CMAKE_BUILD_TYPE})
 
 ################################################################
 ## Project
@@ -25,6 +34,10 @@ project(DesignTime_PACS VERSION 1.0 LANGUAGES CXX)
 
 find_package(pybind11 REQUIRED)
 include_directories(${pybind11_INCLUDE_DIRS})
+
+if(PARALLELIZATION)
+	find_package(OpenMP REQUIRED)
+endif()
 
 # Properties for all targets
 add_compile_options(${MY_CXX_FLAGS})

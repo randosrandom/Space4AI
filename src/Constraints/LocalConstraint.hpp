@@ -34,17 +34,9 @@ namespace Space4AI
     ): comp_idx(comp_idx_), max_res_time(res_time_)
     {}
 
-    #warning I commented part of code of LocalConstraint. If there are issues check here
-
-    // LocalConstraint() = default;
-
-    // LocalConstraint(const LocalConstraint&) = default;
-    // LocalConstraint& operator=(const LocalConstraint&) = default;
-
     /** Bring back default move constructor and move assignment operator */
     LocalConstraint(LocalConstraint&&) = default;
     LocalConstraint& operator=(LocalConstraint&&) = default;
-
 
     /** comp_idx getter */
     size_t

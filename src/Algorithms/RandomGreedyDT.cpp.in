@@ -7,10 +7,20 @@
 * \author giuliamazzeellee
 */
 
+#cmakedefine PARALLELIZATION
+
+#ifdef PARALLELIZATION
+  #define MY_PRAGMA(OPTIONS) _Pragma(#OPTIONS)
+#else
+  #define MY_PRAGMA(OPTIONS) do {} while(0);
+#endif // PARALLELIZATION
+
 #include "src/Algorithms/RandomGreedyDT.hpp"
 
 #include <random>
-//#include <omp.h>
+#ifdef PARALLELIZATION
+  #include <omp.h>
+#endif // PARALELLIZATION
 
 namespace Space4AI
 {
@@ -27,30 +37,45 @@ namespace Space4AI
     EliteResult elite(num_top_sols);
     Logger::Info("Elite container initialized with " + std::to_string(num_top_sols) + " spaces");
 
-    // #pragma omp parallel default(none) shared(max_it, num_top_sols, elite, system)
-  //  {
+    #ifdef PARALLELIZATION
+      const auto old_num_threads = omp_get_max_threads();
+      if(system.get_dynamicPerfModels())
+      {
+        const std::string message =
+          "Using Parallelization with dynamic models is not possible (see GIL ISSUE)"
+          " Overriding number of threads to 1 ...";
 
-    // #pragma omp for schedule(dynamic)
+        Logger::Warn(message);
+
+        std::cout << message << std::endl;
+
+        omp_set_num_threads(1);
+      }
+    #endif // PARALLELIZATION
+
+    MY_PRAGMA(omp parallel for default(none) shared(max_it, num_top_sols, elite, system) schedule(dynamic))
     for(size_t it=0; it<max_it; ++it)
     {
 
-      Logger::Info("**** iteration: " + std::to_string(it) +  " ****");
+      Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
 
       Solution new_sol(std::move(step(system)));
 
       if(new_sol.get_feasibility())
       {
-        // #pragma omp critical
+        MY_PRAGMA(omp critical)
         elite.add(std::move(new_sol));
 
         Logger::Info("******** NEW RESULT ADDED TO ELITE *******");
       }
-
     }
 
-  //  } # pragma omp parallel
-
     Logger::Info("Finished Random Greedy DT algorithm");
+
+    #ifdef PARALLELIZATION
+      elite.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
+      omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
+    #endif
 
     return elite;
   }
@@ -243,7 +268,7 @@ namespace Space4AI
         }
         // OBS: resources_instersection is NEVER EMPTY! Indeed, all FaaS are candidate resource
         // so, at worst, we select Faas for the partition
-        // THAT'S WHY I DO NOT HAVE TO CHECK Segmentation fault here
+        // THAT'S WHY I DO NOT HAVE TO CHECK if n_inter_res = 0
         const size_t n_inter_res = resources_instersection.size();
         std::uniform_int_distribution<decltype(rng)::result_type> dist(0,n_inter_res-1);
         const size_t random_idx = dist(rng);
@@ -256,7 +281,6 @@ namespace Space4AI
         Logger::Trace("create_random_initial_solution: Updated y, y_hat and used_resources");
 
       }
-      //COS'è E A COSA SERVE RES_PART_RANDOM???
     }
 
     std::vector<std::vector<bool>> already_updated_cluster_size(2);

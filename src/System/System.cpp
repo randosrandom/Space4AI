@@ -36,6 +36,8 @@ namespace Space4AI
 
       if(configuration_file.contains("DemandMatrix"))
       {
+        this->dynamicPerfModels = false;
+
         Logger::Info("****** OLD STYLE CONFIGURATION FILE OPENED ******");
 
         Logger::Info("****** READING DemandMatrix ******");
@@ -44,6 +46,10 @@ namespace Space4AI
       }
       else if(configuration_file.contains("Performance"))
       {
+        #warning Actually also here you can have only static models, but it depends on the PerfModel \
+        At the moment I just set DynamicPerfModels to true
+        this->dynamicPerfModels = true;
+
         Logger::Info("****** READING PERFORMANCE MODELS... ******");
         this->initialize_performance(configuration_file.at("Performance"));
         Logger::Info("********** DONE! **********");

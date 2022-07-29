@@ -13,11 +13,11 @@ namespace Space4AI
     {
       Logger::Warn("rank bigger than available solutions ... printing worst solution of rank: " + std::to_string(get_size()));
 
-      elite_results.back().print_solution(system, path);
+      solutions.back().print_solution(system, path);
     }
     else
     {
-      elite_results[rank].print_solution(system, path);
+      solutions[rank].print_solution(system, path);
     }
   }
 

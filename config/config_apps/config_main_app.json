@@ -1,0 +1,19 @@
+{
+  "ConfigFiles" : [
+    "config_apps/LargeScale/5-components/instance10/system_description10.json",
+    "config_apps/LargeScale/15-components/instance10/system_description10.json"
+  ],
+
+  "Algorithm" : {
+    "n_iterations" : 1000,
+    "max_num_sols" : 1
+  },
+
+  "Logger" : {
+    "priority" : 0,
+    "terminal_stream" : 0,
+    "file_stream" : 0,
+    "logger_file" : ""
+  }
+
+}

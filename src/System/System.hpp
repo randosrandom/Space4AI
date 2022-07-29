@@ -54,6 +54,10 @@ namespace Space4AI
     const SystemData&
     get_system_data() const {return system_data; };
 
+    /** dynamicPerfModels getter */
+    bool
+    get_dynamicPerfModels() const {return dynamicPerfModels; }
+
   private:
 
     /** Method to populate the performance evaluators
@@ -73,6 +77,8 @@ namespace Space4AI
     void
     initialize_demand_matrix(const nl::json& demand_matrix_json);
 
+
+
   private:
     /** object containing the data structures that define the system configuration
     *   except for the performance models
@@ -85,6 +91,17 @@ namespace Space4AI
     *   Indexed by: [comp_idx][res_type_idx][part_idx][res_idx]
     */
     PerformanceType performance;
+
+    /** Flag indicating type of Performance Models read (at the moment only Faas counts, since
+    *   Edge and VM defaults to queue theory).
+    *
+    *   False: Performace models are all static, so a demand_matrix has been built
+    *   True:  There is at least one dunamic performance model, pybind11 must be called during
+    *          the construction of the solution to evaluate response times.
+    *
+    *   This flag is important, since Parallelization is not possible for dynamic models (see GIL issue)
+    */
+    bool dynamicPerfModels;
 
   };
 

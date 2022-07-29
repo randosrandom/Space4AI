@@ -88,6 +88,13 @@ namespace Space4AI
       const System& system
     );
 
+    /** feasibility getter */
+    bool
+    get_feasibility() const { return feasibility; }
+
+    CostType
+    get_cost() const {return total_cost; }
+
     /** y_hat getter */
     const YHatType&
     get_y_hat() const {return solution_data.y_hat;}
@@ -100,9 +107,6 @@ namespace Space4AI
     const UsedResourcesNumberType&
     get_n_used_resources() const {return solution_data.n_used_resources;}
 
-    /** feasibility getter */
-    bool
-    get_feasibility() const { return feasibility; }
 
     /** y_hat setter */
     template <class T>

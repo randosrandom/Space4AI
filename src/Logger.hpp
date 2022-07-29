@@ -80,20 +80,12 @@ public:
 	*													filename is not provided, a new file is automatically generated
 	*													using the current time.
 	*/
-	static void EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& new_filepath="")
+	static void EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& filename_="")
 	{
 		get_instance().EnableFileOutputFlag = EnableFileOutputFlag_;
 
 		if(EnableFileOutputFlag_)
 		{
-			if(new_filepath != "")
-			{
-				Logger& logger_instance = get_instance();
-				logger_instance.filepath = new_filepath;
-				logger_instance.enable_file_output();
-			}
-			else
-			{
 				Logger& logger_instance = get_instance();
 
 				std::time_t current_time = std::time(0);
@@ -104,12 +96,11 @@ public:
 
 				std::filesystem::create_directory("logs/");
 
-				std::string name = "logs/logInfo_" + std::string(buffer) + ".txt";
+				std::string name = "logs/log" + filename_ + "_" + std::string(buffer) + ".txt";
 
 				logger_instance.filepath = name;
 
 				logger_instance.enable_file_output();
-			}
 		}
 	}
 

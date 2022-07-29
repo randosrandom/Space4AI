@@ -1,6 +1,6 @@
 {
 
-  "ConfigFiles" : ["config_tests/SystemConfigs/system_description1_5c.json"],
+  "ConfigFiles" : ["config_tests/SystemConfigs/system_description1_15c.json"],
 
   "Algorithm" : {
     "n_iterations" : 2000,
