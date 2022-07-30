@@ -18,7 +18,7 @@ set(MY_CXX_FLAGS -Wall -Wextra -Wsuggest-override -Wnon-virtual-dtor)
 set (CMAKE_CXX_STANDARD 17)
 
 if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Debug CACHE STRING	# Default build type: Debug.
+	set(CMAKE_BUILD_TYPE Release CACHE STRING # Default build type: Release.
 	"Choose the type of build, options are: Debug MinSizeRel Release RelWithDebInfo."
 	FORCE)
 endif()
