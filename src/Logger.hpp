@@ -40,166 +40,175 @@ enum LogPriority
 */
 class Logger
 {
-private:
+	private:
 
-	/** priority of the logger to be set at the beginning of the program */
-	LogPriority priority = InfoPriority;
+		/** priority of the logger to be set at the beginning of the program */
+		LogPriority priority = InfoPriority;
 
-	std::mutex log_mutex;
+		std::mutex log_mutex;
 
-	/** name of the file, if you want to save Logger messages on file */
-	std::string filepath;
-	std::ofstream file;
+		/** name of the file, if you want to save Logger messages on file */
+		std::string filepath;
 
-	/** flag to decide whether to print logging on terminal or not */
-	bool EnableTerminalOutputFlag = false;
+		std::ofstream file;
 
-	/** flag to decide whether to print logging on file or nor */
-	bool EnableFileOutputFlag = false;
+		/** flag to decide whether to print logging on terminal or not */
+		bool EnableTerminalOutputFlag = false;
 
-public:
+		/** flag to decide whether to print logging on file or nor */
+		bool EnableFileOutputFlag = false;
 
-	/** priority setter
-	*		\param new_priority priority to set for the logger
-	*/
-	static void SetPriority(LogPriority new_priority)
-	{
-		get_instance().priority = new_priority;
-	}
+	public:
 
-	/** Method to enable logger messages on terminal */
-	static void EnableTerminalOutput(bool EnableTerminalOutput_ = true)
-	{
-		get_instance().EnableTerminalOutputFlag = EnableTerminalOutput_;
-	}
-
-	/** Method to enable the printing of the logger messages on file.
-	*		\param EnableFileOutputFlag_ true to enable file output, false otherwise
-	*		\param new_filepath 	Name of the file where to save output messages; mind that
-	*													eventual folders in the path must already exists. If the
-	*													filename is not provided, a new file is automatically generated
-	*													using the current time.
-	*/
-	static void EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& filename_="")
-	{
-		get_instance().EnableFileOutputFlag = EnableFileOutputFlag_;
-
-		if(EnableFileOutputFlag_)
+		/** priority setter
+		*		\param new_priority priority to set for the logger
+		*/
+		static void
+		SetPriority(LogPriority new_priority)
 		{
-				Logger& logger_instance = get_instance();
+			get_instance().priority = new_priority;
+		}
 
+		/** Method to enable logger messages on terminal */
+		static void
+		EnableTerminalOutput(bool EnableTerminalOutput_ = true)
+		{
+			get_instance().EnableTerminalOutputFlag = EnableTerminalOutput_;
+		}
+
+		/** Method to enable the printing of the logger messages on file.
+		*		\param EnableFileOutputFlag_ true to enable file output, false otherwise
+		*		\param new_filepath 	Name of the file where to save output messages; mind that
+		*													eventual folders in the path must already exists. If the
+		*													filename is not provided, a new file is automatically generated
+		*													using the current time.
+		*/
+		static void
+		EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& filename_ = "")
+		{
+			get_instance().EnableFileOutputFlag = EnableFileOutputFlag_;
+
+			if(EnableFileOutputFlag_)
+			{
+				Logger& logger_instance = get_instance();
 				std::time_t current_time = std::time(0);
 				std::tm* timestamp = std::localtime(&current_time);
-
 				char buffer[50];
 				strftime(buffer, 50, "%y%m%d_%H%M%S", timestamp);
-
 				std::filesystem::create_directory("logs/");
-
 				std::string name = "logs/log" + filename_ + "_" + std::string(buffer) + ".txt";
-
 				logger_instance.filepath = name;
-
 				logger_instance.enable_file_output();
-		}
-	}
-
-	/** print Trace priority messages */
-	static void Trace(const std::string& message)
-	{
-		get_instance().log("[Trace]\t", TracePriority, message);
-	}
-
-	/** print Debug priority messages */
-	static void Debug(const std::string& message)
-	{
-		get_instance().log("[Debug]\t", DebugPriority, message);
-	}
-
-	/** print Info priority messages */
-	static void Info(const std::string& message)
-	{
-		get_instance().log("[Info]\t", InfoPriority, message);
-	}
-
-	/** print Warn priority messages */
-	static void Warn(const std::string& message)
-	{
-		get_instance().log("[Warn]\t", WarnPriority, message);
-	}
-
-	/** print Error priority messages */
-	static void Error(const std::string& message)
-	{
-		get_instance().log("[Error]\t", ErrorPriority, message);
-	}
-
-	/** print Critical priority messages */
-	static void Critical(const std::string& message)
-	{
-		get_instance().log("[Critical]\t", CriticalPriority, message);
-	}
-
-private:
-
-	Logger() {}
-
-	Logger(const Logger&) = delete;
-	Logger& operator= (const Logger&) = delete;
-
-	~Logger()
-	{
-		if(EnableFileOutputFlag)
-			free_file();
-	}
-
-	static Logger& get_instance()
-	{
-		static Logger logger;
-		return logger;
-	}
-
-	void log(const std::string& message_priority_str, LogPriority message_priority, const std::string& message)
-	{
-		if(priority <= message_priority)
-		{
-			std::time_t current_time = std::time(nullptr);
-			std::tm* timestamp = std::localtime(&current_time);
-
-			std::scoped_lock lock(log_mutex);
-
-			if(EnableTerminalOutputFlag)
-			{
-				std::cout << std::put_time(timestamp, "%c") << "\t" << message_priority_str + message << std::endl;
 			}
+		}
 
+		/** print Trace priority messages */
+		static void
+		Trace(const std::string& message)
+		{
+			get_instance().log("[Trace]\t", TracePriority, message);
+		}
+
+		/** print Debug priority messages */
+		static void
+		Debug(const std::string& message)
+		{
+			get_instance().log("[Debug]\t", DebugPriority, message);
+		}
+
+		/** print Info priority messages */
+		static void
+		Info(const std::string& message)
+		{
+			get_instance().log("[Info]\t", InfoPriority, message);
+		}
+
+		/** print Warn priority messages */
+		static void
+		Warn(const std::string& message)
+		{
+			get_instance().log("[Warn]\t", WarnPriority, message);
+		}
+
+		/** print Error priority messages */
+		static void
+		Error(const std::string& message)
+		{
+			get_instance().log("[Error]\t", ErrorPriority, message);
+		}
+
+		/** print Critical priority messages */
+		static void
+		Critical(const std::string& message)
+		{
+			get_instance().log("[Critical]\t", CriticalPriority, message);
+		}
+
+	private:
+
+		Logger() {}
+
+		Logger(const Logger&) = delete;
+		Logger& operator= (const Logger&) = delete;
+
+		~Logger()
+		{
 			if(EnableFileOutputFlag)
 			{
-				file << std::put_time(timestamp, "%c") << "\t" << message_priority_str + message << std::endl;
+				free_file();
 			}
 		}
-	}
 
-	void enable_file_output()
-	{
-		if(file)
+		static Logger&
+		get_instance()
+		{
+			static Logger logger;
+			return logger;
+		}
+
+		void
+		log(const std::string& message_priority_str, LogPriority message_priority, const std::string& message)
+		{
+			if(priority <= message_priority)
+			{
+				std::time_t current_time = std::time(nullptr);
+				std::tm* timestamp = std::localtime(&current_time);
+				std::scoped_lock lock(log_mutex);
+
+				if(EnableTerminalOutputFlag)
+				{
+					std::cout << std::put_time(timestamp, "%c") << "\t" << message_priority_str + message << std::endl;
+				}
+
+				if(EnableFileOutputFlag)
+				{
+					file << std::put_time(timestamp, "%c") << "\t" << message_priority_str + message << std::endl;
+				}
+			}
+		}
+
+		void
+		enable_file_output()
+		{
+			if(file)
+			{
+				file.close();
+			}
+
+			file.open(filepath);
+
+			if(!file)
+			{
+				std::cout << "Logger: Failed to open file at " + filepath << std::endl;
+			}
+		}
+
+		void
+		free_file()
 		{
 			file.close();
 		}
 
-		file.open(filepath);
-
-		if (!file)
-		{
-			std::cout << "Logger: Failed to open file at " + filepath << std::endl;
-		}
-	}
-
-	void free_file()
-	{
-		file.close();
-	}
-
 };
 
-#endif /*LOGGER_HPP_ */
+#endif // SRC_LOGGER_HPP_

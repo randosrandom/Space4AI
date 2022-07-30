@@ -73,8 +73,6 @@ main(int argc, char** argv)
       basic_config.at("Algorithm").at("max_num_sols").get<size_t>()
     );
 
-    const auto& sols = elite_result.get_solutions();
-    
     std::cout << std::endl;
 
   }

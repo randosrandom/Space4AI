@@ -1,0 +1,34 @@
+# Brace Style Options
+--style=allman
+
+# Tab Options
+--indent=tab
+
+# Brace Modify Options
+#--attach-namespaces
+#--attach-classes
+
+# Indentation Options
+--indent-classes
+--indent-switches
+--indent-after-parens
+
+# Padding Options
+--break-blocks
+--pad-oper
+--pad-comma
+--unpad-paren
+--delete-empty-lines
+--align-pointer=type
+--align-reference=type
+
+# Formatting Options
+--break-closing-braces
+--add-braces
+--break-return-type
+--attach-return-type-decl
+--keep-one-line-blocks
+--keep-one-line-statements
+
+# Other options
+--formatted

@@ -40,3 +40,4 @@ build/*
 doc/html
 doc/latex
 doc/xml
+*.orig

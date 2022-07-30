@@ -48,8 +48,6 @@ main(int argc, char** argv)
       basic_config.at("Algorithm").at("max_num_sols").get<size_t>()
     );
 
-    const auto& sols = elite_result.get_solutions();
-
     if(system.get_dynamicPerfModels() && elite_result.get_num_threads() > 1)
     {
         std::cout << "Threads with dynamic: " << elite_result.get_num_threads() << std::endl;
