@@ -203,7 +203,7 @@ namespace Space4AI
                   partitions[part_idx].get_part_lambda()
                 );
             }
-            else
+            else // Edge or VM
             {
               perf_temp[res_type_idx][part_idx][res_idx] =
                 std::make_unique<QTPE>("QTcloud", true, dem_time.get<TimeType>());

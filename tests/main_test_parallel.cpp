@@ -3,10 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "src/Algorithms/RandomGreedyDT.hpp"
-#include "src/Logger.hpp"
-#include "src/Solution/Solution.hpp"
-#include "src/System/System.hpp"
+#include "src/s4ai.hpp"
 
 namespace sp = Space4AI;
 namespace py = pybind11;
@@ -37,7 +34,7 @@ main(int argc, char** argv)
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     std::cout << std::endl;
-    
+
     sp::System system;
     const std::string system_config_file = basic_config.at("ConfigFiles")[i].get<std::string>();
     system.read_configuration_file(system_config_file);

@@ -1,11 +1,15 @@
 {
   "ConfigFiles" : [
-    "config_apps/LargeScale/5-components/instance10/system_description10.json",
-    "config_apps/LargeScale/15-components/instance10/system_description10.json"
+    "config_apps/LargeScale/15-components/instance10/system_description10.json",
+    "config_apps/LargeScale/15-components/instance9/system_description9.json",
+    "config_apps/LargeScale/15-components/instance8/system_description8.json",
+    "config_apps/LargeScale/15-components/instance7/system_description7.json",
+    "config_apps/LargeScale/15-components/instance6/system_description6.json",
+    "config_apps/LargeScale/15-components/instance5/system_description5.json"
   ],
 
   "Algorithm" : {
-    "n_iterations" : 1000,
+    "n_iterations" : 10000,
     "max_num_sols" : 1
   },
 

@@ -3,10 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "src/Algorithms/RandomGreedyDT.hpp"
-#include "src/Logger.hpp"
-#include "src/Solution/Solution.hpp"
-#include "src/System/System.hpp"
+#include "src/s4ai.hpp"
 
 namespace sp = Space4AI;
 namespace py = pybind11;

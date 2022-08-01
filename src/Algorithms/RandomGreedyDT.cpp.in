@@ -208,7 +208,7 @@ namespace Space4AI
         candidate_resources[i].resize(n_res, false); // other we have to select the candidate_resources
     }
 
-    //loop on computational layers and select one resource for each cl and all resources in faas cls
+    //loop on computational layers and select one resource for each cl (for faas all resources are already selected)
     //loop on resource type
     Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
     for(size_t i=0; i<res_type_idx_count - 1; ++i) // Faas already selected!
