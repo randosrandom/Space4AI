@@ -2,26 +2,39 @@
 #define INITIALIZER_HPP_
 
 #include <pybind11/embed.h>
+#include <iostream>
 
 namespace Space4AI
 {
 class Initializer final
 {
+
 public:
 
-  static
-  Initializer&
-  Instance()
+  Initializer()
   {
-    static Initializer InitializerSingleton;
-    return InitializerSingleton;
+    if(!already_initialized)
+    {
+      pybind11::initialize_interpreter();
+      already_initialized = true;
+    }
+    else
+    {
+      std::cout << "It's forbidden to Initialize more than one times. pybind11 already initialized" << std::endl;
+    }
+  }
+
+  ~Initializer()
+  {
+    if(already_initialized)
+    {
+      pybind11::finalize_interpreter();
+    }
   }
 
 private:
 
-  Initializer() { pybind11::initialize_interpreter(); }
-
-  ~Initializer() { pybind11::finalize_interpreter(); }
+  inline static bool already_initialized = false;
 
 };
 

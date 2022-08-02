@@ -32,7 +32,7 @@ main(int argc, char** argv)
   }
 
   // initialize pybind11
-  sp::Initializer::Instance();
+  const auto init = sp::Initializer();
 
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
