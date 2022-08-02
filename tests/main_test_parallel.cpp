@@ -31,6 +31,9 @@ main(int argc, char** argv)
     throw std::runtime_error("Can't open " + basic_config_filepath.string() + " file. Make sure that the path is correct, and the format is json");
   }
 
+  // initialize pybind11
+  sp::Initializer::Instance();
+
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     std::cout << std::endl;

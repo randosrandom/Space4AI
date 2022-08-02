@@ -20,6 +20,10 @@ namespace Space4AI
 {
 class BasePerformanceModel; // forward declaration
 
+// RANDO: Dopo che Giulia ha commentato tutto, aggiungi tu l'osservazione importante
+// sugli indici (fatto che Edge=0, VM=1: non possono essere cambiati perché
+// i vettori usano questi indici nell'operator[], come nota sul quaderno)
+
 /** Enum class to identify different types of resources */
 enum class ResourceType : size_t
 {

@@ -48,6 +48,9 @@ main(int argc, char** argv)
   Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
 
+  // initialize pybind11
+  sp::Initializer::Instance();
+
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     std::cout << std::endl;

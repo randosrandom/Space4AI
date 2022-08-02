@@ -32,11 +32,6 @@ namespace Space4AI
 
   public:
 
-    System()
-    {
-      static py::scoped_interpreter guard{};
-    }
-
     /** Method to read the .json file that describes
     *   the system and convert it to a nl::json object.
     *

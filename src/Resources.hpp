@@ -41,6 +41,10 @@ class ComputationalLayer
 		std::string
 		get_name() const {return name; }
 
+		/** type_of_resources getter */
+		ResourceType
+		get_type_of_resources() const {return type_of_resources; }
+
 		/** getter of the resources indexes in the layer */
 		const std::vector<size_t>&
 		get_res_idxs() const { return res_idxs; }

@@ -648,7 +648,6 @@ namespace Space4AI
 
           if(feasible)
           {
-
             Logger::Debug("check_feasibility: Checking local constraints ...");
             feasible = this->local_constraints_check(system);
             Logger::Debug("check_feasibility: Done!");

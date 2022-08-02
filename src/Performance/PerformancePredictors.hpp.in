@@ -67,7 +67,7 @@ namespace Space4AI
   };
   */
 
-  class __attribute__((__visibility__("hidden"))) Pacsltk
+  class __attribute__((__visibility__("hidden"))) Pacsltk final
   {
   public:
 
@@ -91,6 +91,10 @@ namespace Space4AI
       ).cast<TimeType>();
     }
 
+    Pacsltk(const Pacsltk&) = delete;
+
+    Pacsltk& operator=(const Pacsltk&) = delete;
+
   private:
 
     #ifndef PYTHONDIR
@@ -98,16 +102,13 @@ namespace Space4AI
     #endif
     Pacsltk(): pacsltk_predictor((PythonDirConfigure(PYTHONDIR), py::module_::import("PACSLTK").attr("predictor"))) {};
 
-    Pacsltk(const Pacsltk&) = delete;
-
-    Pacsltk& operator=(const Pacsltk&) = delete;
-
     void
     PythonDirConfigure(const std::string& path)
     {
       pybind11::module sys = pybind11::module::import("sys");
       pybind11::cast<pybind11::list>(sys.attr("path")).append(path); // for ML-Library
     }
+
   private:
 
     const py::object pacsltk_predictor;

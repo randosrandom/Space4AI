@@ -53,6 +53,9 @@ main(int argc, char** argv)
 
   Timings::Chrono my_chrono;
 
+  // initialize pybind11
+  sp::Initializer::Instance();
+
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     sp::System system;

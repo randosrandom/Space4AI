@@ -34,7 +34,7 @@ namespace Space4AI
     const SolutionData& solution_data
   )
   {
-    // logger messages
+    // logger messages in Debug ...
 
     TimeType perf_evaluation = 0.;
 
@@ -44,9 +44,9 @@ namespace Space4AI
 
     const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
 
-    // logger messages
+    // logger messages in Debug ...
 
-    // logger messages ...
+    // logger messages in Debug...
 
     for(const auto& [p_idx, r_type_idx, r_idx]: used_resources_comp)
     {

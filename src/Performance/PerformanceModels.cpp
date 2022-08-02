@@ -7,24 +7,19 @@ namespace Space4AI
 
   TimeType
   QTPE::predict(
-    size_t comp_idx, size_t part_idx, ResourceType res_type, size_t res_idx,
+    size_t, size_t, ResourceType res_type, size_t res_idx,
     const SystemData& system_data,
     const SolutionData& solution_data
   ) const
   {
     TimeType response_time{0.0};
 
-    const auto& y_hat = solution_data.get_y_hat();
+    const double utilization = compute_utilization(res_type, res_idx, system_data, solution_data);
 
-    #warning "double check if the following if is needed..."
-    if(y_hat[comp_idx][ResIdxFromType(res_type)][part_idx][res_idx] > 0)
-    {
-        double utilization = compute_utilization(res_type, res_idx, system_data, solution_data);
-        if(utilization > 1) // This is en error! utilization cannot be bigger than -1;
-          response_time = -1.;  // manage error in the caller function
-        else
-          response_time = this->demand / (1-utilization);
-    }
+    if(utilization > 1) // This is en error! utilization cannot be bigger than -1;
+      response_time = -1.;  // manage error in the caller function
+    else
+      response_time = this->demand / (1-utilization);
 
     return response_time;
   }
@@ -98,41 +93,33 @@ namespace Space4AI
 
   TimeType
   FaasPacsltkPE::predict(
-    size_t comp_idx, size_t part_idx, ResourceType res_type, size_t res_idx,
+    size_t comp_idx, size_t part_idx, ResourceType, size_t res_idx,
     const SystemData& system_data,
-    const SolutionData& solution_data
+    const SolutionData&
   ) const
   {
-    const auto& y_hat = solution_data.get_y_hat();
 
-    if(y_hat[comp_idx][ResIdxFromType(res_type)][part_idx][res_idx] > 0)
-    {
-      const auto& components = system_data.get_components();
-      const auto& all_resources = system_data.get_all_resources();
+    const auto& components = system_data.get_components();
+    const auto& all_resources = system_data.get_all_resources();
 
-      const auto part_lambda =
-        components[comp_idx].get_partition(part_idx).get_part_lambda();
+    const auto part_lambda =
+      components[comp_idx].get_partition(part_idx).get_part_lambda();
 
-      const auto idle_time_before_kill =
-        all_resources.get_resource<ResourceType::Faas>(res_idx).get_idle_time_before_kill();
+    const auto idle_time_before_kill =
+      all_resources.get_resource<ResourceType::Faas>(res_idx).get_idle_time_before_kill();
 
-      return this->predictor.predict(
-        part_lambda, this->demandWarm, this->demandCold, idle_time_before_kill
-      );
-    }
-    else
-    {
-      #warning "double-check what to do in this case"
-      return 0.;
-    }
+    return this->predictor.predict(
+      part_lambda, this->demandWarm, this->demandCold, idle_time_before_kill
+    );
+
   }
 
 
   TimeType
   FaasPacsltkStaticPE::predict(
-    size_t comp_idx, size_t part_idx, ResourceType res_type, size_t res_idx,
-    const SystemData& system_data,
-    const SolutionData& solution_data
+    size_t, size_t, ResourceType, size_t,
+    const SystemData&,
+    const SolutionData&
   ) const
   {
     return this->demand;
