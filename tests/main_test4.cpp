@@ -49,7 +49,7 @@ main(int argc, char** argv)
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
 
   // initialize pybind11
-  sp::Initializer();
+  const auto init = sp::Initializer();
 
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
@@ -70,7 +70,8 @@ main(int argc, char** argv)
     const auto elite_result = sp::RandomGreedyDT::random_greedy(
       system,
       basic_config.at("Algorithm").at("n_iterations").get<size_t>(),
-      basic_config.at("Algorithm").at("max_num_sols").get<size_t>()
+      basic_config.at("Algorithm").at("max_num_sols").get<size_t>(),
+      true
     );
 
     std::cout << std::endl;

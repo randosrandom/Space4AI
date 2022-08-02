@@ -35,17 +35,9 @@ namespace Space4AI
     random_greedy(
       const System& system,
       std::size_t max_it,
-      std::size_t num_top_sols
+      std::size_t num_top_sols,
+      bool reproducibility_flag
     );
-
-    /** Reproducibility setter.
-    *   \param reproducibility_
-    */
-    static
-    void
-    set_reproducibility(bool reproducibility_) {
-      reproducibility = reproducibility_;
-    }
 
   private:
 
@@ -91,10 +83,13 @@ namespace Space4AI
 
   private:
 
-    /** reproducibility flag.
-    *   If it's true a fixed initial seed it's used, if false a random initial seed is generated
-    */
-    inline static bool reproducibility = false;
+    inline static const size_t fixed_initial_seed = 121298;
+    inline static const size_t seed_adding_factor = 1000;
+
+    inline static size_t current_seed = 0;
+
+    inline static bool reproducibility = true;
+
 
   };
 

@@ -29,10 +29,18 @@ namespace Space4AI
   RandomGreedyDT::random_greedy(
     const System& system,
     size_t max_it,
-    size_t num_top_sols
+    size_t num_top_sols,
+    bool reproducibility_flag
   )
   {
-    Logger::Info("Starting Random Greedy DT algorithm");
+    Logger::Info("Starting Random Greedy DT algorithm with reproducibility flag raised to: " + std::to_string(reproducibility_flag));
+
+    reproducibility = reproducibility_flag;
+
+    if(reproducibility_flag)
+    {
+      current_seed = fixed_initial_seed;
+    }
 
     EliteResult elite(num_top_sols);
     Logger::Info("Elite container initialized with " + std::to_string(num_top_sols) + " spaces");
@@ -59,7 +67,7 @@ namespace Space4AI
 
       Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
 
-      Solution new_sol(std::move(step(system)));
+      Solution new_sol(step(system)); // using copy elision
 
       if(new_sol.get_feasibility())
       {
@@ -136,9 +144,8 @@ namespace Space4AI
 
     if(reproducibility)
     {
-      static size_t seed_ = 121298;
-      seed_ += 1000;
-      rng.seed(seed_);
+      current_seed += seed_adding_factor;
+      rng.seed(current_seed);
     }
     else
     {

@@ -31,7 +31,7 @@ if(SHARED)
 else()
 	message("Creating Static Library")
 	add_library(${LIB_NAME} STATIC ${SRCS} ${EXT_SRCS})
-	set_target_properties(${LIB_NAME} PROPERTIES CXX_VISIBILITY_PRESET "hidden" CUDA_VISIBILITY_PRESET "hidden")
+	# set_target_properties(${LIB_NAME} PROPERTIES CXX_VISIBILITY_PRESET "hidden" CUDA_VISIBILITY_PRESET "hidden") da problemi sul MAC (e poi non mi serve più, perché dichiaro la visibility hidden di certe classi)
 endif()
 
 # target compile and linking target features

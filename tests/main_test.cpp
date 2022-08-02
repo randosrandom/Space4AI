@@ -52,7 +52,8 @@ main(int argc, char** argv)
     const auto elite_result = sp::RandomGreedyDT::random_greedy(
       system,
       basic_config.at("Algorithm").at("n_iterations").get<size_t>(),
-      basic_config.at("Algorithm").at("max_num_sols").get<size_t>()
+      basic_config.at("Algorithm").at("max_num_sols").get<size_t>(),
+      true
     );
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
 
@@ -67,7 +68,7 @@ main(int argc, char** argv)
       return EXIT_FAILURE;
     }
 
-    std::cout << "Found feasible solution for file: " << system_config_file << std::endl;
+    std::cout << "Found feasible solution for file: " << system_config_file << " of cost: " << sols.at(0).get_cost() << std::endl;
     std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
     std::cout << "Random Greedy running time (in seconds): " << algorithm_run_time << std::endl;
 

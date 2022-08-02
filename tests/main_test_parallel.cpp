@@ -34,6 +34,8 @@ main(int argc, char** argv)
   // initialize pybind11
   const auto init = sp::Initializer();
 
+
+
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     std::cout << std::endl;
@@ -45,7 +47,8 @@ main(int argc, char** argv)
     const auto elite_result = sp::RandomGreedyDT::random_greedy(
       system,
       basic_config.at("Algorithm").at("n_iterations").get<size_t>(),
-      basic_config.at("Algorithm").at("max_num_sols").get<size_t>()
+      basic_config.at("Algorithm").at("max_num_sols").get<size_t>(),
+      true
     );
 
     if(system.get_dynamicPerfModels() && elite_result.get_num_threads() > 1)
