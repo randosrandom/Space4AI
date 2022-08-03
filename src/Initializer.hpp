@@ -20,7 +20,7 @@ public:
     }
     else
     {
-      std::cout << "It's forbidden to Initialize more than one times. pybind11 already initialized" << std::endl;
+      std::cout << "It's forbidden to Initialize more than once; pybind11 is already initialized" << std::endl;
     }
   }
 
@@ -29,6 +29,7 @@ public:
     if(already_initialized)
     {
       pybind11::finalize_interpreter();
+      already_initialized = false;
     }
   }
 
