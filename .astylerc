@@ -12,6 +12,7 @@
 --indent-classes
 --indent-switches
 --indent-after-parens
+--indent-preproc-block
 
 # Padding Options
 --break-blocks
