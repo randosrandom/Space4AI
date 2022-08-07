@@ -54,3 +54,13 @@ add_subdirectory(tests)
 execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/config_apps ${CMAKE_BINARY_DIR}/apps/config_apps)
 execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/config_tests ${CMAKE_BINARY_DIR}/tests/config_tests)
 
+# Documentation
+find_package(Doxygen
+             REQUIRED dot
+)
+
+if(DOXYGEN_FOUND)
+	add_subdirectory(doc)
+else()
+	message(WARNING "Doxygen was not found. Documentation will not be generated")
+endif()

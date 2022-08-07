@@ -1,6 +1,10 @@
 /**
-* File used to include all hpp files for external projects
+* \file s4ai.hpp
 *
+* \brief File used to include all headers used by the library
+*
+* \author rando98
+* \author giuliamazzeellee
 */
 
 #ifndef S4AI_HPP_
