@@ -1,23 +1,55 @@
 {
   "ConfigFiles" : [
-    "config_apps/LargeScale/15-components/instance10/system_description10.json",
-    "config_apps/LargeScale/15-components/instance9/system_description9.json",
-    "config_apps/LargeScale/15-components/instance8/system_description8.json",
-    "config_apps/LargeScale/15-components/instance7/system_description7.json",
+    "config_apps/LargeScale/5-components/instance1/system_description1.json",
+    "config_apps/LargeScale/5-components/instance2/system_description2.json",
+    "config_apps/LargeScale/5-components/instance3/system_description3.json",
+    "config_apps/LargeScale/5-components/instance4/system_description4.json",
+    "config_apps/LargeScale/5-components/instance5/system_description5.json",
+    "config_apps/LargeScale/5-components/instance6/system_description6.json",
+    "config_apps/LargeScale/5-components/instance7/system_description7.json",
+    "config_apps/LargeScale/5-components/instance8/system_description8.json",
+    "config_apps/LargeScale/5-components/instance9/system_description9.json",
+    "config_apps/LargeScale/5-components/instance10/system_description10.json",
+    "config_apps/LargeScale/7-components/instance1/system_description1.json",
+    "config_apps/LargeScale/7-components/instance2/system_description2.json",
+    "config_apps/LargeScale/7-components/instance3/system_description3.json",
+    "config_apps/LargeScale/7-components/instance4/system_description4.json",
+    "config_apps/LargeScale/7-components/instance5/system_description5.json",
+    "config_apps/LargeScale/7-components/instance6/system_description6.json",
+    "config_apps/LargeScale/7-components/instance7/system_description7.json",
+    "config_apps/LargeScale/7-components/instance8/system_description8.json",
+    "config_apps/LargeScale/7-components/instance9/system_description9.json",
+    "config_apps/LargeScale/7-components/instance10/system_description10.json",
+    "config_apps/LargeScale/10-components/instance1/system_description1.json",
+    "config_apps/LargeScale/10-components/instance2/system_description2.json",
+    "config_apps/LargeScale/10-components/instance3/system_description3.json",
+    "config_apps/LargeScale/10-components/instance4/system_description4.json",
+    "config_apps/LargeScale/10-components/instance5/system_description5.json",
+    "config_apps/LargeScale/10-components/instance6/system_description6.json",
+    "config_apps/LargeScale/10-components/instance7/system_description7.json",
+    "config_apps/LargeScale/10-components/instance8/system_description8.json",
+    "config_apps/LargeScale/10-components/instance9/system_description9.json",
+    "config_apps/LargeScale/10-components/instance10/system_description10.json",
+    "config_apps/LargeScale/15-components/instance1/system_description1.json",
+    "config_apps/LargeScale/15-components/instance2/system_description2.json",
+    "config_apps/LargeScale/15-components/instance3/system_description3.json",
+    "config_apps/LargeScale/15-components/instance4/system_description4.json",
+    "config_apps/LargeScale/15-components/instance5/system_description5.json",
     "config_apps/LargeScale/15-components/instance6/system_description6.json",
-    "config_apps/LargeScale/15-components/instance5/system_description5.json"
+    "config_apps/LargeScale/15-components/instance7/system_description7.json",
+    "config_apps/LargeScale/15-components/instance8/system_description8.json",
+    "config_apps/LargeScale/15-components/instance9/system_description9.json",
+    "config_apps/LargeScale/15-components/instance10/system_description10.json"
   ],
 
   "Algorithm" : {
-    "n_iterations" : 10000,
+    "n_iterations" : 5000,
     "max_num_sols" : 1
   },
 
   "Logger" : {
-    "priority" : 0,
+    "priority" : 5,
     "terminal_stream" : 0,
-    "file_stream" : 0,
-    "logger_file" : ""
+    "file_stream" : 0
   }
-
 }

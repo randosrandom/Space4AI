@@ -70,7 +70,7 @@ main(int argc, char** argv)
 
     my_chrono.start();
     const auto elite_result = sp::RandomGreedyDT::random_greedy(
-      system, n_iterations, max_num_sols, false
+      system, n_iterations, max_num_sols, true
     );
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
 

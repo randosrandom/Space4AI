@@ -24,6 +24,8 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message("Compiling code in mode: " ${CMAKE_BUILD_TYPE})
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 ################################################################
 ## Project
 ################################################################
@@ -60,7 +62,7 @@ find_package(Doxygen
 )
 
 if(DOXYGEN_FOUND)
-	add_subdirectory(doc)
+	include(makeDoxygen)
 else()
 	message(WARNING "Doxygen was not found. Documentation will not be generated")
 endif()

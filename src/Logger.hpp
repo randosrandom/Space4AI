@@ -173,15 +173,16 @@ class Logger
 			{
 				std::time_t current_time = std::time(nullptr);
 				std::tm* timestamp = std::localtime(&current_time);
-				std::scoped_lock lock(log_mutex);
 
 				if(EnableTerminalOutputFlag)
 				{
+					std::scoped_lock lock(log_mutex);
 					std::cout << std::put_time(timestamp, "%c") << "\t" << message_priority_str + message << std::endl;
 				}
 
 				if(EnableFileOutputFlag)
 				{
+					std::scoped_lock lock(log_mutex);
 					file << std::put_time(timestamp, "%c") << "\t" << message_priority_str + message << std::endl;
 				}
 			}
