@@ -57,12 +57,10 @@ execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/confi
 execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/config_tests ${CMAKE_BINARY_DIR}/tests/config_tests)
 
 # Documentation
-find_package(Doxygen
-             REQUIRED dot
-)
+find_package(Doxygen COMPONENTS dot)
 
 if(DOXYGEN_FOUND)
 	include(makeDoxygen)
 else()
-	message(WARNING "Doxygen was not found. Documentation will not be generated")
+	message(WARNING "Doxygen or graphviz was not found, please check. Documentation will not be generated")
 endif()
