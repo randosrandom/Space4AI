@@ -57,7 +57,7 @@ Now you can generate the *Makefile* through the build system *cmake*:
 cmake ..
 ```
 By default, this will generate a Makefile which will compile in RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
-- CMAKE_BUILD_TYPE (string). Specifies the build type, which can ```Debug```, ```Release```, ```RelWithDebInfo ``` or ```RelWithDebInfo```. Please refer to the original cmake [documentation](https://cmake.org/cmake/help/latest/), for further information.
+- CMAKE_BUILD_TYPE (string). Specifies the build type, which can ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original cmake [documentation](https://cmake.org/cmake/help/latest/), for further information.
 - PARALLELIZATION (option). If set to ON, you will compile the parallel version of the library; otherwise it will be serial.
 > :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to run parallel code in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
 
