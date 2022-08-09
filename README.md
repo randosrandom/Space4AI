@@ -59,7 +59,7 @@ cmake ..
 By default, this will generate a Makefile which will compile in RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
 - CMAKE_BUILD_TYPE (string). Specifies the build type, which can ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original cmake [documentation](https://cmake.org/cmake/help/latest/), for further information.
 - PARALLELIZATION (option). If set to ON, you will compile the parallel version of the library; otherwise it will be serial.
-> :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to run parallel code in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
+> :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
 
 - SHARED (option). If set to OFF, you will create a static library instead of shared one.
 
@@ -74,12 +74,12 @@ After you have generated the Makefile, you are ready to compile the library by d
 ```bash
 make VERBOSE=1
 ```
-Eventually, to ensure that everything went well, please do
+Eventually, to ensure that everything went well, do
 ```bash
 make test
 ```
 to run a bunch of tests, checking the correct compilation of the library and installation of the dependencies.
-If some tests go wrong, please run the tests in VERBOSE mode to try to understand the problem.
+If some tests go wrong, run the tests in VERBOSE mode to try to understand the problem.
 ```bash
 ctest --verbose
 ```
