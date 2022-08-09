@@ -38,7 +38,6 @@ main(int argc, char** argv)
   std::ifstream basic_config_file(basic_config_filepath);
   nl::json basic_config;
 
-
   if(basic_config_file)
   {
     basic_config = nl::json::parse(basic_config_file);
@@ -53,6 +52,13 @@ main(int argc, char** argv)
 
   Timings::Chrono my_chrono;
 
+  const size_t n_iterations = basic_config.at("Algorithm").at("n_iterations").get<size_t>();
+  const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
+
+  Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
+  Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
+  const bool enable_file_output = basic_config.at("Logger").at("file_stream").get<bool>();
+
   // initialize pybind11
   const auto init = sp::Initializer();
 
@@ -62,11 +68,18 @@ main(int argc, char** argv)
 
     my_chrono.start();
     const std::string system_config_file = basic_config.at("ConfigFiles")[i].get<std::string>();
+
+    if(enable_file_output)
+    {
+      std::string filename_ = system_config_file;
+      eraseAllSubStr(filename_, "config");
+      eraseAllSubStr(filename_, ".json");
+      std::replace(filename_.begin(), filename_.end(), '/', '_');
+      Logger::EnableFileOutput(true, filename_);
+    }
+
     system.read_configuration_file(system_config_file);
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
-
-    const size_t n_iterations = basic_config.at("Algorithm").at("n_iterations").get<size_t>();
-    const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
 
     my_chrono.start();
     const auto elite_result = sp::RandomGreedyDT::random_greedy(
@@ -75,43 +88,47 @@ main(int argc, char** argv)
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
 
     std::string suffix_sol = system_config_file;
-    eraseAllSubStr(suffix_sol, "config_apps");
+    eraseAllSubStr(suffix_sol, "config");
     std::replace(suffix_sol.begin(), suffix_sol.end(), '/', '_');
 
-    const std::string sol_output_file = output_dir + "Sol" + suffix_sol;
-    elite_result.print_solution(system, sol_output_file);
-
     const auto& sols = elite_result.get_solutions();
-    double cost;
+    for(size_t rk = 0; rk < sols.size(); ++rk)
+    {
+      const std::string sol_output_file = output_dir + "Sol_rk" + std::to_string(rk) + suffix_sol;
+      elite_result.print_solution(system, sol_output_file, rk);
+
+      nl::json InfoSol;
+
+      InfoSol["System"]["name"] = system_config_file;
+      InfoSol["System"]["readTime"] = system_read_time;
+
+      InfoSol["Algorithm"]["name"] = "Random Greedy";
+      InfoSol["Algorithm"]["time"] = algorithm_run_time;
+      InfoSol["Algorithm"]["n_iterations"] = n_iterations;
+      InfoSol["Algorithm"]["num_threads"] = elite_result.get_num_threads();
+
+      InfoSol["Rank"] = rk;
+      InfoSol["SolCost"] = sols[rk].get_cost();
+
+      const std::string infoSol_output_file = output_dir + "InfoSol_rk" + std::to_string(rk) + suffix_sol;
+
+      std::ofstream o(infoSol_output_file);
+      o << std::setw(4) << InfoSol << std::endl;
+    }
+
     if(sols.size() > 0)
     {
-      cost = sols[0].get_cost();
-      std::cout << "Found feasible solution to: " << system_config_file << " of cost: " << cost << std::endl;
+      std::cout << "Found feasible solution to: " << system_config_file << " of best cost: " << sols[0].get_cost() << std::endl;
     }
     else
     {
-      cost = -1;
+      std::cout << "No feasible solution found to: "<< system_config_file << std::endl;
     }
+
     std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
     std::cout << "Random Greedy running time (in seconds): " << algorithm_run_time << std::endl;
+
     std::cout << std::endl;
-
-    nl::json InfoSol;
-
-    InfoSol["System"]["name"] = system_config_file;
-    InfoSol["System"]["readTime"] = system_read_time;
-
-    InfoSol["Algorithm"]["name"] = "Random Greedy";
-    InfoSol["Algorithm"]["time"] = algorithm_run_time;
-    InfoSol["Algorithm"]["n_iterations"] = n_iterations;
-    InfoSol["Algorithm"]["num_threads"] = elite_result.get_num_threads();
-
-    InfoSol["BestSolCost"] = cost;
-
-    const std::string infoSol_output_file = output_dir + "InfoSol" + suffix_sol;
-
-    std::ofstream o(infoSol_output_file);
-    o << std::setw(4) << InfoSol << std::endl;
 
   }
 

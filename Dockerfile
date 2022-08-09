@@ -19,4 +19,6 @@ RUN pip3 install -r /home/SPACE4AI/requirements.txt
 
 WORKDIR /home/SPACE4AI
 
+RUN mkdir build && cd build && cmake .. && make 
+
 ENTRYPOINT ["/bin/bash"]

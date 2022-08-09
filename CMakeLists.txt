@@ -12,7 +12,7 @@ else()
 	set(LIB_NAME s4aidt_parallel)
 endif()
 
-option(SHARED "Set ON if you want the shared library" OFF)
+option(SHARED "Set OFF if you want the shared library" ON)
 
 set(MY_CXX_FLAGS -Wall -Wextra -Wpedantic -Wconversion -Wunused -Wsuggest-override -Wnon-virtual-dtor)
 set (CMAKE_CXX_STANDARD 17)
@@ -53,8 +53,8 @@ include(CTest)
 add_subdirectory(tests)
 
 # Create Symlink to config folders (think if it is best to have hard copy ...)
-execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/config_apps ${CMAKE_BINARY_DIR}/apps/config_apps)
-execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/config_tests ${CMAKE_BINARY_DIR}/tests/config_tests)
+execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/config/ ${CMAKE_BINARY_DIR}/apps/config)
+execute_process(COMMAND cmake -E create_symlink ${CMAKE_SOURCE_DIR}/tests/config_tests ${CMAKE_BINARY_DIR}/tests/config_tests)
 
 # Documentation
 find_package(Doxygen COMPONENTS dot)

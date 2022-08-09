@@ -11,6 +11,8 @@ It exploits an efficient randomized greedy algorithm that identifies the placeme
 
 ## Dependencies
 
+> :exclamation: We provided indications for ```Ubuntu``` machines, but the flow should be quite similar for any ```UNIX``` distribution, adapting some installation commands. If you use ```Windows``` or you encounter any problem during dependencies installation (or the subsequent compilation process), we suggest to use the library through a ```Docker``` container (further information in the dedicated section).
+
 ### pybind11
 To use our library you have to install [pybind11](https://github.com/pybind/pybind11). You could refer to the original documentation for the installation but, since it can be tricky to understand which is the correct way to go, we strongly suggest you to perform the follwing steps.
 
@@ -54,18 +56,18 @@ Now you can generate the *Makefile* through the build system *cmake*:
 ```bash
 cmake ..
 ```
-By default, this will generate a Makefile which will then create a STATIC library, SERIAL version, and in RELEASE mode. For any other combination, we describe the most important *cmake* variables you can set:
+By default, this will generate a Makefile which will compile in RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
 - CMAKE_BUILD_TYPE (string). Specifies the build type, which can ```Debug```, ```Release```, ```RelWithDebInfo ``` or ```RelWithDebInfo```. Please refer to the original cmake [documentation](https://cmake.org/cmake/help/latest/), for further information.
 - PARALLELIZATION (option). If set to ON, you will compile the parallel version of the library; otherwise it will be serial.
 > :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to run parallel code in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
 
-- SHARED (option). If set to ON, you will create a Shared library instead of Static one.
+- SHARED (option). If set to OFF, you will create a static library instead of shared one.
 
-So, for instance, if you want to compile the RELEASE, in PARALLEL mode, creating the SHARED library, you would do:
+So, for instance, if you want to compile for DEBUG, in PARALLEL mode, creating STATIC library, you would do:
 ```bash
-cmake -DCMAKE_BUILD_TYPE=Release -DPARALLELIZATION=ON -DSHARED=ON ..
+cmake -DCMAKE_BUILD_TYPE=Debug -DPARALLELIZATION=ON -DSHARED=OFF ..
 ```
-Actually there are many other things you can set in *cmake*, such as setting the compiler to use, destinations and so forth.
+Actually there are many other things you can set in *cmake*, such as the compiler to use, destinations and so on.
 Again, please refer to the original [documentation](https://cmake.org/cmake/help/latest/).
 
 After you have generated the Makefile, you are ready to compile the library by doing:
@@ -81,9 +83,6 @@ If some tests go wrong, please run the tests in VERBOSE mode to try to understan
 ```bash
 ctest --verbose
 ```
-<br />
-
-> :exclamation: We provided indications for ```Ubuntu``` machines, but the flow should be quite similar for any ```UNIX``` distribution, adapting some installation commands. If you use ```Windows``` or you encounter any problem in the installation or compilation processes, we suggest to use the library through a ```Docker``` container (further information in the dedicated section).
 
 > :hammer_and_wrench: At the moment we did not provide instruction for the installation of our library, mainly because it is still under development and it is very likely that in the future many things would change. So at this stage, it is pointless to manage the installation too.
 
@@ -91,20 +90,77 @@ ctest --verbose
 
 If you have any problem installing dependencies or compiling the library correctly, you can use [Docker](https://docs.docker.com/) virtualization.
 
-First, we need to create an image and a container, starting from our repository. From the source root (namely the folder in which the Dockerfile is located) do
+First, you need to create an image and a container, starting from our repository. From the source root (namely the folder in which the Dockerfile is located) do
 
 ```bash
 docker build -t <IMAGE_NAME> .
 docker create -it --name <CONTAINER_NAME> <IMAGE_NAME>
 ```
 
-Once you created the container you can use it (of course, without building it again)
+Once you created the container you can use it
 
 ```bash
 docker start -i <CONTAINER_NAME>
 ```
 
-Docker is very convenient to use, as it provides commands to copy files back and forth from the host to the containers. Refer to the original documentation for this and many other features.
+Note that, at the moment of creation of the container, the code will be compiled following the default explained above.
+If you need a different building configuration, you can recompile the code in the container.
+
+## Usage
+
+In the ```config``` folder of the project there are stored both the system descriptions files, and the input *.json* files requested by our main executable, namely ```dt_solver``` . In particular, the input has the following structure:
+```json
+{
+  "ConfigFiles" : [
+    "config/LargeScale/5-components/instance1/system_description1.json",
+    "config/LargeScale/15-components/instance10/system_description10.json"
+  ],
+
+  "Algorithm" : {
+    "n_iterations" : 5000,
+    "max_num_sols" : 1
+  },
+
+  "Logger" : {
+    "priority" : 5,
+    "terminal_stream" : false,
+    "file_stream" : false
+  }
+}
+```
+- **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path with respect to the root folder of the project must be given for each system file;
+
+- **Algorithm**: Here you can the total number of iterations to request, and the number of top solutions to retain;
+
+- **Logger**: configure Logger messages
+  - *priority*: 0 is the lowest priority (print everything possible, useful for hard debugging), 5 is the highest priority (print only the critical errors).
+
+  - *terminal_stream*: set to true if you want to have the messages printed on the terminal, false otherwise.
+
+  - *file_stream*: set to true if you want to have logger messages saved to file. Note that this will automatically create a folder named ```logs``` in the same location of the executable.
+
+In the config folder, there is already a input file called ```config_dt_solver.json``` which you can modify (or you can create one from scratch).
+
+Once you have built the library and configured the input files as you wish, from the ```build``` folder navigate to
+```bash
+cd apps
+```
+where you will find (other than building files) a symbolic link to the ```config``` folder introduced above. Now you can launch the solver by doing
+```bash
+./dt_solver config/config_dt_solver.json
+```
+
+If instead, you are using the parallel version, you can set the total number of threads by either exporting the following environmental variable
+```bash
+export OMP_NUM_THREADS=<NUM_THREADS>
+```
+or you can change it just for the specific executable launch
+```bash
+OMP_NUM_THREADS=<NUM_THREADS> ./dt_solver config/config_dt_solver.json
+
+```
+
+After the run, you will find a folder called ```OutputFiles```, in which there will be saved the solutions and some additional files containing the most important information about the saved solutions (like the cost, the number of threads used, the computing time etc...).
 
 ## References
 

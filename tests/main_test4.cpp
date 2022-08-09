@@ -62,7 +62,6 @@ main(int argc, char** argv)
     eraseAllSubStr(filename_, "config_tests");
     eraseAllSubStr(filename_, ".json");
     std::replace(filename_.begin(), filename_.end(), '/', '_');
-
     Logger::EnableFileOutput(true, filename_);
 
     system.read_configuration_file(system_config_file);
