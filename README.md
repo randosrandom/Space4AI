@@ -103,8 +103,13 @@ Once you created the container you can use it
 docker start -i <CONTAINER_NAME>
 ```
 
-Note that, at the moment of creation of the container, the code will be compiled following the default explained above.
-If you need a different building configuration, you can recompile the code in the container.
+Note that, at the moment of the creation of the image, the code is compiled following the default explained above. To be sure that everything will work properly, the first time you start the container please do a
+```bash
+make test
+```
+from the ```build``` folder,  and check if it passes all the tests.
+
+Moreover, note that if you need a different building configuration, you can recompile the library in the container.
 
 ## Usage
 
