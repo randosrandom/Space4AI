@@ -3,8 +3,8 @@
 *
 * \brief Defines the class to store the Local constraints on the single components
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef LOCALCONSTRAINT_HPP
@@ -14,50 +14,48 @@
 
 namespace Space4AI
 {
-  /** LocalConstraint
-  *
-  *   class to represent a local constraint, i.e. a performance constraint for
-  *   a single component.
-  */
-  class LocalConstraint
-  {
-  public:
+/** Class to represent a performance constraint for
+*   a single Component.
+*/
+class LocalConstraint
+{
+	public:
 
-    /** LocalConstraint class constructor
-    *
-    *   \param comp_idx_ Index of the component in the SystemData.components vector
-    *   \param res_time_ Response time constraint
-    */
-    LocalConstraint(
-      std::size_t comp_idx_,
-      TimeType res_time_
-    ): comp_idx(comp_idx_), max_res_time(res_time_)
-    {}
+		/** LocalConstraint class constructor
+		*
+		*   \param comp_idx_ Index of the Component in the SystemData.components vector
+		*   \param res_time_ Response time constraint
+		*/
+		LocalConstraint(
+		    std::size_t comp_idx_,
+		    TimeType res_time_
+		): comp_idx(comp_idx_), max_res_time(res_time_)
+		{}
 
-    /** Bring back default move constructor and move assignment operator */
-    LocalConstraint(LocalConstraint&&) = default;
-    LocalConstraint& operator=(LocalConstraint&&) = default;
+		/** Bring back default move constructor */
+		LocalConstraint(LocalConstraint&&) = default;
 
-    /** comp_idx getter */
-    size_t
-    get_comp_idx() const { return comp_idx; }
+		/** Bring back move assignment operator */
+		LocalConstraint& operator=(LocalConstraint&&) = default;
 
-    /** max_res_time getter */
-    TimeType
-    get_max_res_time() const { return max_res_time; }
+		/** comp_idx getter */
+		size_t
+		get_comp_idx() const { return comp_idx; }
 
-  private:
+		/** max_res_time getter */
+		TimeType
+		get_max_res_time() const { return max_res_time; }
 
-    /** Index of the component in the SystemData.components vector */
-    std::size_t comp_idx;
+	private:
 
-    /** Response time constraint */
-    TimeType max_res_time;
+		/** Index of the Component in the SystemData.components vector */
+		std::size_t comp_idx;
 
-  };
+		/** Response time constraint */
+		TimeType max_res_time;
+
+};
 
 } // namespace Space4AI
-
-
 
 #endif /* LOCALCONSTRAINT_HPP */
