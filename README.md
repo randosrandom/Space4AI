@@ -109,7 +109,7 @@ make test
 ```
 from the ```build``` folder,  and check if it passes all the tests.
 
-Moreover, note that if you need a different building configuration, you can recompile the library in the container.
+Moreover, if you need a different building configuration, you can recompile the library in the container.
 
 ## Usage
 
