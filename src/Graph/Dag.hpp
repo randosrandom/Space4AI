@@ -12,15 +12,11 @@
 #include <map>
 #include <unordered_map>
 
+#define JSON_USE_IMPLICIT_CONVERSIONS 0
 #include "external/nlohmann/json.hpp"
 
 #include "src/Logger.hpp"
 #include "src/TypeTraits.hpp"
-
-/** Disable implicit conversions FROM a JSON value */
-#ifndef JSON_USE_IMPLICIT_CONVERSIONS
-#define JSON_USE_IMPLICIT_CONVERSIONS 0
-#endif
 
 namespace Space4AI
 {

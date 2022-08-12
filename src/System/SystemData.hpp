@@ -16,8 +16,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "external/nlohmann/json.hpp"
-
 #include "src/Constraints/GlobalConstraint.hpp"
 #include "src/Constraints/LocalConstraint.hpp"
 #include "src/Graph/Component.hpp"

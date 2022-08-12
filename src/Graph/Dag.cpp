@@ -39,9 +39,9 @@ namespace Space4AI
       {
         for(size_t i=0; i<value.at("next").size(); ++i)
         {
-          this->dag_matrix  [ comp_name_to_idx.at( value.at("next")[i] )   ]
-                            [ comp_name_to_idx.at( key )                   ]
-                            = value.at("transition_probability")[i];
+          this->dag_matrix  [ comp_name_to_idx.at( value.at("next")[i].get<std::string>() )   ]
+                            [ comp_name_to_idx.at( key )                                     ]
+                            = value.at("transition_probability")[i].get<double>();
         }
       }
       else
@@ -74,9 +74,9 @@ namespace Space4AI
       {
         for(size_t i=0; i<dag_dict.at(name).at("next").size(); ++i)
         {
-          dag_matrix  [ comp_name_to_idx.at(dag_dict.at(name).at("next")[i] )]
-                      [ idx ]
-                      = dag_dict.at(name).at("transition_probability")[i];
+          dag_matrix  [ comp_name_to_idx.at(dag_dict.at(name).at("next")[i].get<std::string>() )  ]
+                      [ idx                                                                       ]
+                      = dag_dict.at(name).at("transition_probability")[i].get<double>();
         }
       }
     }
