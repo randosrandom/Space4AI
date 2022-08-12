@@ -117,7 +117,7 @@ Moreover, if you need a different building configuration, you can recompile the 
 
 ## Usage
 
-In the ```config``` folder of the project there are stored both the system descriptions files, and the input *.json* files requested by our main executable, namely ```dt_solver``` . In particular, the input has the following structure:
+In the ```config``` folder of the project there are stored both the system description files, and the input *.json* files requested by our main executable, namely ```dt_solver``` . In particular, the input has the following structure:
 ```json
 {
   "ConfigFiles" : [
@@ -179,6 +179,8 @@ If you need to built an application from scratch and use the library, you just h
 #include "src/s4ai.hpp"
 ```
 to include all the needed header files in your application.
+
+If you want to create a new system description file, we suggest to pick any system configuration file from the folder ```config```, and follow it to build the new system.
 
 ## References
 
