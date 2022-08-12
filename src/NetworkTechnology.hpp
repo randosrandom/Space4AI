@@ -1,7 +1,7 @@
 /**
 * \file NetworkTechnology.hpp
 *
-* \brief Defines the class that represents the network domains
+* \brief Defines the class that represents the network domains.
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -18,13 +18,13 @@
 namespace Space4AI
 {
 /** Class used to represent a network domain used for data transfer operations
-*   among different Component or Partition objects
+*   among different Component or Partition objects.
 */
 class NetworkDomain
 {
 	public:
 
-		/** NetworkDomain class constructor
+		/** NetworkDomain class constructor.
 		*
 		*   \param name_ Name of the network domain
 		*   \param cls_names_ Vector of names of the ComputationalLayer objects

@@ -1,7 +1,7 @@
 /**
 * \file LocalConstraint.hpp
 *
-* \brief Defines the class to store the Local constraints on the single components
+* \brief Defines the class to store the Local constraints on the single components.
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -21,7 +21,7 @@ class LocalConstraint
 {
 	public:
 
-		/** LocalConstraint class constructor
+		/** LocalConstraint class constructor.
 		*
 		*   \param comp_idx_ Index of the Component in the SystemData.components vector
 		*   \param res_time_ Response time constraint

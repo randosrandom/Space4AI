@@ -1,10 +1,10 @@
 /**
 * \file Solution.hpp
 *
-* \brief Defines the class to store the a solution to the system configuration provided
+* \brief Defines the class to store the a solution to the System configuration provided.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef SOLUTION_HPP_
@@ -20,78 +20,71 @@
 
 namespace Space4AI
 {
-  /** Solution
-  *
-  *   Class to store and manage the system configuration chosen as a solution
-  *   for the AI application
-  */
-  class Solution //"Configuration"
-  {
-
+/** Class to store and manage the System configuration chosen as a solution
+*   for the AI application.
+*/
+class Solution
+{
   public:
 
-    /** Solution default constructor that initialize cost to -1, and sol_performance
-    *   to (not feasible, empty, empty)
+    /** Solution default constructor that initializes feasibility to false
+    *   and total_cost to -1.
     */
     Solution():
       feasibility(false),
       total_cost(-1)
     {}
 
-    /** Method that reads the configuration of the solution, if you want to load
-    *   a previous solution saved in file.
+    /** Method that reads the configuration of the Solution, if you want to load
+    *   a previous Solution saved in file.
     *
     *   \param file String containing the directory of the .json file
-    *               that describes the configuration of the solution
+    *               that describes the configuration of the Solution
     *
-    *   \param system Object containing all the data structures of the system
+    *   \param system Object containing all the data structures of the System
     */
-    void
-    read_solution_from_file(
-      const std::string& file,
-      const System& system
+    void read_solution_from_file(
+        const std::string& file,
+        const System& system
     );
 
-    /** Method to write the solution in a .json file
+    /** Method to write the Solution in a .json file.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \param name Path to file where you want to save the solution
+    *   \param system Object containing all the data structures of the System
+    *   \param name Path to file where you want to save the Solution
     */
-    void
-    print_solution(const System& system, const std::string& name) const;
+    void print_solution(const System& system, const std::string& name) const;
 
-    /** Method to convert a solution into a json object
+    /** Method to convert a Solution into a nl::json object.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return json object that describes the solution configuration
+    *   \param system Object containing all the data structures of the System
+    *   \return nl::json object that describes the Solution configuration
     */
-    nl::json
-    to_json(const System& system) const;
+    nl::json to_json(const System& system) const;
 
-    /** Method to check the feasibility of a solution
+    /** Method to check the feasibility of a Solution.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return true if the solution is feasible, false otherwise
+    *   \param system Object containing all the data structures of the System
+    *   \return true if the Solution is feasible, false otherwise
     */
-    bool
-    check_feasibility(
-      const System& system
+    bool check_feasibility(
+        const System& system
     );
 
-    /** Method to compute the cost of a solution
+    /** Method to compute the cost of a Solution.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return cost of the solution
+    *   \param system Object containing all the data structures of the System
+    *   \return cost of the Solution
     */
-    CostType
-    objective_function(
-      const System& system
+    CostType objective_function(
+        const System& system
     );
 
     /** feasibility getter */
     bool
     get_feasibility() const { return feasibility; }
 
+    /** total_cost getter */
     CostType
     get_cost() const {return total_cost; }
 
@@ -99,27 +92,28 @@ namespace Space4AI
     const YHatType&
     get_y_hat() const {return solution_data.y_hat;}
 
-    /** used_resources getter from sol_data*/
+    /** used_resources getter from sol_data */
     const UsedResourcesOrderedType&
     get_used_resources() const {return solution_data.used_resources;}
 
-    /** n_used_resources getter from solution_data*/
+    /** n_used_resources getter from solution_data */
     const UsedResourcesNumberType&
     get_n_used_resources() const {return solution_data.n_used_resources;}
-
 
     /** y_hat setter */
     template <class T>
     void
     set_y_hat(T&& y_h) { solution_data.y_hat = std::forward<T>(y_h); }
 
-    /** used_resources setter */
+    /** used_resources setter
+    *
+    *   Note: this method preliminarily sorts the input structure of used resources by
+    *   partition index (see TypeTraits.hpp to better understand the type structure).
+    */
     template <class T>
     void
     set_used_resources(T&& u_r)
     {
-      // VERY IMPORTANT
-      // Used resources must be ordered by part idx!
       for(auto& vec : u_r)
       {
         std::sort(vec.begin(), vec.end());
@@ -138,8 +132,8 @@ namespace Space4AI
     set_total_cost(CostType cost) {total_cost = cost;}
 
     /** "<" operator definition:
-    *   the solutions will be ordered by cost, meaning that a solution with a smaller
-    *   cost is smaller than a solution with a greater cost
+    *   the solutions will be ordered by cost, meaning that a Solution with a smaller
+    *   cost is smaller than a Solution with a greater cost.
     */
     friend
     bool
@@ -147,102 +141,113 @@ namespace Space4AI
 
   private:
 
-    /** Method to check if each component partition is assigned to exactly one resource,
-    *   if the solution is coherent with the compatibility matrix and
+    /** Method to check if each Component Partition is assigned to exactly one Resource,
+    *   if the Solution is coherent with the SystemData.compatibility_matrix and
     *   if the number of used resources does not exceed the number of available
-    *   resources
+    *   resources.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return true if the solution satisfies the constraints, false otherwise
+    *   \param system Object containing all the data structures of the System
+    *   \return true if the Solution satisfies the constraints, false otherwise
     */
-    bool
-    preliminary_constraints_check_assignments(
-      const System& system
+    bool preliminary_constraints_check_assignments(
+        const System& system
     ) const;
 
-    /** Method to check if the solution satisfies the memory constraints
+    /** Method to check if the Solution satisfies the memory constraints.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return true if the solution satisfies the memory constraints, false otherwise
+    *   \param system Object containing all the data structures of the System
+    *   \return true if the Solution satisfies the memory constraints, false otherwise
     */
-    bool
-    memory_constraints_check(
-      const System& system
+    bool memory_constraints_check(
+        const System& system
     ) const;
 
-    /** Method to check that, if a component partition object is executed
-    *   on a VM or a Faas, all its successors are not executed on Edge resources
-    *   (assignments cannot move back from cloud/faas to edge)
+    /** Method to check that, if a Component Partition object is executed
+    *   on a ResourceType::VM or a ResourceType::Faas, all its successors
+    *   are not executed on ResourceType::Edge resources
+    *   (assignments cannot move back from cloud/faas to edge).
     *
-    *   \param system A System object
+    *   \param system Object containing all the data structures of the System
     *   \return True if the constraint is satisfied
     */
-    bool
-    move_backward_check(
-      const System& system
+    bool move_backward_check(
+        const System& system
     ) const;
 
     /** Method to verify if resources that don't allow colocation are overloaded
-    *   (namely more than one partition is running on the resource)
+    *   (namely more than one Partition is running on the Resource).
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return true if the solution satisfies the constraint, false otherwise
+    *   \param system Object containing all the data structures of the System
+    *   \return true if the Solution satisfies the constraint, false otherwise
     */
-    bool
-    performance_assignment_check(
-      const System& system
+    bool performance_assignment_check(
+        const System& system
     ) const;
 
-    /** Method to check if local constraints are satisfied by the solution
+    /** Method to check if LocalConstraint constraints are satisfied by the Solution.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return true if the solution satisfies the local constraints, false otherwise
+    *   \param system Object containing all the data structures of the System
+    *   \return true if the Solution satisfies the LocalConstraint constraints,
+    *           false otherwise
     */
-    bool
-    local_constraints_check(
-      const System& system
+    bool local_constraints_check(
+        const System& system
     );
 
-    /** Method to check if global constraints are satisfied by the solution
+    /** Method to check if GlobalConstraint constraints are satisfied by the Solution.
     *
-    *   \param system Object containing all the data structures of the system
-    *   \return true if the solution satisfies the global constraints, false otherwise
+    *   \param system Object containing all the data structures of the System
+    *   \return true if the Solution satisfies the GlobalConstraint constraints,
+    *           false otherwise
     */
-    bool
-    global_constraints_check(
-      const System& system
+    bool global_constraints_check(
+        const System& system
     );
 
-    std::pair<bool, TimeType>
-    path_global_constraint_check(
-      const std::vector<size_t>& comp_idxs,
-      const System& system
+    /** Method to check if the Solution path satisfies the GlobalConstraint constraints
+    *   and to compute the path response time.
+    *
+    *   \param comp_idxs vector containing the indexes of the selected components
+    *                    in SystemData.components
+    *   \param system Object containing all the data structures of the System
+    *   \return pair: [true if the Solution path satisfies the global constraints, false otherwise;
+    *           response time of the Solution path]
+    */
+    std::pair<bool, TimeType> path_global_constraint_check(
+        const std::vector<size_t>& comp_idxs,
+        const System& system
     ) const;
 
   private:
 
-    /** feasibility of the solution */
+    /** feasibility of the Solution: true if feasible, false otherwise */
     bool feasibility;
 
-    /** solution_data storing: y_hat, used_resources, and n_used_resources */
+    /** SolutionData object storing:
+    *   SolutionData.y_hat, SolutionData.used_resources, and SolutionData.n_used_resources
+    */
     SolutionData solution_data;
 
-    /** Cost of the solution */
+    /** Cost of the Solution */
     CostType total_cost;
 
-    /** For each component, saves difference between the constraint of max time and the actual performance time */
+    /** For each Component, saves difference between the constraint of max time
+    *   and the actual performance time
+    */
     std::vector<TimeType> local_slack_values;
 
-    /** For each global path listed in the config file, saves difference between the constraint of max time and the actual performance time */
+    /** For each global path listed in the config file, saves difference between
+    *   the constraint of max time and the actual performance time
+    */
     std::vector<TimeType> global_slack_values;
 
-    /** component performance times */
+    /** Component performance times */
     std::vector<TimeType> comp_perfs;
 
     /** paths performance times */
     std::vector<TimeType> path_perfs;
 
-  };
+};
 
 } //namespace Space4AI
 

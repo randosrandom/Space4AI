@@ -1,10 +1,10 @@
 /**
-* \file SystemData.hpp
+* \file SystemData.cpp
 *
-* \brief Defines the methods of SystemData class
+* \brief Defines the methods of the class SystemData.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #include "src/System/SystemData.hpp"

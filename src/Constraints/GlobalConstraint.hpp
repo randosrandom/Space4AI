@@ -1,7 +1,7 @@
 /**
 * \file GlobalConstraint.hpp
 *
-* \brief Defines the class to store the Global constraints on a given path of components
+* \brief Defines the class to store the Global constraints on a given path of components.
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -15,14 +15,13 @@
 namespace Space4AI
 {
 /** Class to represent a performance constraint for
-*   a specific path (set of components)
+*   a specific path (set of components).
 */
 class GlobalConstraint
 {
-
 	public:
 
-		/** GlobalConstraint class constructor
+		/** GlobalConstraint class constructor.
 		*
 		*   \param path_name_ Name of the path
 		*   \param comp_idxs_ Vector storing the indexes of the components (in the SystemData.components
