@@ -1,3 +1,12 @@
+/**
+* \file Solution.cpp
+*
+* \brief Defines the methods of the class Solution.
+*
+* \author Randeep Singh
+* \author Giulia Mazzilli
+*/
+
 #include "src/Solution/Solution.hpp"
 
 namespace Space4AI

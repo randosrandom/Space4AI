@@ -1,10 +1,10 @@
 /**
 * \file System.cpp
 *
-* \brief Define the methods of the class System
+* \brief Define the methods of the class System.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #include "src/System/System.hpp"
