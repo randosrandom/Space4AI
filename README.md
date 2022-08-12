@@ -43,6 +43,10 @@ If OpenMP is not featured in the compiler, you can configure it using the comman
 sudo apt install libomp-dev
 ```
 
+### Json for Modern C++
+
+This is a *json* parser, which consists in just an header file so no particular installation procedure is needed. In our repository such header file is saved in  ```external/nlohmann```. For further information on the usage of the library refer directly to the original [documentation](https://json.nlohmann.me/).
+
 ## Compile the library
 After you have installed the dependencies, clone this repository, and enter the source root.
 ```bash
@@ -166,6 +170,15 @@ OMP_NUM_THREADS=<NUM_THREADS> ./dt_solver config/config_dt_solver.json
 ```
 
 After the run, you will find a folder called ```OutputFiles```, in which there will be saved the solutions and some additional files containing the most important information about the saved solutions (like the cost, the number of threads used, the computing time etc...).
+
+### Custom applications
+
+If you need to built an application from scratch and use the library, you just have to
+
+```cpp
+#include "src/s4ai.hpp"
+```
+to include all the needed header files in your application.
 
 ## References
 

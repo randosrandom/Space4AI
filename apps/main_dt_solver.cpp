@@ -8,7 +8,6 @@
 #include "src/s4ai.hpp"
 
 namespace sp = Space4AI;
-namespace py = pybind11;
 namespace fs = std::filesystem;
 namespace nl = nlohmann;
 
