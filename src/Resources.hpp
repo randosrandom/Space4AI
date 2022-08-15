@@ -1,10 +1,11 @@
 /**
 * \file Resources.hpp
 *
-* \brief Defines the classes to manage Edge, VM, Faas Resources
+* \brief Defines the classes to manage ResourceType::Edge, ResourceType::VM,
+* 		 ResourceType::Faas Resources
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef RESOURCES_HPP_
@@ -21,11 +22,12 @@ class ComputationalLayer
 {
 	public:
 
-		/**
-		* ComputationalLayer constructor.
+		/** ComputationalLayer constructor.
 		*
-		* \param name_ Name of the layer
-		* \param type_of_resources_ Type of resources in the layer (either Edge, Vm or Faas)
+		* 	\param name_ Name of the ComputationalLayer
+		* 	\param type_of_resources_ Type of resources in the layer
+		* 							  (either ResourceType::Edge, ResourceType::Vm or
+		* 							  ResourceType::Faas)
 		*/
 		ComputationalLayer(const std::string& name_, ResourceType type_of_resources_):
 			name(name_),
@@ -33,7 +35,10 @@ class ComputationalLayer
 			res_idxs({})
 		{}
 
-		/** method to add the index of a resource in the layer */
+		/** Method to add the index of a Resource in the ComputationalLayer
+		*
+		* 	\param res_idx Index of the Resource to add to ComputationalLayer.res_idxs
+		*/
 		void
 		add_resource(size_t res_idx) { res_idxs.push_back(res_idx); }
 
@@ -51,36 +56,36 @@ class ComputationalLayer
 
 	private:
 
-		/** name of the layer */
+		/** name of the ComputationalLayer */
 		const std::string name;
 
-		/** type of the resources saved in the layer (either Edge, VM or Faas) */
+		/** type of the resources saved in the layer (either ResourceType::Edge,
+		*   ResourceType::VM or ResourceType::Faas)
+		*/
 		const ResourceType type_of_resources;
 
-		/** vector storing the indexes of the resources in the layer */
+		/** vector storing the indexes of the resources in the ComputationalLayer */
 		std::vector<size_t> res_idxs;
 };
 
-/**
-* Template class to manage different type of resources.
+/** Template class to manage different types of resources.
 *
-* This will be used for Edge, VM.
+* 	This will be used for ResourceType::Edge and ResourceType::VM.
 */
 template <ResourceType Type>
 class Resource
 {
 	public:
 
-		/**
-		* Resource constructor.
+		/** Resource constructor.
 		*
-		* \param name_ Name of the resource
-		* \param description_ Eventual description of the resource
-		* \param cl_name_ Computational layer where the resource is located
-		* \param cost_ Cost of the resource
-		* \param memory_ Amount of available memory on the resource
-		* \param number_avail_ Number of available objects of the current type
-		* \param n_cores_ Number of cores of the resource
+		* 	\param name_ Name of the Resource
+		* 	\param description_ Eventual description of the Resource
+		* 	\param cl_name_ name of the ComputationalLayer where the Resource is located
+		* 	\param cost_ Cost of the Resource
+		* 	\param memory_ Amount of available memory on the Resource
+		* 	\param number_avail_ Number of available objects of the current type
+		* 	\param n_cores_ Number of cores of the Resource
 		*/
 		Resource(
 		    const std::string& name_,
@@ -108,7 +113,7 @@ class Resource
 		std::string
 		get_description() const { return description; };
 
-		/** computational layer name getter */
+		/** cl_name getter */
 		std::string
 		get_cl_name() const { return cl_name; };
 
@@ -124,53 +129,51 @@ class Resource
 		size_t
 		get_number_avail() const { return number_avail; }
 
-		/** number of cores getter */
+		/** n_cores getter */
 		size_t
 		get_n_cores() const { return n_cores; };
 
 	private:
 
-		/** Name of the resource */
+		/** Name of the Resource */
 		const std::string name;
 
-		/** Eventual description of the resource */
+		/** Eventual description of the Resource */
 		const std::string description;
 
-		/** Computational layer where the resource is located */
+		/** ComputationalLayer where the Resource is located */
 		const std::string cl_name;
 
-		/** Cost of the resource */
+		/** Cost of the Resource */
 		const CostType cost;
 
-		/** Amount of available memory on the resource */
+		/** Amount of available memory on the Resource */
 		const DataType memory;
 
 		/** Number of available objects of the current type */
 		const size_t number_avail;
 
-		/** Number of cores of the resource */
+		/** Number of cores of the Resource */
 		const size_t n_cores;
 };
 
-/**
-* Specialization of the template class Resource<ResourceType Type> for FaaS
-* resources
+/** Specialization of the template class Resource<ResourceType Type> for
+*   ResourceType::Faas.
 */
 template <>
 class Resource<ResourceType::Faas>
 {
 	public:
 
-		/**
-		* Resource constructor.
+		/** Resource constructor.
 		*
-		* \param name_ Name of the resource
-		* \param description_ Eventual description of the resource
-		* \param cl_name_ Computational layer where the resource is located
-		* \param cost_ Cost of the resource
-		* \param memory_ Amount of available memory on the resource
-		* \param transition_cost_ Transition cost
-		* \param idle_time_before_kill_ How long does the platform keep the servers up after being idle
+		* 	\param name_ Name of the Resource
+		* 	\param description_ Eventual description of the Resource
+		* 	\param cl_name_ ComputationalLayer where the Resource is located
+		* 	\param cost_ Cost of the Resource
+		* 	\param memory_ Amount of available memory on the Resource
+		* 	\param transition_cost_ Transition cost
+		* 	\param idle_time_before_kill_ How long does the platform keep the servers up after being idle
 		*/
 		Resource(
 		    const std::string& name_,
@@ -220,19 +223,19 @@ class Resource<ResourceType::Faas>
 
 	private:
 
-		/** Name of the resource */
+		/** Name of the Resource */
 		const std::string name;
 
-		/** Eventual description of the resource */
+		/** Eventual description of the Resource */
 		const std::string description;
 
-		/** Computational layer where the resource is located */
+		/** ComputationalLayer where the Resource is located */
 		const std::string cl_name;
 
-		/** Cost of the resource */
+		/** Cost of the Resource */
 		const CostType cost;
 
-		/** Amount of available memory on the resource */
+		/** Amount of available memory on the Resource */
 		const DataType memory;
 
 		/** Transition cost */
@@ -242,141 +245,130 @@ class Resource<ResourceType::Faas>
 		const TimeType idle_time_before_kill;
 };
 
-/**
-* Class to store all type of the resources as a single "container".
-*/
+/** Class to store all types of resources in a single "container". */
 class AllResources
 {
 	public:
 
-		/**
-		* AllResources constructor.
+		/** AllResources constructor.
 		*
-		* Initialize number_resources as a N-dimensional vector, where N is the
-		* number of different type of resources.
+		* 	Initializes number_resources as a N-dimensional vector, where N is the
+		* 	number of different types of resources.
 		*/
 		AllResources():
 			number_resources(std::vector<size_t>(ResIdxFromType(ResourceType::Count), 0))
 		{}
 
-		/**
-		* Template method that add the passed resources of type T in the
-		* corresponding container.
+		/** Template method that adds the input Resource of type T in the
+		* 	corresponding container.
 		*/
 		template<class T>
-		void
-		add_resource(T&& resource);
+		void add_resource(T&& resource);
 
-		/**
-		* Template getter that returns all the resources of type T.
+		/** Template getter that returns all the resources of type T. */
+		template<ResourceType T>
+		const std::vector<Resource<T>>& get_resources() const;
+
+		/** Template getter that returns the Resource of type T with the input index.
+		*
+		*	\param res_idx Index of the Resource to be returned
+		*	\return const reference to the chosen Resource
 		*/
 		template<ResourceType T>
-		const std::vector<Resource<T>>&
-		get_resources() const;
+		const Resource<T>& get_resource(size_t res_idx) const;
 
-		/**
-		* Template getter that returns the resource of type T with given index.
+		/** Method to get the name of a Resource.
 		*
-		*	\param res_idx Index of the resource to be returned
-		*	\return const reference to the choser resource
-		*/
-		template<ResourceType T>
-		const Resource<T>&
-		get_resource(size_t res_idx) const;
-
-		/**
-		* Method to get the name of a resource.
-		*
-		*	\param res_type Resource Type (VM, EDGE or Faas)
+		*	\param res_type Resource Type (ResourceType::VM, ResourceType::Edge or ResourceType::Faas)
 		*	\param res_idx Index of the resource
+		* 	\return name of the Resource
 		*/
-		std::string
-		get_name(ResourceType res_type, size_t res_idx) const;
+		std::string get_name(ResourceType res_type, size_t res_idx) const;
 
-		/**
-		* Method to get the description of a resource.
+		/** Method to get the description of a Resource.
 		*
-		*	\param res_type Resource Type (VM, EDGE or Faas)
-		*	\param res_idx Index of the resource
+		*	\param res_type Resource Type (ResourceType::VM, ResourceType::Edge or ResourceType::Faas)
+		*	\param res_idx Index of the Resource
+		* 	\return description of the Resource
 		*/
-		std::string
-		get_description(ResourceType res_type, size_t res_idx) const;
+		std::string get_description(ResourceType res_type, size_t res_idx) const;
 
-		/**
-		* Method to get the total number of resources of the type corresponding to
-		* the type_idx (see ResourceType num class in TypeTraits.hpp)
+		/** Method to get the total number of resources of the type corresponding to
+		* 	the type_idx (see ResourceType enum class in TypeTraits.hpp)
 		*
-		* SPIEGARE BENE TUTTO RETURN, PARAM. QUI DIRE CHE INGRESSO E' INDEX
+		* 	\param res_type_idx Index corresponding to a certain ResourceType
+		* 						(see ResourceType enum class in TypeTraits.hpp)
+		* 	\return total number of resources of the input type
 		*/
-		size_t
-		get_number_resources(size_t res_type_idx) const;
+		size_t get_number_resources(size_t res_type_idx) const;
 
-		/**
-		* Method to get the computational layer of the passed resource.
-		* \param res_type Resource Type (either Edge or VM or Faas)
-		* \param res_idx Index of the resource
+		/** Method to get the ComputationalLayer of the input Resource.
 		*
-		* This method is needed at runtime, when I don't know with which type of
-		* resource I am dealing with.
-		*/
-		std::string
-		get_cl_name(ResourceType res_type, size_t res_idx) const;
-
-		/**
-		* Method to get the memory of the passed resource.
-		* \param res_type Resource Type (either Edge, VM or Faas)
-		* \param res_idx Index of the resource
+		*   This method is needed at runtime, when the ResourceType is unknown.
 		*
-		* This method is needed at runtime, when I don't know with which type of
-		* resource I am dealing with.
+		* 	\param res_type Resource Type (either ResourceType::Edge, ResourceType::VM
+		*				    or ResourceType::Faas)
+		* 	\param res_idx Index of the Resource
+		* 	\return name of the ComputationalLayer including the input Resource
 		*/
-		DataType
-		get_memory(ResourceType res_type, size_t res_idx) const;
+		std::string get_cl_name(ResourceType res_type, size_t res_idx) const;
 
-
-		/**
-		* Method to get the cost of the passed resource.
-		* \param res_type Resource Type (either Edge, VM or Faas)
-		* \param res_idx Index of the resource
+		/** Method to get the memory of the input Resource.
 		*
-		* This method is needed at runtime, when I don't know with which type of
-		* resource I am dealing with.
-		*/
-		CostType
-		get_cost(ResourceType res_type, size_t res_idx) const;
-
-
-		/**
-		* Method to get the number_avail of the passed resource.
-		* \param res_type Resource Type (either Edge, VM or Faas)
-		* \param res_idx Index of the resource
+		* 	This method is needed at runtime, when the ResourceType is unknown.
 		*
-		* This method is needed at runtime, when I don't know with which type of
-		* resource I am dealing with. Note that the method accept also Faas
-		* resources as input, even though Faas does not have the concept of available
-		* objects. Anyway, in such case, 1 is returned.
+		* 	\param res_type Resource Type (either ResourceType::Edge, ResourceType::VM
+		*				    or ResourceType::Faas)
+		* 	\param res_idx Index of the resource
+		* 	\return memory of the input Resource
 		*/
-		size_t
-		get_number_avail(ResourceType res_type, size_t res_idx) const;
+		DataType get_memory(ResourceType res_type, size_t res_idx) const;
+
+
+		/** Method to get the cost of the input Resource.
+		*
+		* 	This method is needed at runtime, when the ResourceType is unknown.
+		*
+		* 	\param res_type Resource Type (either ResourceType::Edge, ResourceType::VM
+		*				    or ResourceType::Faas)
+		* 	\param res_idx Index of the Resource
+		* 	\return cost of the input Resource
+		*/
+		CostType get_cost(ResourceType res_type, size_t res_idx) const;
+
+
+		/** Method to get the number_avail of the input Resource.
+		*
+		* 	This method is needed at runtime, when the ResourceType is unknown.
+		* 	Note that the method accepts also ResourceType::Faas resources as input,
+		* 	even though ResourceType::Faas lacks the concept of available
+		* 	objects. Anyway, in such case, 1 is returned.
+		*
+		* 	\param res_type Resource Type (either ResourceType::Edge, ResourceType::VM
+		*				    or ResourceType::Faas)
+		* 	\param res_idx Index of the Resource
+		* 	\return number_avail of the input Resource
+		*/
+		size_t get_number_avail(ResourceType res_type, size_t res_idx) const;
 
 	private:
 
-		/** Store for each type of resource, the number of resources of that type */
+		/** Store for each type of Resource, the number of resources of that type */
 		std::vector<size_t> number_resources;
 
-		/** Edge resources vector */
+		/** ResourceType::Edge resources vector */
 		std::vector<Resource<ResourceType::Edge>> edge_resources;
 
-		/** VM resources vector */
+		/** ResourceType::VM resources vector */
 		std::vector<Resource<ResourceType::VM>> vm_resources;
 
-		/** Faas Resources vector */
+		/** ResourceType::Faas Resources vector */
 		std::vector<Resource<ResourceType::Faas>> faas_resources;
 
 };
 
 // ---------------------------------------------------------------------------
-// DEFINITION OF TEMPLETATES and METHODS
+// DEFINITION OF TEMPLATES and METHODS
 // ---------------------------------------------------------------------------
 
 template <class T>

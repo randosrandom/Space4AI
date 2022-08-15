@@ -1,10 +1,10 @@
 /**
 * \file Dag.cpp
 *
-* \brief Definition of the methods of class Graph
+* \brief Definition of the methods of the class Graph.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #include <iostream>

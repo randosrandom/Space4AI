@@ -1,10 +1,10 @@
 /**
 * \file s4ai.hpp
 *
-* \brief File used to include all headers used by the library
+* \brief File used to include all headers used by the library.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef S4AI_HPP_
