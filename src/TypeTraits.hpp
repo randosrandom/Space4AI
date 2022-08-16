@@ -3,8 +3,8 @@
 *
 * \brief Defines the main types and data structures used in the code.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef TYPETRAITS_HPP_
@@ -33,16 +33,16 @@ enum class ResourceType : size_t
 	Count = 3, /**< total number of resource types */
 };
 
-using CostType = double; /**< represent the cost type used */
-using ProbType = double; /**< represent ransition probabilities of the dag */
-using DataType = double; /**< represent data sizes passed between components */
-using LoadType = double; /**< represent the input exogenous workload */
-using TimeType = double; /**< represent time */
+using CostType = double; /**< represents the cost type used */
+using ProbType = double; /**< represents transition probabilities of the DAG */
+using DataType = double; /**< represents data sizes passed between components */
+using LoadType = double; /**< represents the input exogenous workload */
+using TimeType = double; /**< represents time */
 
-/*
-* Compatibility Matrix of the system.
-* Four dimensional vector if bool (indexed by [i][j][k][l]) storing true if
-* partition k of Component i is compatible with resource l of type j, false otherwise
+/** Compatibility Matrix of the system.
+*
+*   Four-dimensional vector of booleans (indexed by [i][j][k][l]) storing true if
+*   partition k of Component i is compatible with resource l of type j, false otherwise
 *
 *        i: index of the component
 *        j: index of the resource type
@@ -52,31 +52,30 @@ using TimeType = double; /**< represent time */
 using CompatibilityMatrixType =
     std::vector<std::vector<std::vector<std::vector<bool>>>>;
 
-/**
-* Used to save the transition matrix of the DAG.
-* Two dimensional vector of ProbType (indexed by [i][j]) storing the transition
-* probability from component j to component i.
+/** Strurcture used to save the transition matrix of the DAG.
+*
+*   Two-dimensional vector of ProbType (indexed by [i][j]) storing the transition
+*   probability from component j to component i.
 */
 using DagMatrixType = std::vector<std::vector<ProbType>>;
 
-/**
-* DemandEdgeVMType needed to store demands of resources using of QTPE.
+/** DemandEdgeVMType needed to store demands of resources using QTPE.
 *
-* QTPE is the only PE that must know demands from the other instances of the PE
-* (other components and partition running on the same resource). The design choice
-* we choose is to save a static 4-dim vector
-* (indexed by [comp_idx][type_idx][part_idx][res_idx]) and we save Nans when
-* the specific resources running the specific partition does not use QTPE.
-* Other design choice are available but to use less memory would require
-* shared_ptr but in this case just a copy is better.
+*   QTPE is the only PE that must know demands from the other instances of the PE
+*   (i.e. other components and partitions running on the same Resource).
+*   Our design choice is to save a static 4-dim vector
+*   (indexed by [comp_idx][type_idx][part_idx][res_idx]) using Nans when
+*   the specific resources running the specific partition does not use QTPE.
+*   Other design choices are available, for instance, to use less memory,
+*   shared_ptr would be optimal but in this case just a copy is better.
 */
 using DemandEdgeVMType =
     std::vector<std::vector<std::vector<std::vector<TimeType>>>>;
 
 /** Predictors to compute the demand time.
 *
-*   For each partition and each component, running on a specific resource of a
-*   specific type, we save an unique_ptr to the BasePerformanceModel class,
+*   For each Partition and each Component, running on a specific Resource of a
+*   specific ResourceType, we save a unique_ptr to the BasePerformanceModel class,
 *   exploiting Inheritance and Polymorphism.
 */
 using PerformanceType =
@@ -85,23 +84,27 @@ using PerformanceType =
     >>>>;
 
 /** Type of the "y hat".
-*   Indexing equivalent to CompatibilityMatrixType. It stores the number of
-*   resources of a certain type, running a certain component-partition couple.
+*
+*   The indexing is equivalent to the one of CompatibilityMatrixType.
+*   It stores the number of resources of a certain ResourceType, running a certain
+*   Component-Partition couple.
 */
 using YHatType =
     std::vector<std::vector<std::vector<std::vector<
     std::size_t
     >>>>;
 
-/** Save only the deployed resources.
-*   For each component (indexing the first vector) we save a vector of tuples,
-*   (partition index, ResourceType index, Resource index) used on that component.
-*   Actually it could be sufficient to use just YHat, but since the number of
+/** Structure to save only the deployed resources.
+*
+*   For each Component (indexing the first vector) we save a vector of tuples,
+*   (Partition index, ResourceType index, Resource index) used on that Component.
+*   Actually it could be sufficient to use just y_hat, but since the number of
 *   chosen resources can be much smaller than available resources, it is better
 *   to have a data structure that keeps track only of the used resources.
 *
-*   There is Ordered in name, since the inner vector must be ordered by part_idx at some point.
-*   Using a std::set would not be efficient since order it's not necessary to
+*   The structure is ordered, in fact the inner vector must be ordered by
+*   part_idx at some point.
+*   Using a std::set would not be efficient since order is not necessary to
 *   keep the order for each insert (See report for details)
 */
 using UsedResourcesOrderedType =
@@ -110,15 +113,15 @@ using UsedResourcesOrderedType =
     >>;
 
 /** For each [Resource Type, Resource idx] save the number of instances of
-*   such resource deployed in the system.
+*   such Resource deployed in the System.
 */
 using UsedResourcesNumberType =
     std::vector<std::vector<size_t>>;
 
-/**
-* Function that convert a ResourceType::member to the corresponding index
-* \param ResType a ResourceType::member
-* \return index of the ResourceType::member
+/** Function that converts a ResourceType::member to its corresponding index
+*
+*   \param ResourceType A ResourceType::member
+*   \return index of the ResourceType::member
 */
 inline
 size_t
@@ -127,10 +130,10 @@ ResIdxFromType(ResourceType resType)
 	return static_cast<std::size_t>(resType);
 }
 
-/**
-* function to convert an index to the corresponding ResourceType::member
-* \param type_idx an index of a ResourceType::member
-* \return ResourceType::member corresponding to type_idx
+/** Function to convert an index to the corresponding ResourceType::member
+*
+*   \param type_idx An index of a ResourceType::member
+*   \return ResourceType::member corresponding to type_idx
 */
 inline
 ResourceType

@@ -3,8 +3,8 @@
 *
 * \brief Defines the methods of the RandomGreedyDT class
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #cmakedefine PARALLELIZATION

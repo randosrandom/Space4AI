@@ -1,11 +1,10 @@
-
 /**
 * \file Logger.hpp
 *
 * \brief Defines the class to implement the logger.
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef LOGGER_HPP_
@@ -20,10 +19,8 @@
 #include <cstring>
 #include <filesystem>
 
-/** LogPriority class.
-*
-*	Enum class to list different priorities
-* for the logger.
+/** Enum class to list different message priorities
+* 	for the logger.
 */
 enum LogPriority
 {
@@ -35,33 +32,14 @@ enum LogPriority
 	CriticalPriority = 5
 };
 
-/** Logger.
-*	Class used to print in terminal and file useful logging messages.
-*/
+/** Class used to print on terminal and on file useful logging messages. */
 class Logger
 {
-	private:
-
-		/** priority of the logger to be set at the beginning of the program */
-		LogPriority priority = InfoPriority;
-
-		std::mutex log_mutex;
-
-		/** name of the file, if you want to save Logger messages on file */
-		std::string filepath;
-
-		std::ofstream file;
-
-		/** flag to decide whether to print logging on terminal or not */
-		bool EnableTerminalOutputFlag = false;
-
-		/** flag to decide whether to print logging on file or nor */
-		bool EnableFileOutputFlag = false;
-
 	public:
 
 		/** priority setter
-		*		\param new_priority priority to set for the logger
+		*
+		*	\param new_priority priority to set for the Logger
 		*/
 		static void
 		SetPriority(LogPriority new_priority)
@@ -69,19 +47,25 @@ class Logger
 			get_instance().priority = new_priority;
 		}
 
-		/** Method to enable logger messages on terminal */
+		/** Method to enable or disable Logger messages on terminal
+		*
+		* 	\param EnableTerminalOutput true to enable terminal output, false otherwise
+		* 								(defaults to true)
+		*/
 		static void
 		EnableTerminalOutput(bool EnableTerminalOutput_ = true)
 		{
 			get_instance().EnableTerminalOutputFlag = EnableTerminalOutput_;
 		}
 
-		/** Method to enable the printing of the logger messages on file.
-		*		\param EnableFileOutputFlag_ true to enable file output, false otherwise
-		*		\param new_filepath 	Name of the file where to save output messages; mind that
-		*													eventual folders in the path must already exists. If the
-		*													filename is not provided, a new file is automatically generated
-		*													using the current time.
+		/** Method to enable the printing of the Logger messages on file.
+		*
+		* 	\param EnableFileOutputFlag_ true to enable file output, false otherwise
+		* 								 (defaults to true)
+		*	\param new_filepath Name of the file where to save output messages; mind that
+		*						eventual folders in the path must already exists. If the
+		*						filename is not provided, a new file is automatically generated
+		*						using the current time in the title.
 		*/
 		static void
 		EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& filename_ = "")
@@ -102,42 +86,42 @@ class Logger
 			}
 		}
 
-		/** print Trace priority messages */
+		/** print TracePriority messages */
 		static void
 		Trace(const std::string& message)
 		{
 			get_instance().log("[Trace]\t", TracePriority, message);
 		}
 
-		/** print Debug priority messages */
+		/** print DebugPriority messages */
 		static void
 		Debug(const std::string& message)
 		{
 			get_instance().log("[Debug]\t", DebugPriority, message);
 		}
 
-		/** print Info priority messages */
+		/** print InfoPriority messages */
 		static void
 		Info(const std::string& message)
 		{
 			get_instance().log("[Info]\t", InfoPriority, message);
 		}
 
-		/** print Warn priority messages */
+		/** print WarnPriority messages */
 		static void
 		Warn(const std::string& message)
 		{
 			get_instance().log("[Warn]\t", WarnPriority, message);
 		}
 
-		/** print Error priority messages */
+		/** print ErrorPriority messages */
 		static void
 		Error(const std::string& message)
 		{
 			get_instance().log("[Error]\t", ErrorPriority, message);
 		}
 
-		/** print Critical priority messages */
+		/** print CriticalPriority messages */
 		static void
 		Critical(const std::string& message)
 		{
@@ -146,11 +130,19 @@ class Logger
 
 	private:
 
+		/** Logger class consturctor */
 		Logger() {}
 
+		/** Delete copy constructor */
 		Logger(const Logger&) = delete;
+
+		/** Delete " = " operator */
 		Logger& operator= (const Logger&) = delete;
 
+		/** Logger class destructor
+		*
+		* 	It closes the output file if enabled.
+		*/
 		~Logger()
 		{
 			if(EnableFileOutputFlag)
@@ -159,6 +151,7 @@ class Logger
 			}
 		}
 
+		/** Logger instance getter */
 		static Logger&
 		get_instance()
 		{
@@ -166,6 +159,12 @@ class Logger
 			return logger;
 		}
 
+		/** Method to print any Logger message on terminal and file, depending on the LogPriority
+		*
+		* 	\param message_priority_str String to describe the Logger priority level
+		* 	\param message_priority Logger priority level (see LogPriority)
+		* 	\param message Logging message to be printed
+		*/
 		void
 		log(const std::string& message_priority_str, LogPriority message_priority, const std::string& message)
 		{
@@ -188,6 +187,9 @@ class Logger
 			}
 		}
 
+		/** Method to enable the file output by opening the file specified by
+		*   Logger.filepath
+		*/
 		void
 		enable_file_output()
 		{
@@ -204,11 +206,32 @@ class Logger
 			}
 		}
 
+		/** Method to close the output file */
 		void
 		free_file()
 		{
 			file.close();
 		}
+
+	private:
+
+		/** priority of the Logger messages to be set at the beginning of the program */
+		LogPriority priority = InfoPriority;
+
+		/** object to make the Logger thread safe */
+		std::mutex log_mutex;
+
+		/** name of the file, if you want to save Logger messages on file */
+		std::string filepath;
+
+		/** file to write Logger messages */
+		std::ofstream file;
+
+		/** flag to decide whether to print logging messages on terminal or not */
+		bool EnableTerminalOutputFlag = false;
+
+		/** flag to decide whether to print logging messages on file or not */
+		bool EnableFileOutputFlag = false;
 
 };
 
