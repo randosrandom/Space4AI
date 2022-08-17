@@ -74,15 +74,16 @@ class SolutionData
 		YHatType y_hat;
 
 		/** Structure to store only the deployed resources.
+		* 
 		*   For each Component (indexing the first vector) we save a vector of tuples,
 		*   [Partition index, ResourceType index, Resource index] used on that Component.
 		*   Actually it could be sufficient to use just y_hat, but since the number of
 		*   chosen resources can be much smaller than available resources, it is better
 		*   to have a data structure that keeps track only of the used resources.
 		*
-		*   The outer vector is ordered by Component index (same as in SystemData.components),
-		*   since the inner vector must be ordered by part_idx at some point.
-		*   Using a std::set would not be efficient since order it's not necessary to
+		*   The structure is ordered, in fact the inner vector must be ordered by 
+		* 	part_idx at some point.
+		*   Using a std::set would not be efficient since order is not necessary to
 		*   keep the order for each insert (See report for details)
 		*/
 		UsedResourcesOrderedType used_resources;

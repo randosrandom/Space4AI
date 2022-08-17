@@ -1,10 +1,11 @@
 /**
 * \file RandomGreedyDT.hpp
 *
-* \brief Defines the Random Greedy (Design time version) algorithm to solve the problem
+* \brief Defines the Random Greedy (Design time version) algorithm to solve the
+*        optimization problem
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #ifndef RANDOM_GREEDY_DT_HPP_
@@ -16,82 +17,88 @@
 
 namespace Space4AI
 {
-  /** Class to define the Random Greedy algorithm to solve the problem
-  */
-  class RandomGreedyDT
-  {
-  public:
+/** Class to define the Random Greedy algorithm to solve the optimization problem
+*/
+class RandomGreedyDT
+{
+    public:
 
-    /** Method to generate a random greedy solutions
-    *
-    *   \param system A System object
-    *   \param max_it Maximum number of iterations for the algorithm
-    *   \param num_top_sols maximum length admissible for the vector (see EliteResult.hpp)
-    *
-    *   \return EliteResult class containing num_top_sols solution ordered by cost
-    */
-    static
-    EliteResult
-    random_greedy(
-      const System& system,
-      std::size_t max_it,
-      std::size_t num_top_sols,
-      bool reproducibility_flag
-    );
+    		/** Method to generate random greedy solutions
+    		*
+    		*   \param system Object containing all the data structures of the System
+    		*   \param max_it Maximum number of iterations for the algorithm
+    		*   \param num_top_sols Maximum admissible length for the vector of solutions
+    		*                       (see EliteResult.hpp)
+    		*
+    		*   \return EliteResult class containing num_top_sols solutions ordered by cost
+    		*/
+    		static
+    		EliteResult random_greedy(
+    		    const System& system,
+    		    std::size_t max_it,
+    		    std::size_t num_top_sols,
+    		    bool reproducibility_flag
+    		);
 
-  private:
+  	private:
 
-    /** Single step of the randomized greedy algorithm.
-    *   It randomly generates a candidate solution, then evaluates its feasibility;
-    *   if it is feasible, it evaluates its cost and updates it by reducing the cluster size.
-    *
-    *   \param system The system object under analysis
-    *   \return A Solution object
-    *
-    *
-    */
-    static
-    Solution
-    step(const System& system);
+    		/** Single step of the randomized greedy algorithm.
+    		*
+    		*   It randomly generates a candidate Solution, then evaluates its feasibility;
+    		*   if it is feasible, it evaluates its cost and updates it by reducing the
+    		*   ResourceType::Edge and ResourceType::VM devices cluster size.
+    		*
+    		*   \param system Object containing all the data structures of the System
+    		*   \return A Solution object
+    		*/
+    		static
+    		Solution step(const System& system);
 
-    /** Method to create the initial random solution
-    *   \param system
-    *   \return Solution object
-    */
-    static
-    Solution
-    create_random_initial_solution(
-      const System& system
-    );
+    		/** Method to create the initial random Solution
+    		*
+    		*   It randomly generates a candidate Solution as a starting point to find a
+    		*   feasible one.
+    		*
+    		*   \param Object containing all the data structures of the System
+    		*   \return Solution object
+    		*/
+    		static
+    		Solution create_random_initial_solution(
+    		    const System& system
+    		);
 
-    /** Method reduce the number of VM resources in a cluster.
-    *   \param Solution The original solution
-    *   \param res_type_idx Index indicating the resource type of the resource with index res_idx
-    *   \param res_idx Resource index to which to perform the reduce_cluster
-    *   \param system The system under analysis
-    *
-    *   \return Updated Solution with reduced cluster
-    */
-    static
-    Solution
-    reduce_cluster_size(
-      const Solution& solution,
-      const size_t res_type_idx,
-      const size_t res_idx,
-      const System& system
-    );
+    		/** Method reduce the number of ResourceType::Edge and ResourceType::VM resources
+    		*   in a cluster.
+    		*
+    		*   \param Solution The initial Solution
+    		*   \param res_type_idx Index indicating the ResourceType of the Resource with index res_idx
+    		*   \param res_idx Index of the Resource whose cluster needs to be reduced
+    		*   \param system Object describing the System under analysis
+    		*   \return Updated Solution with reduced cluster
+    		*/
+    		static
+    		Solution reduce_cluster_size(
+    		    const Solution& solution,
+    		    const size_t res_type_idx,
+    		    const size_t res_idx,
+    		    const System& system
+    		);
 
-  private:
+  	private:
 
-    inline static const size_t fixed_initial_seed = 121298;
-    inline static const size_t seed_adding_factor = 1000;
+    		/* Initial seed for the random device */
+    		inline static const size_t fixed_initial_seed = 121298;
 
-    inline static size_t current_seed = 0;
+    		/* Additional factor for the random device seed */
+    		inline static const size_t seed_adding_factor = 1000;
 
-    inline static bool reproducibility = true;
+    		/* Seed for the random device */
+    		inline static size_t current_seed = 0;
 
+    		/* Flag to make the random greedy solutions reproducible */
+    		inline static bool reproducibility = true;
 
-  };
+};
 
 } // namespace Space4AI
 

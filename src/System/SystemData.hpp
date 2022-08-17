@@ -178,7 +178,7 @@ class SystemData
 		*   one of the DAG, since here only one Partition can come after another,
 		*   while for the DAG, you can have multiple subsequents for each node.
 		*
-		*   \param part_json nl::json object extracted from the .json configuration file,
+		*   \param parts_json nl::json object extracted from the .json configuration file,
 		*                    containing the partitions of a specific Component
 		*   \return a std::map that associates an index to each Partition (identified by its name)
 		*/
