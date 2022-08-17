@@ -200,15 +200,16 @@ class SystemData
 
 		/** Hash map from Component name to the assigned index.
 		*   Actually it is the same to the one stored in the dag, but it makes sense
-		*   to have it also here for performance efficiency
+		*   to have it also here.
 		*/
 		std::unordered_map<std::string, std::size_t>
 		comp_name_to_idx;
 
 		/** Ordered map from index to component name.
-		*   It is useful when there is the need to sometihing in order
+		*   It is useful when there is the need to loop on components
+		*		following the execution order.
 		*   Actually it is equal to the one stored in the DAG, but it makes sense
-		*   to have it also here for performance efficiency.
+		*   to have it also here.
 		*/
 		std::map<size_t, std::string>
 		idx_to_comp_name;
