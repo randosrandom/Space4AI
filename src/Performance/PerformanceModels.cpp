@@ -1,3 +1,12 @@
+/**
+* \file PerformanceModels.hpp
+*
+* \brief Defines methods of the classes defined in PerformanceModels.hpp
+* 
+* \author Randeep Singh
+* \author Giulia Mazzilli
+*/
+
 #include "src/Performance/PerformanceModels.hpp"
 
 #include <cmath>

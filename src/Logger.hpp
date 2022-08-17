@@ -49,8 +49,8 @@ class Logger
 
 		/** Method to enable or disable Logger messages on terminal
 		*
-		* 	\param EnableTerminalOutput true to enable terminal output, false otherwise
-		* 								(defaults to true)
+		* 	\param EnableTerminalOutput_ true to enable terminal output, false otherwise
+		* 								 (defaults to true)
 		*/
 		static void
 		EnableTerminalOutput(bool EnableTerminalOutput_ = true)
@@ -62,10 +62,10 @@ class Logger
 		*
 		* 	\param EnableFileOutputFlag_ true to enable file output, false otherwise
 		* 								 (defaults to true)
-		*	\param new_filepath Name of the file where to save output messages; mind that
-		*						eventual folders in the path must already exists. If the
-		*						filename is not provided, a new file is automatically generated
-		*						using the current time in the title.
+		*	\param filename_ Name of the file where to save output messages; mind that
+		*					 eventual folders in the path must already exists. If the
+		*					 filename is not provided, a new file is automatically generated
+		*					 using the current time in the title.
 		*/
 		static void
 		EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& filename_ = "")

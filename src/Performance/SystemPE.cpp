@@ -3,8 +3,8 @@
 *
 * \brief Defines the methods of the classes defined in SystemPE.hpp
 *
-* \author rando98
-* \author giuliamazzeellee
+* \author Randeep Singh
+* \author Giulia Mazzilli
 */
 
 #include "src/Performance/SystemPE.hpp"

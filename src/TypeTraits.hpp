@@ -123,7 +123,7 @@ using UsedResourcesNumberType =
 
 /** Function that converts a ResourceType::member to its corresponding index
 *
-*   \param ResourceType A ResourceType::member
+*   \param resType A ResourceType::member
 *   \return index of the ResourceType::member
 */
 inline
@@ -135,7 +135,7 @@ ResIdxFromType(ResourceType resType)
 
 /** Function to convert an index to the corresponding ResourceType::member
 *
-*   \param type_idx An index of a ResourceType::member
+*   \param typeIdx An index of a ResourceType::member
 *   \return ResourceType::member corresponding to type_idx
 */
 inline
