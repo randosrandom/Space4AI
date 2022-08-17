@@ -1,11 +1,13 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
+#include <omp.h>
 
 #include "external/chrono/chrono.hpp"
-
 #include "src/s4ai.hpp"
+
 
 namespace sp = Space4AI;
 namespace fs = std::filesystem;
@@ -46,13 +48,19 @@ main(int argc, char** argv)
     throw std::runtime_error("Can't open " + basic_config_filepath.string() + " file. Make sure that the path is correct, and the format is json");
   }
 
-  std::string output_dir = "OutputFiles/";
+  const size_t n_iterations = basic_config.at("Algorithm").at("n_iterations").get<size_t>();
+  const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
+
+
+  std::string output_dir = "OutputFiles/ScalabilityAnalysis/" + std::to_string(n_iterations) + "iters/";
+  fs::create_directories(output_dir);
+
+  std::ostringstream threads_buffer;
+  threads_buffer << std::setw(2) << std::setfill('0') << omp_get_max_threads();
+  output_dir = output_dir + "threads_" + threads_buffer.str() + "/";
   fs::create_directory(output_dir);
 
   Timings::Chrono my_chrono;
-
-  const size_t n_iterations = basic_config.at("Algorithm").at("n_iterations").get<size_t>();
-  const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
 
   Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());

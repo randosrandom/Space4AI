@@ -137,7 +137,7 @@ In the ```config``` folder of the project there are stored both the system descr
   }
 }
 ```
-- **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path with respect to the root folder of the project must be given for each system file;
+- **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path with respect to the root folder of the project must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive. Anyway, see the report for some more information on them.
 
 - **Algorithm**: Here you can the total number of iterations to request, and the number of top solutions to retain;
 
@@ -196,3 +196,12 @@ Lohmann, N. (2022). JSON for Modern C++. https://github.com/nlohmann
 
 <a id="4">[4]</a>
 Merkel, D. (2014). Docker: lightweight linux containers for consistent development and deployment. https://docs.docker.com/
+
+# TODO:
+- static Initializer
+
+
+
+- ```bash
+docker create -it --name dt_pacs_cont --mount type=bind,source="$(pwd)"/OutputFilesFromDocker,target=/home/SPACE4AI/OutputFilesForIndigo s4air/dt_pacs_image:latest
+```

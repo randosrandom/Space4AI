@@ -16,6 +16,9 @@
 #include <vector>
 #include <tuple>
 
+#define JSON_USE_IMPLICIT_CONVERSIONS 0
+#include "external/nlohmann/json.hpp"
+
 namespace Space4AI
 {
 class BasePerformanceModel; // forward declaration

@@ -12,9 +12,6 @@
 #include <map>
 #include <unordered_map>
 
-#define JSON_USE_IMPLICIT_CONVERSIONS 0
-#include "external/nlohmann/json.hpp"
-
 #include "src/Logger.hpp"
 #include "src/TypeTraits.hpp"
 
@@ -103,7 +100,8 @@ namespace Space4AI
     std::unordered_map<std::string, size_t> comp_name_to_idx;
 
     /** Ordered map from index to component name.
-    *   It is useful when there is the need to sometihing in order
+    *   It is useful when there is the need to
+    *   loop on components follwoing the execution order.
     */
     std::map<size_t, std::string> idx_to_comp_name;
 
