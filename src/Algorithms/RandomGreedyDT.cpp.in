@@ -109,7 +109,7 @@ RandomGreedyDT::step(const System& system)
       {
         if(n_used_resources[res_type_idx][res_idx] > 1)
         {
-          sol = std::move(reduce_cluster_size(sol, res_type_idx, res_idx, system));
+          sol = reduce_cluster_size(sol, res_type_idx, res_idx, system);
         }
       }
     }

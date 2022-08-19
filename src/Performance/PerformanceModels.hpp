@@ -208,11 +208,32 @@ class FaasPE: public BasePerformanceModel
 
 };
 
-class __attribute__((__visibility__("hidden"))) FaasPacsltkPE: public FaasPE
+// Disable the warning about "greater visibility" due to pybind11. In principle you can even
+// declare the class with hidden visibility, but then Doxygen can't generate
+// the documentation about it. The warning is safe (indeed only g++ complains,
+// clang++ not), so we can disable it.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
+/**
+*   Class to define AWS Lambda FaaS performance models (dynamic version)
+*
+*   Class inherited from FaasPE. This class is very similar to FaasPacsltkStaticPE,
+*   with the crucial difference that this is used where there is the need to
+*   compute the demand time during run time, for instance if a workload variations
+*   has happened. In principle, it is not needed at Design Time.
+*/
+class /*__attribute__((__visibility__("hidden")))*/ FaasPacsltkPE: public FaasPE
 {
 
   public:
-
+    /** FaasPacsltkPE constructor.
+    *
+    *   \param keyword_ Keyword (name) to identify the model to use
+    *   \param allows_colocation_ true if colocation is allowed, false otherwise
+    *   \param demandWarm_ Demand time when there is an active server available on the platform
+    *   \param demandCold_ Demand time when all the servers on the platform are down and a new one
+    *                      needs to be activated
+    */
     FaasPacsltkPE(
       const std::string& keyword_,
       bool allows_colocation_,
@@ -223,6 +244,7 @@ class __attribute__((__visibility__("hidden"))) FaasPacsltkPE: public FaasPE
       predictor(Pacsltk::Instance())
     {}
 
+    /** Abstract method of BasePerformanceModel overridden. */
     virtual
     double predict(
       size_t comp_idx, size_t part_idx, ResourceType res_type, size_t res_idx,
@@ -234,13 +256,22 @@ class __attribute__((__visibility__("hidden"))) FaasPacsltkPE: public FaasPE
 
   private:
 
+    /** Instance of the singleton class Pacsltk used to compute the demand time
+    *   through the use of the Python library "pacsltk"*/
     Pacsltk& predictor;
 
 };
+#pragma GCC diagnostic pop
 
-/** Class to define AWS Lambda FaaS performance models.
+
+/** Class to define AWS Lambda FaaS performance models (static version).
 *
-*   Available only for ResourceType::Faas resources.
+*   Class inherited from FaasPE. This class is very similar to FaasPacsltkPE, but
+*   it computes the demand time once and for all, at construction time. Thus,
+*   when the demand time is requested, the stored value is returned, without the need
+*   of recoumputing the same value. Obviously, this model can be used only
+*   under the assumption that the workload does not vary, which is satisfied for
+*   design time problems.
 */
 class FaasPacsltkStaticPE: public FaasPE
 {

@@ -24,10 +24,24 @@ namespace Space4AI
 {
 namespace py = pybind11;
 
-class __attribute__((__visibility__("hidden"))) Pacsltk final
+
+// Disable the warning about "greater visibility" due to pybind11. In principle you can even
+// declare the class with hidden visibility, but then Doxygen can't generate
+// the documentation about it. The warning is safe (indeed only g++ complains,
+// clang++ not), so we can disable it.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
+
+/** Class to store the pacsltk predictor.
+*
+*   It embeds the python interpreter. The class is created followinf the Meyer's
+*   singleton pattern.
+*/
+class /*__attribute__((__visibility__("hidden")))*/ Pacsltk final
 {
   public:
 
+    /** Istance getter */
     static
     Pacsltk&
     Instance()
@@ -37,6 +51,14 @@ class __attribute__((__visibility__("hidden"))) Pacsltk final
       return single_pacsltk;
     }
 
+    /** Method to compute the demand time.
+    *
+    *   \param part_lambda partion input workload
+    *   \param demand_warm Demand time when there is an active server available on the platform
+    *   \param demandCold_ Demand time when all the servers on the platform are down and a new one
+    *                      needs to be activated
+    *   \param idle_time_before_kill How long does the platform keep the servers up after being idle
+    */
     TimeType
     predict(
       LoadType part_lambda,
@@ -67,9 +89,12 @@ class __attribute__((__visibility__("hidden"))) Pacsltk final
     }
 
   private:
-
+    /** python object "storing" the predictor get_sls_warm_count_dist from
+    the pacsltk library */
     const py::object pacsltk_predictor;
 };
+
+#pragma GCC diagnostic pop
 
 } //namespace Space4AI
 

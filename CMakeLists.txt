@@ -14,7 +14,7 @@ endif()
 
 option(SHARED "Set OFF if you want the shared library" ON)
 
-set(MY_CXX_FLAGS -Wall -Wextra -Wpedantic -Wconversion -Wunused -Wsuggest-override -Wnon-virtual-dtor)
+set(MY_CXX_FLAGS -Wall -Wextra -Wpedantic -Wunused -Wsuggest-override -Wnon-virtual-dtor)
 set (CMAKE_CXX_STANDARD 17)
 
 if(NOT CMAKE_BUILD_TYPE)
