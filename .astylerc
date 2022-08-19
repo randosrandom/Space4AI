@@ -2,7 +2,7 @@
 --style=allman
 
 # Tab Options
---indent=tab
+--indent=spaces=2
 
 # Brace Modify Options
 #--attach-namespaces

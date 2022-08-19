@@ -29,67 +29,67 @@ namespace nl = nlohmann;
 */
 class System
 {
-	public:
+  public:
 
-		/** Method to read the .json file that describes
-		*   the System and convert it to a nl::json object.
-		*
-		*   \param system_file String containing the directory of the .json file
-		*                      that describes the System
-		*/
-		void read_configuration_file(const std::string& system_file);
+    /** Method to read the .json file that describes
+    *   the System and convert it to a nl::json object.
+    *
+    *   \param system_file String containing the directory of the .json file
+    *                      that describes the System
+    */
+    void read_configuration_file(const std::string& system_file);
 
-		/** performance getter */
-		const PerformanceType&
-		get_performance() const {return performance;};
+    /** performance getter */
+    const PerformanceType&
+    get_performance() const {return performance;};
 
-		/** system_data getter */
-		const SystemData&
-		get_system_data() const {return system_data; };
+    /** system_data getter */
+    const SystemData&
+    get_system_data() const {return system_data; };
 
-		/** dynamicPerfModels getter */
-		bool
-		get_dynamicPerfModels() const {return dynamicPerfModels; }
+    /** dynamicPerfModels getter */
+    bool
+    get_dynamicPerfModels() const {return dynamicPerfModels; }
 
-	private:
+  private:
 
-		/** Method to populate the performance evaluators.
-		*
-		*   \param performance_json json object extracted from configuration_file containing
-		*                           the description of the performance models
-		*/
-		void initialize_performance(const nl::json& performance_json);
+    /** Method to populate the performance evaluators.
+    *
+    *   \param performance_json json object extracted from configuration_file containing
+    *                           the description of the performance models
+    */
+    void initialize_performance(const nl::json& performance_json);
 
-		/** Method to populate the demand matrix.
-		*
-		*   \param demand_matrix_json  nl::json object extracted from configuration_file containing
-		*                              the description of the static performance evaluators.
-		*/
-		void initialize_demand_matrix(const nl::json& demand_matrix_json);
+    /** Method to populate the demand matrix.
+    *
+    *   \param demand_matrix_json  nl::json object extracted from configuration_file containing
+    *                              the description of the static performance evaluators.
+    */
+    void initialize_demand_matrix(const nl::json& demand_matrix_json);
 
-	private:
-		/** Object containing the data structures that define the System configuration
-		*   except for the performance models.
-		*/
-		SystemData system_data;
+  private:
+    /** Object containing the data structures that define the System configuration
+    *   except for the performance models.
+    */
+    SystemData system_data;
 
-		/** Object used to store uniqe ptrs to the performance models used by each Resource
-		*   in each Component.
-		*
-		*   Indexed by: [comp_idx][res_type_idx][part_idx][res_idx]
-		*/
-		PerformanceType performance;
+    /** Object used to store uniqe ptrs to the performance models used by each Resource
+    *   in each Component.
+    *
+    *   Indexed by: [comp_idx][res_type_idx][part_idx][res_idx]
+    */
+    PerformanceType performance;
 
-		/** Flag indicating type of Performance Models read (only needed for ResourceType::Faas since
-		*   ResourceType::Edge and ResourceType::VM default to queue theory).
-		*
-		*   False: Performace Models are all static, so a demand_matrix has been built.
-		*   True:  There is at least one dynamic Performance Model, pybind11 must be called during
-		*          the construction of the Solution to evaluate response times.
-		*
-		*   This flag is important, since Parallelization is not possible for dynamic models (see GIL issue).
-		*/
-		bool dynamicPerfModels;
+    /** Flag indicating type of Performance Models read (only needed for ResourceType::Faas since
+    *   ResourceType::Edge and ResourceType::VM default to queue theory).
+    *
+    *   False: Performace Models are all static, so a demand_matrix has been built.
+    *   True:  There is at least one dynamic Performance Model, pybind11 must be called during
+    *          the construction of the Solution to evaluate response times.
+    *
+    *   This flag is important, since Parallelization is not possible for dynamic models (see GIL issue).
+    */
+    bool dynamicPerfModels;
 
 };
 

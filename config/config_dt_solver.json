@@ -1,11 +1,10 @@
 {
   "ConfigFiles" : [
-    "config/LargeScale/5-components/instance1/system_description1.json",
-    "config/LargeScale/15-components/instance10/system_description10.json"
+    "config/LargeScale/5-components/instance1/system_description1.json"
   ],
 
   "Algorithm" : {
-    "n_iterations" : 5000,
+    "n_iterations" : 1000,
     "max_num_sols" : 1
   },
 

@@ -30,10 +30,10 @@ class BasePerformanceModel; // forward declaration
 /** Enum class to identify different types of resources */
 enum class ResourceType : size_t
 {
-	Edge = 0,
-	VM = 1,
-	Faas = 2,
-	Count = 3, /**< total number of resource types */
+  Edge = 0,
+  VM = 1,
+  Faas = 2,
+  Count = 3, /**< total number of resource types */
 };
 
 using CostType = double; /**< represents the cost type used */
@@ -53,7 +53,7 @@ using TimeType = double; /**< represents time */
 *        l: index of resource.
 */
 using CompatibilityMatrixType =
-    std::vector<std::vector<std::vector<std::vector<bool>>>>;
+  std::vector<std::vector<std::vector<std::vector<bool>>>>;
 
 /** Strurcture used to save the transition matrix of the DAG.
 *
@@ -73,7 +73,7 @@ using DagMatrixType = std::vector<std::vector<ProbType>>;
 *   shared_ptr would be optimal but in this case just a copy is better.
 */
 using DemandEdgeVMType =
-    std::vector<std::vector<std::vector<std::vector<TimeType>>>>;
+  std::vector<std::vector<std::vector<std::vector<TimeType>>>>;
 
 /** Predictors to compute the demand time.
 *
@@ -82,9 +82,9 @@ using DemandEdgeVMType =
 *   exploiting Inheritance and Polymorphism.
 */
 using PerformanceType =
-    std::vector<std::vector<std::vector<std::vector<
-    std::unique_ptr<BasePerformanceModel>
-    >>>>;
+  std::vector<std::vector<std::vector<std::vector<
+  std::unique_ptr<BasePerformanceModel>
+  >>>>;
 
 /** Type of the "y hat".
 *
@@ -93,9 +93,9 @@ using PerformanceType =
 *   Component-Partition couple.
 */
 using YHatType =
-    std::vector<std::vector<std::vector<std::vector<
-    std::size_t
-    >>>>;
+  std::vector<std::vector<std::vector<std::vector<
+  std::size_t
+  >>>>;
 
 /** Structure to save only the deployed resources.
 *
@@ -111,15 +111,15 @@ using YHatType =
 *   keep the order for each insert (See report for details)
 */
 using UsedResourcesOrderedType =
-    std::vector<std::vector<
-    std::tuple<size_t, size_t, size_t>
-    >>;
+  std::vector<std::vector<
+  std::tuple<size_t, size_t, size_t>
+  >>;
 
 /** For each [Resource Type, Resource idx] save the number of instances of
 *   such Resource deployed in the System.
 */
 using UsedResourcesNumberType =
-    std::vector<std::vector<size_t>>;
+  std::vector<std::vector<size_t>>;
 
 /** Function that converts a ResourceType::member to its corresponding index
 *
@@ -130,7 +130,7 @@ inline
 size_t
 ResIdxFromType(ResourceType resType)
 {
-	return static_cast<std::size_t>(resType);
+  return static_cast<std::size_t>(resType);
 }
 
 /** Function to convert an index to the corresponding ResourceType::member
@@ -142,7 +142,7 @@ inline
 ResourceType
 ResTypeFromIdx(size_t typeIdx)
 {
-	return static_cast<ResourceType>(typeIdx);
+  return static_cast<ResourceType>(typeIdx);
 }
 
 } //namespace Space4AI
