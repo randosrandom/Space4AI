@@ -18,28 +18,28 @@ namespace Space4AI
 {
 class Initializer final
 {
-public:
+  public:
 
-  /** Initializer.
-  *
-  *   Initializes pybind11 only if it was not initialized previously.
-  */
-  static
-  Initializer&
-  Instance()
-  {
-    static Initializer InitializerSingleton;
-    return InitializerSingleton;
-  }
+    /** Initializer.
+    *
+    *   Initializes pybind11 only if it was not initialized previously.
+    */
+    static
+    Initializer&
+    Instance()
+    {
+      static Initializer InitializerSingleton;
+      return InitializerSingleton;
+    }
 
-  ~Initializer() { pybind11::finalize_interpreter(); std::cout << "Finalizing pybind11 objects..." << std::endl; }
+    ~Initializer() { pybind11::finalize_interpreter(); std::cout << "Finalizing pybind11 objects..." << std::endl; }
 
-  Initializer(const Initializer&) = delete;
-  Initializer& operator=(const Initializer) = delete;
+    Initializer(const Initializer&) = delete;
+    Initializer& operator=(const Initializer) = delete;
 
-private:
+  private:
 
-  Initializer() { pybind11::initialize_interpreter(); std::cout << "Initializing pybind11 objects..." << std::endl;  }
+    Initializer() { pybind11::initialize_interpreter(); std::cout << "Initializing pybind11 objects..." << std::endl;  }
 
 };
 
