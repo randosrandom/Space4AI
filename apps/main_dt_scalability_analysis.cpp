@@ -67,7 +67,7 @@ main(int argc, char** argv)
   const bool enable_file_output = basic_config.at("Logger").at("file_stream").get<bool>();
 
   // initialize pybind11
-  const auto init = sp::Initializer();
+  sp::Initializer::Instance();
 
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {

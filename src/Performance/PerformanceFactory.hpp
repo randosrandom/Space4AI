@@ -19,20 +19,30 @@
 
 namespace Space4AI
 {
-
+/** Object factory for Performance Models.
+*
+*   \param model Model name of the model
+*   \param perf_json  Piece of the system configuration json file
+*                     containing information about the specific performance
+*                     model.
+*   \param system_data  As the name say
+*   \param comp_idx   Component index
+*   \param part_idx   Partition index
+*   \param res_idx    Resource index
+*
+*   \return unique_ptr to the BasePerformanceModel abstract class
+*/
 inline
 std::unique_ptr<BasePerformanceModel>
 create_PE(
   const std::string& model, const nl::json& perf_json,
   const SystemData& system_data,
-  size_t comp_idx = std::numeric_limits<size_t>::quiet_NaN(),
-  size_t part_idx = std::numeric_limits<size_t>::quiet_NaN(),
-  size_t res_idx = std::numeric_limits<size_t>::quiet_NaN()
+  size_t comp_idx, size_t part_idx, size_t res_idx
 )
 {
   if(model == "QTedge" || model == "QTcloud")
   {
-    return std::make_unique<QTPE>(model, true, perf_json.at("demand").get<TimeType>());
+    return std::make_unique<QTPE>(model, true);
   }
   else if(model == "PACSLTK")
   {

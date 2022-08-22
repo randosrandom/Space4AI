@@ -102,11 +102,9 @@ class QTPE: public BasePerformanceModel
     */
     QTPE(
       const std::string& keyword_,
-      bool allows_colocation_,
-      TimeType demand_
+      bool allows_colocation_
     ):
-      BasePerformanceModel(keyword_, allows_colocation_),
-      demand(demand_)
+      BasePerformanceModel(keyword_, allows_colocation_)
     {}
 
     /** Abstract method of BasePerformanceModel overridden. */
@@ -127,12 +125,11 @@ class QTPE: public BasePerformanceModel
     *                        and SolutionData.used_resources
     *   \return utilization of the Resource
     */
-    static
     double compute_utilization(
       ResourceType res_type, size_t res_idx,
       const SystemData& system_data,
       const SolutionData& solution_data
-    );
+    ) const;
 
     /** all_demands setter */
     template<class T>
@@ -148,11 +145,8 @@ class QTPE: public BasePerformanceModel
 
   private:
 
-    /** Demand time */
-    const TimeType demand;
-
-    /** Demand times of the other Component and Partition objects that could be run on
-    *   the specific Resource
+    /** Demand times of all Component-Partition objects that could be run on
+    *   the specific Resource of type Edge or Cloud VM.
     */
     inline
     static

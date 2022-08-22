@@ -67,10 +67,9 @@ using DagMatrixType = std::vector<std::vector<ProbType>>;
 *   QTPE is the only PE that must know demands from the other instances of the PE
 *   (i.e. other components and partitions running on the same Resource).
 *   Our design choice is to save a static 4-dim vector
-*   (indexed by [comp_idx][type_idx][part_idx][res_idx]) using Nans when
-*   the specific resources running the specific partition does not use QTPE.
-*   Other design choices are available, for instance, to use less memory,
-*   shared_ptr would be optimal but in this case just a copy is better.
+*   (indexed by [comp_idx][type_idx][part_idx][res_idx]) filled with Nans when
+*   the specific resources running the specific component-partition
+*   does not use QTPE.
 */
 using DemandEdgeVMType =
   std::vector<std::vector<std::vector<std::vector<TimeType>>>>;

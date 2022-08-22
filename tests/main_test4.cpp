@@ -49,7 +49,7 @@ main(int argc, char** argv)
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
 
   // initialize pybind11
-  const auto init = sp::Initializer();
+  sp::Initializer::Instance();
 
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {

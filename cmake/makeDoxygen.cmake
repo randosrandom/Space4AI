@@ -1,5 +1,4 @@
 # Doxygen configuration
-
 set(SRCDIR ${CMAKE_SOURCE_DIR}/src)
 set(doxyfile_in ${CMAKE_SOURCE_DIR}/doc/Doxyfile.in)
 set(doxyfile ${CMAKE_BINARY_DIR}/doc/Doxyfile)

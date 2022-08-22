@@ -109,7 +109,7 @@ System::initialize_performance(const nl::json& performance_json)
         {
           const std::string model = perf_data.at("model").get<std::string>();
           perf_temp[res_type_idx][part_idx][res_idx] =
-            create_PE(model, perf_data, system_data);
+            create_PE(model, perf_data, system_data, comp_idx, part_idx, res_idx);
 
           // THINK ABOUT HOW TO AVOID THIS ...
           if(model == "QTedge" || model == "QTcloud")
@@ -196,7 +196,7 @@ System::initialize_demand_matrix(const nl::json& demand_matrix_json)
           else // Edge or VM
           {
             perf_temp[res_type_idx][part_idx][res_idx] =
-              std::make_unique<QTPE>("QTcloud", true, dem_time.get<TimeType>());
+              std::make_unique<QTPE>("QTcloud", true);
             demands_edge_vm_temp[res_type_idx][part_idx][res_idx] = dem_time.get<TimeType>();
           }
         }
