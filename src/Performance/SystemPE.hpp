@@ -93,7 +93,7 @@ class SystemPerformanceEvaluator
     *   \return Network transfer time
     */
     static
-    double get_network_delay(
+    TimeType get_network_delay(
       ResourceType res1_type, size_t res1_idx, ResourceType res2_type, size_t res2_idx,
       double data_size,
       const System& system

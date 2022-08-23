@@ -76,6 +76,7 @@ using DemandEdgeVMType =
 
 /** Predictors to compute the demand time.
 *
+*   \memberof Space4AI::System
 *   For each Partition and each Component, running on a specific Resource of a
 *   specific ResourceType, we save a unique_ptr to the BasePerformanceModel class,
 *   exploiting Inheritance and Polymorphism.

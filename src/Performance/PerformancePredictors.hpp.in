@@ -24,7 +24,6 @@ namespace Space4AI
 {
 namespace py = pybind11;
 
-
 // Disable the warning about "greater visibility" due to pybind11. In principle you can even
 // declare the class with hidden visibility, but then Doxygen can't generate
 // the documentation about it. The warning is safe (indeed only g++ complains,
@@ -34,26 +33,26 @@ namespace py = pybind11;
 
 /** Class to store the pacsltk predictor.
 *
-*   It embeds the python interpreter. The class is created followinf the Meyer's
-*   singleton pattern.
+*   It embeds the python interpreter. The class is created following the Meyer's
+*   Singleton pattern.
 */
 class /*__attribute__((__visibility__("hidden")))*/ Pacsltk final
 {
   public:
 
-    /** Istance getter */
+    /** Instance getter */
     static
     Pacsltk&
     Instance()
     {
-      // We use the Meyer's trick to istantiate the factory as Singleton
+      // We use the Meyer's trick to instantiate the factory as Singleton
       static Pacsltk single_pacsltk;
       return single_pacsltk;
     }
 
     /** Method to compute the demand time.
     *
-    *   \param part_lambda partion input workload
+    *   \param part_lambda partition input workload
     *   \param demand_warm Demand time when there is an active server available on the platform
     *   \param demandCold_ Demand time when all the servers on the platform are down and a new one
     *                      needs to be activated
