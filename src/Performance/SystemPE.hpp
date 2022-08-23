@@ -55,7 +55,6 @@ class SystemPerformanceEvaluator
     *
     *   \param system Object containing all the data structures of the System
     *   \param solution_data SolutionData object
-    *
     *   \return vector with the response times of all components
     */
     static
@@ -69,8 +68,7 @@ class SystemPerformanceEvaluator
     *
     *   \param comp_idx Index of the Component
     *   \param system Object containing all the data structures of the System
-    *   \param solution_data Object storing SolutionData.y_hat and SolutionData.used_resources
-    *                        (main data of the Solution)
+    *   \param solution_data SolutionData object
     *   \return Response time of the Component
     */
     static
@@ -89,7 +87,7 @@ class SystemPerformanceEvaluator
     *   \param res2_type Type of the second Resource
     *   \param res2_idx Second Resource index
     *   \param data_size Amount of data to be transferred
-    *   \param system Object containing all the data structures of the System
+    *   \param system System under analysis
     *   \return Network transfer time
     */
     static
