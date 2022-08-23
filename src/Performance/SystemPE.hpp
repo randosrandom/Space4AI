@@ -54,8 +54,8 @@ class SystemPerformanceEvaluator
     /** Static method to evaluate the response time of the all Component objects.
     *
     *   \param system Object containing all the data structures of the System
-    *   \param solution_data Object storing SolutionData.y_hat and SolutionData.used_resources
-    *                        (main data of the Solution)
+    *   \param solution_data SolutionData object
+    *
     *   \return vector with the response times of all components
     */
     static
