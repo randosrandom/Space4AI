@@ -453,7 +453,7 @@ Solution::local_constraints_check(
   for(size_t i = 0; i < local_constraints.size(); ++i)
   {
     comp_perfs[i] =
-      SystemPerformanceEvaluator::get_perf_evaluation(
+      SystemPE::get_perf_evaluation(
         local_constraints[i].get_comp_idx(),
         system,
         solution_data
@@ -551,7 +551,7 @@ Solution::path_global_constraint_check(
       const auto data_size =
         components[curr_comp_idx].get_partition(curr_comp_last_part_idx).get_data_size();
       sum +=
-        SystemPerformanceEvaluator:: get_network_delay(
+        SystemPE:: get_network_delay(
           ResTypeFromIdx(res1_type_idx), res1_idx,
           ResTypeFromIdx(res2_type_idx), res2_idx,
           data_size,

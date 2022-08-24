@@ -12,7 +12,7 @@
 namespace Space4AI
 {
 std::vector<TimeType>
-SystemPerformanceEvaluator::compute_performance(
+SystemPE::compute_performance(
   const System& system,
   const SolutionData& solution_data
 )
@@ -29,21 +29,18 @@ SystemPerformanceEvaluator::compute_performance(
 }
 
 TimeType
-SystemPerformanceEvaluator::get_perf_evaluation(
+SystemPE::get_perf_evaluation(
   size_t comp_idx,
   const System& system,
   const SolutionData& solution_data
 )
 {
-  // logger messages in Debug ...
   TimeType perf_evaluation = 0.;
   const auto& performance_comp = system.get_performance()[comp_idx];
   const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
   const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
 
-  // logger messages in Debug ...
-
-  // logger messages in Debug...
+  Logger::Debug("Evaluating performance of component" + std::to_string(comp_idx));
 
   for(const auto& [p_idx, r_type_idx, r_idx] : used_resources_comp)
   {
@@ -90,7 +87,7 @@ SystemPerformanceEvaluator::get_perf_evaluation(
 }
 
 TimeType
-SystemPerformanceEvaluator::get_network_delay(
+SystemPE::get_network_delay(
   ResourceType res1_type, size_t res1_idx, ResourceType res2_type, size_t res2_idx,
   DataType data_size,
   const System& system
@@ -124,7 +121,7 @@ SystemPerformanceEvaluator::get_network_delay(
   {
     const auto access_delay = network_domains[*network_domains_intersect.begin()].get_access_delay();
     const auto bandwidth = network_domains[*network_domains_intersect.begin()].get_bandwidth();
-    network_delay = NetworkPerformanceEvaluator::predict(access_delay, bandwidth, data_size);
+    network_delay = NetworkPE::predict(access_delay, bandwidth, data_size);
   }
   else // more than one network_domain
   {
@@ -134,7 +131,7 @@ SystemPerformanceEvaluator::get_network_delay(
     {
       const auto access_delay = network_domains[idx].get_access_delay();
       const auto bandwidth = network_domains[idx].get_bandwidth();
-      new_network_delay = NetworkPerformanceEvaluator::predict(access_delay, bandwidth, data_size);
+      new_network_delay = NetworkPE::predict(access_delay, bandwidth, data_size);
       network_delay = new_network_delay < network_delay ?
         new_network_delay : network_delay;
     }

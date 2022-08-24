@@ -22,7 +22,7 @@ namespace Space4AI
 *   required to transfer data between two consecutive Component or Partition
 *   objects executed on different devices in the same NetworkDomain.
 */
-class NetworkPerformanceEvaluator
+class NetworkPE
 {
   public:
 
@@ -47,7 +47,7 @@ class NetworkPerformanceEvaluator
 };
 
 /** Class used to evaluate the performance (response time) of the whole System. */
-class SystemPerformanceEvaluator
+class SystemPE
 {
   public:
 

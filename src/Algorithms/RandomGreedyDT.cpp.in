@@ -313,44 +313,6 @@ RandomGreedyDT::create_random_initial_solution(
     }
   }
 
-  /*
-  for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count - 1; ++res_type_idx)
-  {
-    const auto res_type = ResTypeFromIdx(res_type_idx);
-
-    const size_t n_res = all_resources.get_number_resources(res_type_idx);
-    Logger::Trace("create_random_initial_solution: resource of type: " + std::to_string(res_type_idx));
-
-    //loop over edge or VM resources
-    for(size_t res_idx = 0; res_idx < n_res; ++res_idx)
-    {
-      Logger::Trace("create_random_initial_solution: resource: " + std::to_string(res_idx));
-      //randomly generate the number of resources that can be assigned
-      //to the partitions that run on that resource
-      const size_t number_avail = all_resources.get_number_avail(res_type, res_idx);
-      std::uniform_int_distribution<decltype(rng)::result_type> dist(1,number_avail);
-      const size_t random_number = dist(rng);
-
-      //loop over components
-      for(size_t comp_idx = 0; comp_idx < components.size(); ++comp_idx)
-      {
-        const auto& partitions = components[comp_idx].get_partitions();
-
-        for(size_t part_idx = 0; part_idx < partitions.size(); ++part_idx)
-        {
-          //if the partition runs on the current resource,update the number
-          if(y_hat[comp_idx][res_type_idx][part_idx][res_idx] > 0)
-          {
-            y_hat[comp_idx][res_type_idx][part_idx][res_idx] = random_number;
-            n_used_resources[res_type_idx][res_idx] = random_number;
-            Logger::Trace("create_random_initial_solution: Updated number of resources of comp " + std::to_string(comp_idx) + \
-            " part " + std::to_string(part_idx) + " to " + std::to_string(random_number));
-          }
-        }
-      }
-    }
-  }
-  */
   Logger::Debug("create_random_initial_solution: Initializing new random solution...");
   solution.set_y_hat(std::move(y_hat));
   solution.set_used_resources(std::move(used_resources));
