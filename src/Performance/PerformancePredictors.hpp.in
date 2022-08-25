@@ -62,12 +62,7 @@ class /*__attribute__((__visibility__("hidden")))*/ Pacsltk final
     predict(
       LoadType part_lambda,
       TimeType demandWarm, TimeType demandCold, TimeType idle_time_before_kill
-    ) const
-    {
-      return pacsltk_predictor(
-          part_lambda, demandWarm, demandCold, idle_time_before_kill
-        ).cast<TimeType>();
-    }
+    ) const;
 
     Pacsltk(const Pacsltk&) = delete;
 
