@@ -39,7 +39,6 @@ SystemPE::get_perf_evaluation(
   const auto& performance_comp = system.get_performance()[comp_idx];
   const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
   const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
-
   Logger::Debug("Evaluating performance of component" + std::to_string(comp_idx));
 
   for(const auto& [p_idx, r_type_idx, r_idx] : used_resources_comp)

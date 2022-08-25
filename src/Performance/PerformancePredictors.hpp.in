@@ -58,8 +58,7 @@ class /*__attribute__((__visibility__("hidden")))*/ Pacsltk final
     *                      needs to be activated
     *   \param idle_time_before_kill How long does the platform keep the servers up after being idle
     */
-    TimeType
-    predict(
+    TimeType predict(
       LoadType part_lambda,
       TimeType demandWarm, TimeType demandCold, TimeType idle_time_before_kill
     );
