@@ -32,14 +32,14 @@ class Initializer final
       return InitializerSingleton;
     }
 
-    ~Initializer() { pybind11::finalize_interpreter(); std::cout << "Finalizing pybind11 objects..." << std::endl; }
+    ~Initializer() { pybind11::finalize_interpreter(); std::cout << "Finalized pybind11 objects!" << std::endl; }
 
     Initializer(const Initializer&) = delete;
     Initializer& operator=(const Initializer) = delete;
 
   private:
 
-    Initializer() { pybind11::initialize_interpreter(); std::cout << "Initializing pybind11 objects..." << std::endl;  }
+    Initializer() { pybind11::initialize_interpreter(); std::cout << "Initialized pybind11 objects!" << std::endl;  }
 
 };
 

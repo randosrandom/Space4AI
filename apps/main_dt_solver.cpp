@@ -123,10 +123,11 @@ main(int argc, char** argv)
     {
       std::cout << "No feasible solution found to: "<< system_config_file << std::endl;
     }
-
+    
+    std::cout << std::endl;
     std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
     std::cout << "Random Greedy running time (in seconds): " << algorithm_run_time << std::endl;
-
+    std::cout << "Pacsltk time spent (in seconds):" << sp::Pacsltk::Instance().get_time_spent() << std::endl;
     std::cout << std::endl;
 
   }
