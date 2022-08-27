@@ -4,9 +4,9 @@
   ],
 
   "Algorithm" : {
-    "n_iterations" : 20000,
+    "n_iterations" : 500,
     "max_num_sols" : 1,
-    "reproducibility" : true
+    "reproducibility" : false
   },
 
   "Logger" : {

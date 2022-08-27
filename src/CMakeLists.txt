@@ -15,6 +15,7 @@ set(SRCS
 "${CMAKE_BINARY_DIR}/src/Algorithms/RandomGreedyDT.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Graph/Dag.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Performance/PerformanceModels.cpp;\
+${CMAKE_SOURCE_DIR}/src/Performance/PerformancePredictors.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Performance/SystemPE.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Solution/EliteResult.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Solution/Solution.cpp;\

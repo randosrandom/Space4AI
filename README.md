@@ -11,7 +11,7 @@ It exploits an efficient randomized greedy algorithm that identifies the placeme
 
 ## Dependencies
 
-> :exclamation: We provided indications for ```Ubuntu``` machines, but the flow should be quite similar for any ```UNIX``` distribution, adapting some installation commands. If you use ```Windows``` or you encounter any problem during dependencies installation (or the subsequent compilation process), we suggest to use the library through a ```Docker``` container (further information in the dedicated section).
+> :exclamation: We provided indications for ```Ubuntu``` machines, but the flow should be quite similar for any ```UNIX``` distribution, adapting some installation commands. If you use ```Windows``` or you encounter any problem during dependencies installation (or the subsequent compilation process), we suggest to use the library through a ```Docker``` container (further information in the [dedicated](#docker-container) section).
 
 ### pybind11
 To use our library you have to install [pybind11](https://github.com/pybind/pybind11). You could refer to the original documentation for the installation but, since it can be tricky to understand which is the correct way to go, we strongly suggest you to perform the follwing steps.
@@ -115,6 +115,8 @@ from the ```build``` folder,  and check if it passes all the tests.
 
 Moreover, if you need a different building configuration, you can recompile the library in the container.
 
+Note that, working with a Docker requires to extract files form the container to the host most of the time. For this we suggest you to use Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/). If instead you have superuser permissions, you might prefer [volumes](https://docs.docker.com/storage/volumes/).
+
 ## Usage
 
 In the ```config``` folder of the project there are stored both the system description files, and the input *.json* files requested by our main executable, namely ```dt_solver``` . In particular, the input has the following structure:
@@ -127,7 +129,8 @@ In the ```config``` folder of the project there are stored both the system descr
 
   "Algorithm" : {
     "n_iterations" : 5000,
-    "max_num_sols" : 1
+    "max_num_sols" : 1,
+    "reproducibility": false
   },
 
   "Logger" : {
@@ -139,7 +142,7 @@ In the ```config``` folder of the project there are stored both the system descr
 ```
 - **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path with respect to the root folder of the project must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive. Anyway, see the report for some more information on them.
 
-- **Algorithm**: Here you can the total number of iterations to request, and the number of top solutions to retain;
+- **Algorithm**: Here you can the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or go just random, as generally adopted in practice.
 
 - **Logger**: configure Logger messages
   - *priority*: 0 is the lowest priority (print everything possible, useful for hard debugging), 5 is the highest priority (print only the critical errors).
@@ -166,7 +169,6 @@ export OMP_NUM_THREADS=<NUM_THREADS>
 or you can change it just for the specific executable launch
 ```bash
 OMP_NUM_THREADS=<NUM_THREADS> ./dt_solver config/config_dt_solver.json
-
 ```
 
 After the run, you will find a folder called ```OutputFiles```, in which there will be saved the solutions and some additional files containing the most important information about the saved solutions (like the cost, the number of threads used, the computing time etc...).
@@ -180,7 +182,13 @@ If you need to built an application from scratch and use the library, you just h
 ```
 to include all the needed header files in your application.
 
-If you want to create a new system description file, we suggest to pick any system configuration file from the folder ```config```, and follow it to build the new system.
+Moreover, to initialize (and finalize) the Python interpreter you need to do the following before initializing the system
+```cpp
+Space4AI::Initializer::Instance();
+```
+The initializer also takes care of the destruction of the objects, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
+
+Furthermore, if you want to create a new system description file, we suggest to pick any system configuration file from the folder ```config```, and follow it to build a new one.
 
 ## References
 

@@ -53,6 +53,7 @@ main(int argc, char** argv)
 
   const size_t n_iterations = basic_config.at("Algorithm").at("n_iterations").get<size_t>();
   const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
+  const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
 
   Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
@@ -82,7 +83,7 @@ main(int argc, char** argv)
 
     my_chrono.start();
     const auto elite_result = sp::RandomGreedyDT::random_greedy(
-      system, n_iterations, max_num_sols, true
+      system, n_iterations, max_num_sols, reproducibility
     );
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
 
@@ -123,7 +124,7 @@ main(int argc, char** argv)
     {
       std::cout << "No feasible solution found to: "<< system_config_file << std::endl;
     }
-    
+
     std::cout << std::endl;
     std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
     std::cout << "Random Greedy running time (in seconds): " << algorithm_run_time << std::endl;
