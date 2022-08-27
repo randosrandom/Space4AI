@@ -185,7 +185,7 @@ If you want to create a new system description file, we suggest to pick any syst
 ## References
 
 <a id="1">[1]</a>
-H. Sedghani, F. Filippini and D. Ardagna (2021). A Randomized Greedy Method for AI Applications Component Placement and Resource Selection in Computing Continua. https://doi.ieeecomputersociety.org/10.1109/JCC53141.2021.00022
+H. Sedghani, F. Filippini and D. Ardagna, "A Random Greedy based Design Time Tool for AI Applications Component Placement and Resource Selection in Computing Continua," 2021 IEEE International Conference on Edge Computing (EDGE), 2021, pp. 32-40, doi: 10.1109/EDGE53862.2021.00014. https://ieeexplore.ieee.org/document/9712094
 
 <a id="2">[2]</a>
 Wenzel Jakob, Jason Rhinelander and Dean Moldovan (2017).
