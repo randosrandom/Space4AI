@@ -245,7 +245,7 @@ class Resource<ResourceType::Faas>
     const TimeType idle_time_before_kill;
 };
 
-/** Class to store all types of resources in a single "container". */
+/** Class to store all types of resources in a single container. */
 class AllResources
 {
   public:

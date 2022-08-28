@@ -23,8 +23,7 @@
 
 namespace Space4AI
 {
-/** Abstract class to represent the parent of all performance models that will
-*   inherit from it.
+/** Abstract Parent class of the performance models.
 *
 *   Abstract class used to represent a performance model for predicting the
 *   response time of a Partition object deployed onto a given Resource.
@@ -155,7 +154,7 @@ class QTPE: public BasePerformanceModel
 };
 
 /** Abstract class inherited from BasePerformanceModel, to represent
-*   ResourceType::Faas resources performance models.
+*   ResourceType::Faas performance models.
 */
 class FaasPE: public BasePerformanceModel
 {

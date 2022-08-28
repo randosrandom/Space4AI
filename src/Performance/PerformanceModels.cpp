@@ -1,5 +1,5 @@
 /**
-* \file PerformanceModels.hpp
+* \file PerformanceModels.cpp
 *
 * \brief Defines methods of the classes defined in PerformanceModels.hpp
 *

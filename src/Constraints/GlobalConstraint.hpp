@@ -15,7 +15,7 @@
 namespace Space4AI
 {
 /** Class to represent a performance constraint for
-*   a specific path (set of components).
+*   a specific path (set of Component objects).
 */
 class GlobalConstraint
 {

@@ -16,9 +16,9 @@
 
 namespace Space4AI
 {
-/** Class designed to evaluate the performance of a NetworkTechnology object.
+/** Class designed to evaluate the performance of a NetworkDomain object.
 *
-*   The performance of a NetworkTechnology object can be defined as the time
+*   The performance can be defined as the time
 *   required to transfer data between two consecutive Component or Partition
 *   objects executed on different devices in the same NetworkDomain.
 */
@@ -46,7 +46,7 @@ class NetworkPE
 
 };
 
-/** Class used to evaluate the performance (response time) of the whole System. */
+/** Class used to evaluate the performance (response times) of the whole System. */
 class SystemPE
 {
   public:

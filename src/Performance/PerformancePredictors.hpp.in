@@ -31,7 +31,7 @@ namespace py = pybind11;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 
-/** Class to store the pacsltk predictor.
+/** Class to store the predictor from the paclstk package used for ResourceType::Faas.
 *
 *   It embeds the python interpreter. The class is created following the Meyer's
 *   Singleton pattern.

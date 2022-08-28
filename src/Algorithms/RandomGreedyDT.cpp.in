@@ -1,5 +1,5 @@
 /**
-* \file RandomGreedyDT.cpp
+* \file RandomGreedyDT.cpp.in
 *
 * \brief Defines the methods of the RandomGreedyDT class
 *

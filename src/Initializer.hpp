@@ -16,6 +16,9 @@
 
 namespace Space4AI
 {
+/**
+* Class to initialize and finalize pybind11.
+*/
 class Initializer final
 {
   public:

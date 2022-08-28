@@ -20,8 +20,8 @@
 
 namespace Space4AI
 {
-/** Class to store and manage the System configuration chosen as a solution
-*   for the AI application.
+/** Class to store and manage the a solution
+*   for the AI application represented by a System object.
 */
 class Solution
 {
