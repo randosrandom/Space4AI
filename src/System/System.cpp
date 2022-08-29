@@ -68,7 +68,7 @@ System::initialize_performance(const nl::json& performance_json)
     const auto& comp_data = performance_json.at(comp);
     const auto& partitions = system_data.components[system_data.comp_name_to_idx[comp]].get_partitions();
     // create and initialize demands_edge_vm_temp
-    DemandEdgeVMType::value_type demands_edge_vm_temp(2); // "2" because it's only needed for Edge and VM (Rando: see warning on Runtime_version_2)
+    DemandEdgeVMType::value_type demands_edge_vm_temp(2); // "2" because it's only needed for Edge and VM
 
     for(size_t i = 0; i < demands_edge_vm_temp.size(); ++i)
     {

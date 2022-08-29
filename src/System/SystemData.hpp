@@ -1,7 +1,7 @@
 /**
 * \file SystemData.hpp
 *
-* \brief Defines the class to store the System configuration read from .json file.
+* \brief Defines the class to store the System configuration read from json file.
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -33,7 +33,7 @@ namespace nl = nlohmann;
 /** Class to store the System configuration.
 *
 *   Class to store the data structures that define the System configuration described
-*   in the .json configuration file except for the performance section.
+*   in the json configuration file except for the performance section.
 */
 class SystemData
 {

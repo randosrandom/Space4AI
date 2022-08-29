@@ -2,7 +2,7 @@
 * \file PerformancePredictors.hpp.in
 *
 * \brief Defines the classes that provide the interface between the Performance
-*        Models (C++) and the (Python) functions of the a-ML library.
+*        Models (C++) and the (Python) functions.
 *
 * C++/Python interface is provided by pybind11. For efficiency classes are implemented
 * through the Meyer's singleton pattern.
@@ -31,7 +31,7 @@ namespace py = pybind11;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 
-/** Class to store the predictor from the paclstk package used for ResourceType::Faas.
+/** Class to store the predictor from the paclstk package used for FaaS.
 *
 *   It embeds the python interpreter. The class is created following the Meyer's
 *   Singleton pattern.

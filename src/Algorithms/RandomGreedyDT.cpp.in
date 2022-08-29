@@ -266,7 +266,7 @@ RandomGreedyDT::create_random_initial_solution(
 
       // OBS: resources_instersection is NEVER EMPTY! Indeed, all FaaS are candidate resource
       // so, at worst, we select Faas for the partition
-      // THAT'S WHY I DO NOT HAVE TO CHECK if n_inter_res = 0
+      // THAT'S WHY I DO NOT HAVE TO CHECK if n_inter_res = 0 (~)
       const size_t n_inter_res = resources_instersection.size();
       std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_inter_res - 1);
       const size_t random_idx = dist(rng);

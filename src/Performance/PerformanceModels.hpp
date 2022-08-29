@@ -84,10 +84,7 @@ class BasePerformanceModel
     const bool allows_colocation;
 };
 
-/** Class to define queue-servers performance models.
-*
-*   Available for ResourceType::Edge and ResourceType::VM.
-*/
+/** Class to define queue-servers performance models for Edge and VM. */
 class QTPE: public BasePerformanceModel
 {
 
@@ -153,8 +150,8 @@ class QTPE: public BasePerformanceModel
 
 };
 
-/** Abstract class inherited from BasePerformanceModel, to represent
-*   ResourceType::Faas performance models.
+/** Abstract class inherited from BasePerformanceModel, to represent generic
+*   FaaS performance models.
 */
 class FaasPE: public BasePerformanceModel
 {
@@ -208,7 +205,7 @@ class FaasPE: public BasePerformanceModel
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 /**
-*   Class to define AWS Lambda FaaS performance models (dynamic version)
+*   Class to define FaaS pacsltk performance model (dynamic version)
 *
 *   Class inherited from FaasPE. This class is very similar to FaasPacsltkStaticPE,
 *   with the crucial difference that this is used where there is the need to
@@ -257,7 +254,7 @@ class /*__attribute__((__visibility__("hidden")))*/ FaasPacsltkPE: public FaasPE
 #pragma GCC diagnostic pop
 
 
-/** Class to define AWS Lambda FaaS performance models (static version).
+/** Class to define FaaS pacsltk performance model (static version).
 *
 *   Class inherited from FaasPE. This class is very similar to FaasPacsltkPE, but
 *   it computes the demand time once and for all, at construction time. Thus,

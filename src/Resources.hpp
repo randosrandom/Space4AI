@@ -1,8 +1,7 @@
 /**
 * \file Resources.hpp
 *
-* \brief Defines the classes to manage ResourceType::Edge, ResourceType::VM,
-* 		 ResourceType::Faas Resources
+* \brief Defines the classes to manage Edge, VM, Faas resources.
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -157,8 +156,8 @@ class Resource
     const size_t n_cores;
 };
 
-/** Specialization of the template class Resource<ResourceType Type> for
-*   ResourceType::Faas.
+/** Specialization of the template class Resource for
+*   FaaS.
 */
 template <>
 class Resource<ResourceType::Faas>
@@ -364,7 +363,6 @@ class AllResources
 
     /** ResourceType::Faas Resources vector */
     std::vector<Resource<ResourceType::Faas>> faas_resources;
-
 };
 
 // ---------------------------------------------------------------------------
@@ -406,7 +404,6 @@ AllResources::add_resource(T&& resource)
   }
 }
 
-
 template<ResourceType T>
 const std::vector<Resource<T>>&
   AllResources::get_resources() const
@@ -429,7 +426,6 @@ const std::vector<Resource<T>>&
     throw std::invalid_argument("Wrong type provided in *get_resources()* in Resources.hpp");
   }
 }
-
 
 template<ResourceType T>
 const Resource<T>&

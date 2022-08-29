@@ -182,7 +182,7 @@ class Solution
     */
     bool performance_assignment_check(
       const System& system
-    ) const;
+    ) const;  // It should not be needed to check it after RG. The solution is built satisfying preliminary constraints!
 
     /** Method to check if LocalConstraint constraints are satisfied by the Solution.
     *

@@ -32,7 +32,7 @@ enum LogPriority
   CriticalPriority = 5
 };
 
-/** Class used to print on terminal and on file useful logging messages. */
+/** Class used to print on terminal and on file logging messages. */
 class Logger
 {
   public:
@@ -65,7 +65,9 @@ class Logger
     *	\param filename_ Name of the file where to save output messages; mind that
     *					 eventual folders in the path must already exists. If the
     *					 filename is not provided, a new file is automatically generated
-    *					 using the current time in the title.
+    *					 using the current date and time in the title. Moreover, the date
+    *          and time may be appended also to the filename provided, to
+    *          distinguish between different runs.
     */
     static void
     EnableFileOutput(bool EnableFileOutputFlag_ = true, const std::string& filename_ = "")

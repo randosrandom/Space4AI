@@ -676,7 +676,7 @@ Solution::objective_function(
         {
           const auto res_cost = all_resources.get_resource<ResourceType::Faas>(res_idx).get_cost();
           const double time = system.get_system_data().get_time();
-          // ATTENTO: LA FILIPPINI USA COMP_LAMBDA... SECONDO ME E' GIUSTO PART_LAMBDA MA CHIEDI!
+          // ATTENTO: LORO USANO COMP_LAMBDA... SECONDO ME E' GIUSTO PART_LAMBDA INVECE
           const auto part_lambda = components[comp_idx].get_partition(part_idx).get_part_lambda();
           const auto warm_time =
             static_cast<FaasPE*>(

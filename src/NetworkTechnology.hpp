@@ -44,31 +44,19 @@ class NetworkDomain
 
     /** name getter */
     std::string
-    get_name() const
-    {
-      return name;
-    }
+    get_name() const { return name; }
 
     /** cls getter */
     const std::vector<std::string>&
-    get_cls() const
-    {
-      return cls_names;
-    }
+    get_cls() const { return cls_names; }
 
     /** access_delay getter */
     TimeType
-    get_access_delay() const
-    {
-      return access_delay;
-    }
+    get_access_delay() const { return access_delay; }
 
     /** bandwidth getter */
     double
-    get_bandwidth() const
-    {
-      return bandwidth;
-    }
+    get_bandwidth() const { return bandwidth; }
 
   private:
 

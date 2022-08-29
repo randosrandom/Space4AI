@@ -71,8 +71,7 @@ So, for instance, if you want to compile for DEBUG, in PARALLEL mode, creating S
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Debug -DPARALLELIZATION=ON -DSHARED=OFF ..
 ```
-Actually there are many other things you can set in *cmake*, such as the compiler to use, destinations and so on.
-Again, please refer to the original [documentation](https://cmake.org/cmake/help/latest/).
+For any other operation, please refer to the original [documentation](https://cmake.org/cmake/help/latest/).
 
 After you have generated the Makefile, you are ready to compile the library by doing:
 ```bash
@@ -88,7 +87,7 @@ If some tests go wrong, run the tests in VERBOSE mode to try to understand the p
 ctest --verbose
 ```
 
-> :hammer_and_wrench: At the moment we did not provide instruction for the installation of our library, mainly because it is still under development and it is very likely that in the future many things would change. So at this stage, it is pointless to manage the installation too.
+> :hammer_and_wrench: At the moment we did not provide instruction for the installation of our library, mainly because it is still under development and the its usage as Standalone is perfectly fine. So at this stage, it is pointless to manage the installation too.
 
 ## Docker container
 
@@ -115,7 +114,7 @@ from the ```build``` folder,  and check if it passes all the tests.
 
 Moreover, if you need a different building configuration, you can recompile the library in the container.
 
-Note that, working with a Docker requires to extract files form the container to the host most of the time. For this we suggest you to use Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/). If instead you have superuser permissions, you might prefer [volumes](https://docs.docker.com/storage/volumes/).
+Note that, working with a Docker container requires to extract files form the container to the host most of the time. For this we suggest you to use Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/). If instead you have superuser permissions, you might prefer [volumes](https://docs.docker.com/storage/volumes/).
 
 ## Usage
 
@@ -204,12 +203,3 @@ Lohmann, N. (2022). JSON for Modern C++. https://github.com/nlohmann
 
 <a id="4">[4]</a>
 Merkel, D. (2014). Docker: lightweight linux containers for consistent development and deployment. https://docs.docker.com/
-
-# TODO:
-- static Initializer
-
-
-
-- ```bash
-docker create -it --name dt_pacs_cont --mount type=bind,source="$(pwd)"/OutputFilesFromDocker,target=/home/SPACE4AI/OutputFilesForIndigo s4air/dt_pacs_image:latest
-```

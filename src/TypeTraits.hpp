@@ -23,13 +23,11 @@ namespace Space4AI
 {
 class BasePerformanceModel; // forward declaration
 
-// RANDO: Dopo che Giulia ha commentato tutto, aggiungi tu l'osservazione importante
-// sugli indici (fatto che Edge=0, VM=1: non possono essere cambiati perché
-// i vettori usano questi indici nell'operator[], come nota sul quaderno)
-
 /** Enum class to identify different types of resources */
 enum class ResourceType : size_t
 {
+  // WARNING: do not modify the indexes related to resources.
+  // They are used in access operators in vectors.
   Edge = 0,
   VM = 1,
   Faas = 2,
@@ -55,7 +53,7 @@ using TimeType = double; /**< represents time */
 using CompatibilityMatrixType =
   std::vector<std::vector<std::vector<std::vector<bool>>>>;
 
-/** Strurcture used to save the transition matrix of the DAG.
+/** Structure used to save the transition matrix of the DAG.
 *
 *   Two-dimensional vector of ProbType (indexed by [i][j]) storing the transition
 *   probability from component j to component i.
