@@ -88,12 +88,13 @@ ctest --verbose
 
 If you have any problem installing dependencies or compiling the library correctly, you can use [Docker](https://docs.docker.com/) virtualization.
 
-First, you need to create an image and a container, starting from our repository. From the source root (namely the folder in which the Dockerfile is located) do
-
+First, pull the [image](https://hub.docker.com/r/randosrandom/space4ai) from the Docker Hub
 ```bash
-docker build -t <IMAGE_NAME> .
-docker create -it --name <CONTAINER_NAME> <IMAGE_NAME>
+docker pull randosrandom/space4ai
 ```
+Then create a container
+s
+
 
 Once you created the container you can use it
 
@@ -178,9 +179,9 @@ to include all the needed header files in your application.
 
 Moreover, to initialize (and finalize) the Python interpreter you need to do the following before initializing the system
 ```cpp
-Space4AI::Initializer::Instance();
+pybind11::scoped_interpreter guard{};
 ```
-The initializer also takes care of the destruction of the objects, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
+This initializer also takes care of the destruction of the objects, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
 
 Furthermore, if you want to create a new system description file, we suggest to pick any system configuration file from the folder ```config```, and follow it to build a new one.
 

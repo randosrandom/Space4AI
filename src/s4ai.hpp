@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,6 @@ Copyright 2021 AI-SPRINT
 #ifndef S4AI_HPP_
 #define S4AI_HPP_
 
-#include "src/Initializer.hpp"
 #include "src/Logger.hpp"
 
 #include "src/Algorithms/RandomGreedyDT.hpp"
