@@ -98,8 +98,7 @@ Once you created the container you can activate it
 ```bash
 docker start -i <CONTAINER_NAME>
 ```
-
-Note that, at the moment of the creation of the image, the code is compiled following the default explained above. To be sure that everything is going to work properly, the first time you start the container please do a
+Note that, in the image, the code is compiled following the default explained above. To be sure that everything is going to work properly, the first time you start the container please do a
 ```bash
 make test
 ```
