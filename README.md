@@ -3,7 +3,7 @@
 ## Introduction
 SPACE4-AI is a tool that tackles the component placement resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
 
-It exploits an efficient randomized greedy algorithm that identifies the placement minimizing a certain loss, e.g. the total cost, across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
+It exploits an efficient randomized greedy algorithm that identifies the placement, minimizing a certain loss, across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
 
 | ![UseCase](images/useCase.png "A Use case of identifying wind turbines blade damage") |
 |:--:|
@@ -57,7 +57,7 @@ Now you can generate the *Makefile* through the build system *cmake*:
 cmake ..
 ```
 By default, this will generate a Makefile to compile the RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
-- CMAKE_BUILD_TYPE (string). Specifies the build type, which can ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original cmake [documentation](https://cmake.org/cmake/help/latest/), for further information.
+- CMAKE_BUILD_TYPE (string). Specifies the build type, which can be ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original [documentation](https://cmake.org/cmake/help/latest/), for further information.
 - PARALLELIZATION (option). If set to ON, it will compile the parallel version of the library; otherwise it will be serial.
 > :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
 
@@ -113,7 +113,7 @@ Note that, working with a Docker container requires to extract files form the co
 
 ## Usage
 
-In the ```config``` folder of the project there are stored both the system description files, and the input *.json* files requested by our main executable, namely ```dt_solver``` . In particular, the input has the following structure:
+In the ```config``` folder are stored both the system description files and the input *.json* files requested by our main executable, namely ```dt_solver```. In particular, the input has the following structure:
 ```json
 {
   "ConfigFiles" : [
@@ -134,9 +134,9 @@ In the ```config``` folder of the project there are stored both the system descr
   }
 }
 ```
-- **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path with respect to the root folder of the project must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive. Anyway, see the report for some more information on them.
+- **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path, with respect to the root folder of the project, must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive.
 
-- **Algorithm**: Here you can the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or go just random, as generally adopted in practice.
+- **Algorithm**: Here you can set the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or go just random, as generally done in practice.
 
 - **Logger**: configure Logger messages
   - *priority*: 0 is the lowest priority (print everything possible, useful for hard debugging), 5 is the highest priority (print only the critical errors).
@@ -145,7 +145,7 @@ In the ```config``` folder of the project there are stored both the system descr
 
   - *file_stream*: set to true if you want to have logger messages saved to file. Note that this will automatically create a folder named ```logs``` in the same location of the executable.
 
-In the config folder, there is already a input file called ```config_dt_solver.json``` which you can modify (or you can create one from scratch).
+In the config folder, there is an input file called ```config_dt_solver.json``` which you can modify (or you can create a new one from scratch).
 
 Once you have built the library and configured the input files as you wish, from the ```build``` folder navigate to
 ```bash
