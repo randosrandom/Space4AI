@@ -1,9 +1,9 @@
 # SPACE4-AI Design Time
 
 ## Introduction
-SPACE4-AI is a tool that tackles the component placement resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
+SPACE4-AI is a tool that tackles the component placement and resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
 
-It exploits an efficient randomized greedy algorithm that identifies the placement, minimizing a certain loss, across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
+It exploits an efficient randomized greedy algorithm that identifies the placement of minimum cost across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
 
 | ![UseCase](images/useCase.png "A Use case of identifying wind turbines blade damage") |
 |:--:|
@@ -14,7 +14,7 @@ It exploits an efficient randomized greedy algorithm that identifies the placeme
 > :exclamation: We provided indications for ```Ubuntu``` machines, but the flow should be quite similar for any ```UNIX``` distribution, adapting some installation commands. If you use ```Windows``` or you encounter any problem during dependencies installation (or the subsequent compilation process), we suggest to use the library through a ```Docker``` container (further information in the [dedicated](#docker-container) section).
 
 ### pybind11
-To use our library you have to install [pybind11](https://github.com/pybind/pybind11). You could refer to the original documentation for the installation but, since it can be tricky to understand which is the correct way to go, we strongly suggest you to perform the following steps.
+To use our library you have to install [pybind11](https://github.com/pybind/pybind11). You can refer to the original documentation for the installation but, since it can be tricky to understand which is the correct way to go, we strongly suggest you to perform the following steps.
 
 First of all, please update your system to have the latest versions of the compilers, libraries and so on. Then make sure to have **cmake 3.16.3** or above installed. Moreover, you also ought to have **Python 3.7** or above. After that you need to install **python3-dev** packages, for which you can do
 ```bash
@@ -26,14 +26,14 @@ pip3 install "pybind11[global]"
 ```
 
 ### pacsltk
-If you successfully installed pybind11, you can move to install the [pacsltk](https://github.com/pacslab/serverless-performance-modeling) package.
+If you successfully installed pybind11, you can move to the installation of the [pacsltk](https://github.com/pacslab/serverless-performance-modeling) package.
 
 ```bash
 pip3 install pacsltk
 ```
 
 ### OpenMP
-If moreover, you will use the parallel version of the library, you need to have the **OpenMP** installed. In general, most modern compilers provide support for OpenMP. If you are using gcc, you can check the configuration by running
+Moreover, if you want to use the parallel version of the library, you need to have the **OpenMP** installed. In general, most modern compilers provide support for OpenMP. If you are using gcc, you can check the configuration by running
 ```bash
 echo |cpp -fopenmp -dM |grep -i open
 ```
@@ -45,30 +45,30 @@ sudo apt install libomp-dev
 
 ### Json for Modern C++
 
-This is a *json* parser, which consists in just an header file so no particular installation procedure is needed. In our repository such header file is saved in  ```external/nlohmann```. For further information on the usage of the library refer directly to the original [documentation](https://json.nlohmann.me/).
+This is a *json* parser, which consists of just an header file so no particular installation procedure is needed. In our repository such header file is saved in  ```external/nlohmann```. For further information on the usage of the library refer directly to the original [documentation](https://json.nlohmann.me/).
 
 ## Compile the library
 After you have installed the dependencies, clone this repository and enter the source root. Then create a *build* sub-folder and navigate to it
 ```bash
 mkdir build && cd build
 ```
-Now you can generate the *Makefile* through the build system *cmake*:
+You can now generate the *Makefile* through the build system *cmake*:
 ```bash
 cmake ..
 ```
 By default, this will generate a Makefile to compile the RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
 - CMAKE_BUILD_TYPE (string). Specifies the build type, which can be ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original [documentation](https://cmake.org/cmake/help/latest/), for further information.
 - PARALLELIZATION (option). If set to ON, it will compile the parallel version of the library; otherwise it will be serial.
-> :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
+> :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial mode (a warning message will pop out).
 
 - SHARED (option). If set to OFF, it will create a static library instead of shared one.
 
-So, for instance, if you want to compile for DEBUG, in PARALLEL mode, creating STATIC library, you would do:
+So, for instance, if you wanted to compile for DEBUG, in PARALLEL mode, creating STATIC library, you would have to type:
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Debug -DPARALLELIZATION=ON -DSHARED=OFF ..
 ```
 
-After you have generated the Makefile, you are ready to compile the library by doing:
+After generating the Makefile, you are ready to compile the library by doing:
 ```bash
 make VERBOSE=1
 ```
@@ -76,13 +76,13 @@ Eventually, to ensure that everything went well, do
 ```bash
 make test
 ```
-to run a bunch of tests, checking the correct compilation of the library and installation of the dependencies.
+to run a bunch of tests, checking the correct compilation of the library and the installation of the dependencies.
 If some tests go wrong, run the tests in VERBOSE mode to understand the problem.
 ```bash
 ctest --verbose
 ```
 
-> :hammer_and_wrench: At the moment we did not provide instruction for the installation of our library, mainly because it is still under development and the its usage as standalone is perfectly fine. So at this stage, it is pointless to manage the installation too.
+> :hammer_and_wrench: At the moment we did not provide instructions for the installation of our library, mainly because it is still under development and its usage as standalone is perfectly fine. So at this stage, it is pointless to manage the installation too.
 
 ## Docker container
 
@@ -96,13 +96,13 @@ Then create a container
 s
 
 
-Once you created the container you can use it
+Once you created the container you can activate it
 
 ```bash
 docker start -i <CONTAINER_NAME>
 ```
 
-Note that, at the moment of the creation of the image, the code is compiled following the default explained above. To be sure that everything will work properly, the first time you start the container please do a
+Note that, at the moment of the creation of the image, the code is compiled following the default explained above. To be sure that everything is going to work properly, the first time you start the container please do a
 ```bash
 make test
 ```
@@ -114,7 +114,7 @@ Note that, working with a Docker container requires to extract files form the co
 
 ## Usage
 
-In the ```config``` folder are stored both the system description files and the input *.json* files requested by our main executable, namely ```dt_solver```. In particular, the input has the following structure:
+In the ```config``` folder are stored both the system description files and the input *.json* files requested by our main executable, namely ```dt_solver```. In particular, the input file has the following structure:
 ```json
 {
   "ConfigFiles" : [
@@ -137,7 +137,7 @@ In the ```config``` folder are stored both the system description files and the 
 ```
 - **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path, with respect to the root folder of the project, must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive.
 
-- **Algorithm**: Here you can set the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or go just random, as generally done in practice.
+- **Algorithm**: Here you can set the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or just go random, as it's generally done in practice.
 
 - **Logger**: configure Logger messages
   - *priority*: 0 is the lowest priority (print everything possible, useful for hard debugging), 5 is the highest priority (print only the critical errors).
@@ -157,11 +157,11 @@ where you will find (other than building files) a symbolic link to the ```config
 ./dt_solver config/config_dt_solver.json
 ```
 
-If instead, you are using the parallel version, you can set the total number of threads by either exporting the following environmental variable
+If, instead, you are using the parallel version, you can set the total number of threads by either exporting the following environmental variable
 ```bash
 export OMP_NUM_THREADS=<NUM_THREADS>
 ```
-or you can change it just for the specific executable launch
+or changing it for each specific executable launch
 ```bash
 OMP_NUM_THREADS=<NUM_THREADS> ./dt_solver config/config_dt_solver.json
 ```
@@ -183,7 +183,7 @@ pybind11::scoped_interpreter guard{};
 ```
 This initializer also takes care of the destruction of the objects, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
 
-Furthermore, if you want to create a new system description file, we suggest to pick any system configuration file from the folder ```config```, and follow it to build a new one.
+Furthermore, if you want to create a new system description file, we suggest you to pick any system configuration file from the folder ```config```, and follow it to build a new one.
 
 ## References
 
