@@ -1,7 +1,7 @@
 # SPACE4-AI Design Time
 
 ## Introduction
-SPACE4-AI is a tool that tackles the component placement resource selection problem in the computing continuum at design time, while dealing with different application requirements and constraints.
+SPACE4-AI is a tool that tackles the component placement resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
 
 It exploits an efficient randomized greedy algorithm that identifies the placement minimizing a certain loss, e.g. the total cost, across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
 
@@ -14,7 +14,7 @@ It exploits an efficient randomized greedy algorithm that identifies the placeme
 > :exclamation: We provided indications for ```Ubuntu``` machines, but the flow should be quite similar for any ```UNIX``` distribution, adapting some installation commands. If you use ```Windows``` or you encounter any problem during dependencies installation (or the subsequent compilation process), we suggest to use the library through a ```Docker``` container (further information in the [dedicated](#docker-container) section).
 
 ### pybind11
-To use our library you have to install [pybind11](https://github.com/pybind/pybind11). You could refer to the original documentation for the installation but, since it can be tricky to understand which is the correct way to go, we strongly suggest you to perform the follwing steps.
+To use our library you have to install [pybind11](https://github.com/pybind/pybind11). You could refer to the original documentation for the installation but, since it can be tricky to understand which is the correct way to go, we strongly suggest you to perform the following steps.
 
 First of all, please update your system to have the latest versions of the compilers, libraries and so on. Then make sure to have **cmake 3.16.3** or above installed. Moreover, you also ought to have **Python 3.7** or above. After that you need to install **python3-dev** packages, for which you can do
 ```bash
@@ -33,7 +33,7 @@ pip3 install pacsltk
 ```
 
 ### OpenMP
-If moreover, you will use the PARALLEL version of the library, you need to have the **OpenMP** installed. In general, most modern compilers provide support for OpenMP. If you are using gcc, you can check the configuration by running
+If moreover, you will use the parallel version of the library, you need to have the **OpenMP** installed. In general, most modern compilers provide support for OpenMP. If you are using gcc, you can check the configuration by running
 ```bash
 echo |cpp -fopenmp -dM |grep -i open
 ```
@@ -48,11 +48,7 @@ sudo apt install libomp-dev
 This is a *json* parser, which consists in just an header file so no particular installation procedure is needed. In our repository such header file is saved in  ```external/nlohmann```. For further information on the usage of the library refer directly to the original [documentation](https://json.nlohmann.me/).
 
 ## Compile the library
-After you have installed the dependencies, clone this repository, and enter the source root.
-```bash
-cd <YOUR_FOLDER>/SPACE4-AI_DT
-```
-Create a *build* sub-folder and navigate to it
+After you have installed the dependencies, clone this repository and enter the source root. Then create a *build* sub-folder and navigate to it
 ```bash
 mkdir build && cd build
 ```
@@ -60,18 +56,17 @@ Now you can generate the *Makefile* through the build system *cmake*:
 ```bash
 cmake ..
 ```
-By default, this will generate a Makefile which will compile in RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
+By default, this will generate a Makefile to compile the RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
 - CMAKE_BUILD_TYPE (string). Specifies the build type, which can ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original cmake [documentation](https://cmake.org/cmake/help/latest/), for further information.
-- PARALLELIZATION (option). If set to ON, you will compile the parallel version of the library; otherwise it will be serial.
+- PARALLELIZATION (option). If set to ON, it will compile the parallel version of the library; otherwise it will be serial.
 > :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial (a warning message will pop out).
 
-- SHARED (option). If set to OFF, you will create a static library instead of shared one.
+- SHARED (option). If set to OFF, it will create a static library instead of shared one.
 
 So, for instance, if you want to compile for DEBUG, in PARALLEL mode, creating STATIC library, you would do:
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Debug -DPARALLELIZATION=ON -DSHARED=OFF ..
 ```
-For any other operation, please refer to the original [documentation](https://cmake.org/cmake/help/latest/).
 
 After you have generated the Makefile, you are ready to compile the library by doing:
 ```bash
@@ -82,12 +77,12 @@ Eventually, to ensure that everything went well, do
 make test
 ```
 to run a bunch of tests, checking the correct compilation of the library and installation of the dependencies.
-If some tests go wrong, run the tests in VERBOSE mode to try to understand the problem.
+If some tests go wrong, run the tests in VERBOSE mode to understand the problem.
 ```bash
 ctest --verbose
 ```
 
-> :hammer_and_wrench: At the moment we did not provide instruction for the installation of our library, mainly because it is still under development and the its usage as Standalone is perfectly fine. So at this stage, it is pointless to manage the installation too.
+> :hammer_and_wrench: At the moment we did not provide instruction for the installation of our library, mainly because it is still under development and the its usage as standalone is perfectly fine. So at this stage, it is pointless to manage the installation too.
 
 ## Docker container
 
@@ -192,14 +187,17 @@ Furthermore, if you want to create a new system description file, we suggest to 
 ## References
 
 <a id="1">[1]</a>
-H. Sedghani, F. Filippini and D. Ardagna, "A Random Greedy based Design Time Tool for AI Applications Component Placement and Resource Selection in Computing Continua," 2021 IEEE International Conference on Edge Computing (EDGE), 2021, pp. 32-40, doi: 10.1109/EDGE53862.2021.00014. https://ieeexplore.ieee.org/document/9712094
+AI IN SECURE PRIVACY-PRESERVING COMPUTING CONTINUUM, 2021. https://www.ai-sprint-project.eu/
 
 <a id="2">[2]</a>
+H. Sedghani, F. Filippini and D. Ardagna, "A Random Greedy based Design Time Tool for AI Applications Component Placement and Resource Selection in Computing Continua," 2021 IEEE International Conference on Edge Computing (EDGE), 2021, pp. 32-40, doi: 10.1109/EDGE53862.2021.00014. https://ieeexplore.ieee.org/document/9712094
+
+<a id="3">[3]</a>
 Wenzel Jakob, Jason Rhinelander and Dean Moldovan (2017).
 Pybind11 -- Seamless operability between C++11 and Python. https://github.com/pybind/pybind11
 
-<a id="3">[3]</a>
+<a id="4">[4]</a>
 Lohmann, N. (2022). JSON for Modern C++. https://github.com/nlohmann
 
-<a id="4">[4]</a>
+<a id="5">[5]</a>
 Mahmoudi Nima, Khazaei Hamzeh (2020). Performance Modeling of Serverless Computing Platforms. https://github.com/pacslab/serverless-performance-modeling
