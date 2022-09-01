@@ -181,7 +181,7 @@ Moreover, to initialize (and finalize) the Python interpreter you need to do the
 ```cpp
 pybind11::scoped_interpreter guard{};
 ```
-This initializer also takes care of the destruction of the objects, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
+This initializer also takes care of the destruction of the objects when it goes out of scope, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
 
 Furthermore, if you want to create a new system description file, we suggest you to pick any system configuration file from the folder ```config```, and follow it to build a new one.
 

@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -450,7 +450,7 @@ SystemData::initialize_local_constraints(const nl::json& local_constraints_json)
   {
     for(const auto& [comp, data] : local_constraints_json.items())
     {
-      this->local_constraints.at(comp_name_to_idx.at(comp)) = std::move(LocalConstraint(comp_name_to_idx.at(comp), data.at("local_res_time").get<TimeType>()));
+      this->local_constraints.at(comp_name_to_idx.at(comp)) = LocalConstraint(comp_name_to_idx.at(comp), data.at("local_res_time").get<TimeType>());
     }
   }
 }

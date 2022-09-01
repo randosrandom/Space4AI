@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,8 +59,8 @@ System::read_configuration_file(const std::string& system_file)
   }
   else if(configuration_file.contains("Performance"))
   {
-#warning Actually also here you can have only static models, but it depends on the PerfModel \
-At the moment I just set DynamicPerfModels to true
+//#warning Actually also here you can have only static models, but it depends on the PerfModel 
+//At the moment I just set DynamicPerfModels to true
     this->dynamicPerfModels = true;
     Logger::Info("****** READING PERFORMANCE MODELS... ******");
     this->initialize_performance(configuration_file.at("Performance"));
