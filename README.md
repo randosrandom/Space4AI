@@ -92,12 +92,11 @@ First, pull the [image](https://hub.docker.com/r/randosrandom/space4ai) from the
 ```bash
 docker pull randosrandom/space4ai
 ```
-Then create a container
-s
-
-
+Then create a container using such image
+```bash
+docker create -it --name <CONTAINER_NAME> randosrandom/space4ai
+```
 Once you created the container you can activate it
-
 ```bash
 docker start -i <CONTAINER_NAME>
 ```
