@@ -88,14 +88,12 @@ ctest --verbose
 
 If you have any problem installing dependencies or compiling the library correctly, you can use [Docker](https://docs.docker.com/) virtualization.
 
-First, pull the [image](https://hub.docker.com/r/randosrandom/space4ai) from the Docker Hub
-```bash
-docker pull randosrandom/space4ai
-```
-Then create a container using such image
+First create a container by doing
 ```bash
 docker create -it --name <CONTAINER_NAME> randosrandom/space4ai
 ```
+which will pull the [image](https://hub.docker.com/r/randosrandom/space4ai) from the Docker Hub.
+
 Once you created the container you can activate it
 ```bash
 docker start -i <CONTAINER_NAME>
