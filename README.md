@@ -1,11 +1,19 @@
 # SPACE4-AI Design Time
 
+## Table of contents
+1. [Introduction](#introduction)
+2. [Dependencies](#dependencies)
+3. [Compile the library](#compile-the-library)
+4. [Docker container](#docker-container)
+5. [Usage](#usage)
+6. [Custom applications](#custom-applications)
+
 ## Introduction
 SPACE4-AI is a tool that tackles the component placement and resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
 
 It exploits an efficient randomized greedy algorithm that identifies the placement of minimum cost across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
 
-| ![UseCase](images/useCase.png "A Use case of identifying wind turbines blade damage") |
+| ![UseCase](report/useCase.png "A Use case of identifying wind turbines blade damage") |
 |:--:|
 | <b>Use Case: maintenance and inspection of a wind farm</b>|
 
