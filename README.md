@@ -106,7 +106,7 @@ from the ```build``` folder,  and check if it passes all the tests.
 
 Moreover, if you need a different building configuration, you can recompile the library in the container.
 
-Note that, working with a Docker container requires to extract files form the container to the host most of the time. For this we suggest you to use Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/). If instead you have superuser permissions, you might prefer [volumes](https://docs.docker.com/storage/volumes/).
+Working with a Docker container requires to extract files form the container to the host most of the time. For this we suggest you to use Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/). If instead you have superuser permissions, you might prefer [volumes](https://docs.docker.com/storage/volumes/).
 
 ## Usage
 
@@ -162,7 +162,7 @@ or changing it for each specific executable launch
 OMP_NUM_THREADS=<NUM_THREADS> ./dt_solver config/config_dt_solver.json
 ```
 
-After the run, you will find a folder called ```OutputFiles```, in which there will be saved the solutions and some additional files containing the most important information about the saved solutions (like the cost, the number of threads used, the computing time etc...).
+After the run you will find a folder called ```OutputFiles```, in which there will be saved the solutions and some additional files containing the most important information about the chosen solutions (like the cost, the number of threads used, the computing time etc...).
 
 ### Custom applications
 
@@ -177,7 +177,7 @@ Moreover, to initialize (and finalize) the Python interpreter you need to do the
 ```cpp
 pybind11::scoped_interpreter guard{};
 ```
-This initializer also takes care of the destruction of the objects when it goes out of scope, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
+It also takes care of the destruction of the objects when it goes out of scope, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
 
 Furthermore, if you want to create a new system description file, we suggest you to pick any system configuration file from the folder ```config```, and follow it to build a new one.
 
