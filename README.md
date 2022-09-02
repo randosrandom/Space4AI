@@ -1,6 +1,6 @@
 # SPACE4-AI Design Time
 
-## Table of contents
+## Table of Contents
 1. [Introduction](#introduction)
 2. [Dependencies](#dependencies)
 3. [Compile the library](#compile-the-library)
