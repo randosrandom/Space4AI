@@ -94,7 +94,7 @@ ctest --verbose
 > :hammer_and_wrench: At the moment we did not provide instructions for the installation of our library, mainly because it is still under development and its usage as standalone is perfectly fine.
 
 ## Documentation
-If [Doxygen](http://www.doxygen.org) (version 1.8.17 or above) and [GraphViz](http://www.graphviz.org) are found in you system, the documentation will be automatically generated, during compilation, under the ```build/doc/``` folder.
+If [Doxygen](http://www.doxygen.org) (version 1.8.17 or above) and [GraphViz](http://www.graphviz.org) are found in your system, the documentation will be automatically generated, during compilation, under the ```build/doc/``` folder. It is sufficient to open the ```html/index.html``` file to view the documentation with any browser.
 
 ## Docker container
 
