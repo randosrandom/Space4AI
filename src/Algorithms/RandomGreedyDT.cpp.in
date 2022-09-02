@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,11 +84,11 @@ RandomGreedyDT::random_greedy(
       {
         MY_PRAGMA(omp critical)
         elite.add(std::move(new_sol));
-        Logger::Info("******** NEW RESULT ADDED TO ELITE *******");
+        Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
       }
     }
-
   Logger::Info("Finished Random Greedy DT algorithm");
+  Logger::Info("Number of top feasible solutions found: " + std::to_string(elite.get_size()));
 #ifdef PARALLELIZATION
   elite.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
   omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue

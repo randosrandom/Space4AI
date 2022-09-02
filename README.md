@@ -4,14 +4,15 @@
 1. [Introduction](#introduction)
 2. [Dependencies](#dependencies)
 3. [Compile the library](#compile-the-library)
-4. [Docker container](#docker-container)
-5. [Usage](#usage)
-6. [Custom applications](#custom-applications)
+4. [Documentation](#documentation)
+5. [Docker container](#docker-container)
+6. [Usage](#usage)
+7. [Custom applications](#custom-applications)
 
 ## Introduction
 SPACE4-AI is a tool that tackles the component placement and resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
 
-It exploits an efficient randomized greedy algorithm that identifies the placement of minimum cost across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
+SPACE4-AI exploits an efficient randomized greedy algorithm that identifies the placement of minimum cost across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
 
 | ![UseCase](report/useCase.png "A Use case of identifying wind turbines blade damage") |
 |:--:|
@@ -53,10 +54,10 @@ sudo apt install libomp-dev
 
 ### Json for Modern C++
 
-This is a *json* parser, which consists of just an header file so no particular installation procedure is needed. In our repository such header file is saved in  ```external/nlohmann```. For further information on the usage of the library refer directly to the original [documentation](https://json.nlohmann.me/).
+This is a *json* parser, which consists of just an header file so no particular installation procedure is needed. In our repository such header file is saved in  ```external/nlohmann```. The original documentation can be found [here](https://json.nlohmann.me/).
 
 ## Compile the library
-After you have installed the dependencies, clone this repository and enter the source root. Then create a *build* sub-folder and navigate to it
+After you have installed the dependencies, clone this repository and enter the source root. Then create a ```build``` sub-folder and navigate to it
 ```bash
 mkdir build && cd build
 ```
@@ -65,9 +66,9 @@ You can now generate the *Makefile* through the build system *cmake*:
 cmake ..
 ```
 By default, this will generate a Makefile to compile the RELEASE mode, SERIAL version, creating a SHARED library. For any other combination, we describe the most important *cmake* variables you can set:
-- CMAKE_BUILD_TYPE (string). Specifies the build type, which can be ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original [documentation](https://cmake.org/cmake/help/latest/), for further information.
+- CMAKE_BUILD_TYPE (string). Specifies the build type, which can be ```Debug```, ```Release```, ```RelWithDebInfo``` or ```RelWithDebInfo```. Please refer to the original [documentation](https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html) for further information.
 - PARALLELIZATION (option). If set to ON, it will compile the parallel version of the library; otherwise it will be serial.
-> :warning: The Parallelization is **not** supported if there is the need to call Python functions during the construction of the solution through the algorithm (see **GIL ISSUE** on the report). If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial mode (a warning message will pop out).
+> :warning: The Parallelization is **not** supported (due to the GIL) if there is the need to call Python functions during the construction of the solution through the algorithm. If you try to go parallel in this situation, the code will automatically ignore the requested threads, and will run in serial mode (a warning message will pop out).
 
 - SHARED (option). If set to OFF, it will create a static library instead of shared one.
 
@@ -90,7 +91,10 @@ If some tests go wrong, run the tests in VERBOSE mode to understand the problem.
 ctest --verbose
 ```
 
-> :hammer_and_wrench: At the moment we did not provide instructions for the installation of our library, mainly because it is still under development and its usage as standalone is perfectly fine. So at this stage, it is pointless to manage the installation too.
+> :hammer_and_wrench: At the moment we did not provide instructions for the installation of our library, mainly because it is still under development and its usage as standalone is perfectly fine.
+
+## Documentation
+If [Doxygen](http://www.doxygen.org) (version 1.8.17 or above) and [GraphViz](http://www.graphviz.org) are found in you system, the documentation will be automatically generated, during compilation, under the ```build/doc/``` folder.
 
 ## Docker container
 
@@ -141,7 +145,7 @@ In the ```config``` folder are stored both the system description files and the 
 ```
 - **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path, with respect to the root folder of the project, must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive.
 
-- **Algorithm**: Here you can set the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or just go random, as it's generally done in practice.
+- **Algorithm**: set the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or just go random, as it's generally done in practice.
 
 - **Logger**: configure Logger messages
   - *priority*: 0 is the lowest priority (print everything possible, useful for hard debugging), 5 is the highest priority (print only the critical errors).
@@ -156,12 +160,12 @@ Once you have built the library and configured the input files as you wish, from
 ```bash
 cd apps
 ```
-where you will find (other than building files) a symbolic link to the ```config``` folder introduced above. Now you can launch the solver by doing
+where you will find (other than building files) the executables and a symbolic link to the ```config``` folder. Now you can launch the solver by doing
 ```bash
 ./dt_solver config/config_dt_solver.json
 ```
 
-If, instead, you are using the parallel version, you can set the total number of threads by either exporting the following environmental variable
+If, you use the parallel version, you can set the total number of threads by either exporting the following environmental variable
 ```bash
 export OMP_NUM_THREADS=<NUM_THREADS>
 ```
