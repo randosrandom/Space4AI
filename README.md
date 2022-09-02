@@ -42,7 +42,7 @@ pip3 install pacsltk
 ```
 
 ### OpenMP
-Moreover, if you want to use the parallel version of the library, you need to have the **OpenMP** installed. In general, most modern compilers provide support for OpenMP. If you are using gcc, you can check the configuration by running
+If you want to use the parallel version of the library, you need to have the **OpenMP** installed. In general, most modern compilers provide support for OpenMP. If you are using gcc, you can check the configuration by running
 ```bash
 echo |cpp -fopenmp -dM |grep -i open
 ```
@@ -110,13 +110,7 @@ Once you created the container you can activate it
 ```bash
 docker start -i <CONTAINER_NAME>
 ```
-Note that, in the image, the code is compiled following the default explained above. To be sure that everything is going to work properly, the first time you start the container please do a
-```bash
-make test
-```
-from the ```build``` folder,  and check if it passes all the tests.
-
-Moreover, if you need a different building configuration, you can recompile the library in the container.
+In the image, the code is compiled following the default explained above. If you need a different building configuration, you can recompile the library in the container.
 
 Working with a Docker container requires to extract files form the container to the host most of the time. For this we suggest you to use Docker [bind mounts](https://docs.docker.com/storage/bind-mounts/). If instead you have superuser permissions, you might prefer [volumes](https://docs.docker.com/storage/volumes/).
 
@@ -143,7 +137,7 @@ In the ```config``` folder are stored both the system description files and the 
   }
 }
 ```
-- **ConfigFiles**: list of system descriptions you want to solve. Note that the relative path, with respect to the root folder of the project, must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive.
+- **ConfigFiles**: list of system descriptions you want to solve. The relative path, with respect to the root folder of the project, must be given for each system file; we do not provide details about the systems configuration files structure since it is quite intuitive.
 
 - **Algorithm**: set the total number of iterations to request, the number of top solutions to retain, and decide whether to obtain reproducible results, which can be useful for debug or analysis, or just go random, as it's generally done in practice.
 
@@ -152,7 +146,7 @@ In the ```config``` folder are stored both the system description files and the 
 
   - *terminal_stream*: set to true if you want to have the messages printed on the terminal, false otherwise.
 
-  - *file_stream*: set to true if you want to have logger messages saved to file. Note that this will automatically create a folder named ```logs``` in the same location of the executable.
+  - *file_stream*: set to true if you want to have logger messages saved to file. A folder named ```logs``` will be automatically created in the same location of the executable.
 
 In the config folder, there is an input file called ```config_dt_solver.json``` which you can modify (or you can create a new one from scratch).
 
@@ -165,7 +159,7 @@ where you will find (other than building files) the executables and a symbolic l
 ./dt_solver config/config_dt_solver.json
 ```
 
-If, you use the parallel version, you can set the total number of threads by either exporting the following environmental variable
+If you use the parallel version, you can set the total number of threads by either exporting the following environmental variable
 ```bash
 export OMP_NUM_THREADS=<NUM_THREADS>
 ```
@@ -174,7 +168,7 @@ or changing it for each specific executable launch
 OMP_NUM_THREADS=<NUM_THREADS> ./dt_solver config/config_dt_solver.json
 ```
 
-After the run you will find a folder called ```OutputFiles```, in which there will be saved the solutions and some additional files containing the most important information about the chosen solutions (like the cost, the number of threads used, the computing time etc...).
+After the run, you will find a folder called ```OutputFiles```, in which there will be saved the solutions and summary files containing the most important information about the chosen solutions (like the cost, the number of threads used, the computing time etc...).
 
 ### Custom applications
 
