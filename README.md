@@ -85,11 +85,11 @@ Eventually, to ensure that everything went well, do
 ```bash
 make test
 ```
-to run a bunch of tests, checking the correct compilation of the library and the installation of the dependencies.
-If some tests go wrong, run the tests in VERBOSE mode to understand the problem.
+or
 ```bash
-ctest --verbose
+ctest --verbose # testing in verbose mode
 ```
+to run a bunch of tests, checking the correct compilation of the library and the installation of the dependencies.
 
 > :hammer_and_wrench: At the moment we did not provide instructions for the installation of our library, mainly because it is still under development and its usage as standalone is perfectly fine.
 
