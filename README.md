@@ -10,7 +10,7 @@
 7. [Custom applications](#custom-applications)
 
 ## Introduction
-SPACE4-AI is a tool that tackles the component placement and resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the AI-SPRINT project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
+SPACE4-AI is a tool that tackles the component placement and resource selection problem in the computing continuum at design-time, while dealing with different application requirements and constraints. The need for this kind of tools starts from the rise of edge computing, a model that deploys computing and storage power through several devices with different capacities. This work will contribute to the [AI-SPRINT](https://www.ai-sprint-project.eu/) project, a Research and Innovation Action co-funded by the European Commission, H2020 Programme.
 
 SPACE4-AI exploits an efficient randomized greedy algorithm that identifies the placement of minimum cost across heterogeneous resources including edge devices, cloud GPU-based Virtual Machines and Function as a Service solutions, under Quality of Service (QoS) response time constraints.
 
