@@ -185,7 +185,7 @@ pybind11::scoped_interpreter guard{};
 ```
 It also takes care of the destruction of the objects when it goes out of scope, and it saves you from creating multiple concurrent interpreters (forbidden by the Python GIL).
 
-Furthermore if you want to create a new system description file, we suggest you to pick any system configuration file from the folder ```config```, and follow it to build a new one.
+Furthermore, if you want to create a new system description file, we suggest you to pick any system configuration file from the folder ```config```, and follow it to build a new one.
 
 ## References
 
