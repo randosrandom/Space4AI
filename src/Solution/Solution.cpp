@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
-void
+DTSelectedResourcesType
 Solution::read_solution_from_file(
   const std::string& file_run,
   const System& system
@@ -43,26 +43,40 @@ Solution::read_solution_from_file(
     throw std::runtime_error(err_message);
   }
 
+  DTSelectedResourcesType dt_selected_resources;
+  dt_selected_resources.resize(ResIdxFromType(ResourceType::Count));
+
+  Logger::Info("solution::read_solution_from_file: Reading Design Time Solution...");
+
   const auto& comp_name_to_idx = system.get_system_data().get_comp_name_to_idx();
   const auto& part_name_to_part_idx = system.get_system_data().get_part_name_to_part_idx();
   const auto& res_name_to_type_and_idx = system.get_system_data().get_res_name_to_type_and_idx();
   const auto& gc_name_to_idx = system.get_system_data().get_gc_name_to_idx();
   const auto& components = system.get_system_data().get_components();
   const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& cls = system.get_system_data().get_cls();
+  const auto& cl_name_to_idx = system.get_system_data().get_cl_name_to_idx();
+
   nl::json configuration_file;
   file >> configuration_file;
+
+  Logger::Debug("solution::read_solution_from_file: Resizing data structures...");
+
   const std::size_t comp_num = comp_name_to_idx.size();
   const std::size_t res_type_idx_count = ResIdxFromType(ResourceType::Count);
+
   solution_data.y_hat.resize(comp_num);
   solution_data.used_resources.resize(comp_num);
+  solution_data.n_used_resources.resize(ResIdxFromType(ResourceType::Count));
+
   this->comp_perfs.resize(comp_num);
   this->path_perfs.resize(gc_name_to_idx.size());
 
+  // resize y_hat
   // loop on components
   for(std::size_t i = 0; i < comp_num; ++i)
   {
     solution_data.y_hat[i].resize(res_type_idx_count);
-
     // loop on type of resources
     for(std::size_t j = 0; j < res_type_idx_count; ++j)
     {
@@ -75,10 +89,21 @@ Solution::read_solution_from_file(
     }
   }
 
+  // resize n_used_resources and dt_selected_resources
+  for(std::size_t j = 0; j < res_type_idx_count-1; ++j)
+  {
+    solution_data.n_used_resources[j].resize(all_resources.get_number_resources(j));
+    dt_selected_resources[j].resize(cls[j].size());
+  }
+
+  Logger::Debug("solution::read_solution_from_file: Data structure resized!");
+
   std::size_t comp_idx;
   std::size_t res_type_idx;
   std::size_t part_idx;
   std::size_t res_idx;
+
+  Logger::Debug("solution::read_solution_from_file: Starting reading file...");
 
   for(const auto& [comp, comp_data] : configuration_file.at("components").items())
   {
@@ -113,9 +138,11 @@ Solution::read_solution_from_file(
           }
           else // Edge or VM
           {
-            solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = static_cast<size_t>(res_data.at("number"));
+            const auto number = static_cast<size_t>(res_data.at("number"));
+            solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = number;
+            solution_data.n_used_resources[res_type_idx][res_idx] = number;
+            dt_selected_resources[res_type_idx][cl_name_to_idx[res_type_idx].at(cl)] = std::make_pair(true, res_idx);
           }
-
           solution_data.used_resources[comp_idx].emplace_back(part_idx, res_type_idx, res_idx);
         }
       }
@@ -138,6 +165,8 @@ Solution::read_solution_from_file(
   }
 
   total_cost = configuration_file.at("total_cost").get<CostType>();
+
+  return dt_selected_resources;
 }
 
 nl::json

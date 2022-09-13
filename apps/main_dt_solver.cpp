@@ -46,7 +46,7 @@ main(int argc, char** argv)
     throw std::runtime_error("Can't open " + basic_config_filepath.string() + " file. Make sure that the path is correct, and the format is json");
   }
 
-  std::string output_dir = "OutputFiles/";
+  std::string output_dir = "OutputFilesDT/";
   fs::create_directory(output_dir);
 
   Timings::Chrono my_chrono;
@@ -94,7 +94,19 @@ main(int argc, char** argv)
     const auto& sols = elite_result.get_solutions();
     for(size_t rk = 0; rk < sols.size(); ++rk)
     {
-      const std::string sol_output_file = output_dir + "Sol_rk" + std::to_string(rk) + suffix_sol;
+      std::string infoSol_output_file, sol_output_file;
+
+      if(rk == 0)
+      {
+        infoSol_output_file = output_dir + "InfoSol" + suffix_sol;
+        sol_output_file = output_dir + "Sol" + suffix_sol;
+      }
+      else
+      {
+        infoSol_output_file = output_dir + "InfoSol_rk" + std::to_string(rk) + suffix_sol;
+        sol_output_file = output_dir + "Sol_rk" + std::to_string(rk) + suffix_sol;
+      }
+
       elite_result.print_solution(system, sol_output_file, rk);
 
       nl::json InfoSol;
@@ -109,8 +121,6 @@ main(int argc, char** argv)
 
       InfoSol["Rank"] = rk;
       InfoSol["SolCost"] = sols[rk].get_cost();
-
-      const std::string infoSol_output_file = output_dir + "InfoSol_rk" + std::to_string(rk) + suffix_sol;
 
       std::ofstream o(infoSol_output_file);
       o << std::setw(4) << InfoSol << std::endl;

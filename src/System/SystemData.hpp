@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,6 +109,10 @@ class SystemData
     const std::vector<std::vector<ComputationalLayer>>&
     get_cls() const {return cls;}
 
+    /** cl_name_to_idx getter */
+    const std::vector<std::unordered_map<std::string, std::size_t>>
+    get_cl_name_to_idx() const {return cl_name_to_idx;}
+
     /** resources getter */
     const AllResources&
     get_all_resources() const {return all_resources;}
@@ -116,6 +120,10 @@ class SystemData
     /** res_name_to_type_and_idx getter */
     const std::unordered_map<std::string, std::pair<ResourceType, std::size_t>>&
     get_res_name_to_type_and_idx() const {return res_name_to_type_and_idx;}
+
+    /** dt_selected_resources getter */
+    const DTSelectedResourcesType&
+    get_dt_selected_resources() const {return dt_selected_resources;}
 
     /** compatibility matrix getter */
     const CompatibilityMatrixType&
@@ -243,6 +251,15 @@ class SystemData
     */
     std::vector<std::vector<ComputationalLayer>> cls;
 
+    /** Object to store map from computational layers to index.
+    *
+    *   cl_name_to_idx[i] store the maps from layers containing resources out of
+    *   type i (0,1 or 2 i.e. ResourceType::Edge, ResourceType::VM or
+    *   ResourceType::Faas) to the correspondent indexed.
+    */
+    std::vector<std::unordered_map<std::string, size_t>>
+    cl_name_to_idx;
+
     /** Object storing all the resources */
     AllResources all_resources;
 
@@ -251,7 +268,18 @@ class SystemData
     *   knowing its name.
     */
     std::unordered_map<std::string, std::pair<ResourceType, std::size_t>>
-      res_name_to_type_and_idx;
+    res_name_to_type_and_idx;
+
+    /** For each [ResourceType::Edge/VM, ComputationalLayer idx] save a pair<bool, size_t>
+    *   to indicate whether the specific layer has been selected in a solution
+    *   or not.
+    *
+    *   This is needed at Run-time, to keep track of the selected solution at
+    *   Design-Time: if in a layer I select a resource at design-time, at run-time
+    *   I can't choose another resource at that layer. FaaS layer are not tracked,
+    *   since they are all located in a single one.
+    */
+    DTSelectedResourcesType dt_selected_resources;
 
     /** Object storing the compatibility matrix */
     CompatibilityMatrixType compatibility_matrix;
@@ -295,6 +323,10 @@ SystemData::initialize_resources(const nl::json& resources_json)
   for(const auto& [cl, data] : resources_json.items())
   {
     this->cls[ResIdxFromType(Type)].emplace_back(cl, Type);
+    cl_name_to_idx[ResIdxFromType(Type)].emplace(
+      cl,
+      cl_name_to_idx[ResIdxFromType(Type)].size()
+    );
 
     for(const auto& [res_name, res_data] : data.items())
     {
@@ -348,7 +380,13 @@ SystemData::initialize_resources<ResourceType::Faas>
       continue;
     }
 
+    // key is really a computationallayers!
+
     this->cls[ResIdxFromType(ResourceType::Faas)].emplace_back(key, ResourceType::Faas); // only one computational layer for faas!
+    cl_name_to_idx[ResIdxFromType(ResourceType::Faas)].emplace(
+      key,
+      cl_name_to_idx[ResIdxFromType(ResourceType::Faas)].size()
+    );
 
     for(const auto& [res_name, res_data] : data.items())
     {

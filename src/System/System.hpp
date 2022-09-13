@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,8 @@ namespace Space4AI
 {
 namespace nl = nlohmann;
 
+class Solution;
+
 /** Class to store the general System object.
 *
 *   Class to store all the data structures included in SystemData plus
@@ -52,8 +54,22 @@ class System
     *
     *   \param system_file String containing the directory of the .json file
     *                      that describes the System
+    *   \param solution_data
     */
     void read_configuration_file(const std::string& system_file);
+
+    /** Method to read the .json file that describes
+    *   the System and convert it to a nl::json object.
+    *
+    *   \param system_file String containing the directory of the .json file
+    *                      that describes the System
+    *   \param solution_data SolutionData object used for dt_selected_resources.
+    */
+    Solution
+    read_configuration_file(
+      const std::string& system_file,
+      const std::string& dt_solution_file
+    );
 
     /** performance getter */
     const PerformanceType&

@@ -24,6 +24,7 @@ Copyright 2021 AI-SPRINT
 */
 
 #include "src/System/System.hpp"
+#include "src/Solution/Solution.hpp"
 
 namespace Space4AI
 {
@@ -59,7 +60,7 @@ System::read_configuration_file(const std::string& system_file)
   }
   else if(configuration_file.contains("Performance"))
   {
-//#warning Actually also here you can have only static models, but it depends on the PerfModel 
+//#warning Actually also here you can have only static models, but it depends on the PerfModel
 //At the moment I just set DynamicPerfModels to true
     this->dynamicPerfModels = true;
     Logger::Info("****** READING PERFORMANCE MODELS... ******");
@@ -71,6 +72,18 @@ System::read_configuration_file(const std::string& system_file)
     Logger::Error("*System::read_configuration_file(...)*: Performance field (or DemandMatrix field, for old configuration) not present in json file");
     throw std::invalid_argument("*System::read_configuration_file(...)*: Performance field (or DemandMatrix field, for old configuration) not present in json file");
   }
+}
+
+Solution
+System::read_configuration_file(
+  const std::string& system_file,
+  const std::string& dt_solution_file
+)
+{
+  read_configuration_file(system_file);
+  Solution sol;
+  system_data.dt_selected_resources = sol.read_solution_from_file(dt_solution_file, *this);
+  return sol;
 }
 
 void

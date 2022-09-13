@@ -4,6 +4,11 @@
     "config/LargeScale/15-components/instance1/system_description1.json"
   ],
 
+  "DTSolutions" : [
+    "OutputFilesDT/Sol_LargeScale_5-components_instance1_system_description1.json",
+    "OutputFilesDT/Sol_LargeScale_15-components_instance1_system_description1.json"
+  ],
+
   "Algorithm" : {
     "n_iterations" : 5000,
     "max_num_sols" : 1,
@@ -11,7 +16,7 @@
   },
 
   "Logger" : {
-    "priority" : 5,
+    "priority" : 2,
     "terminal_stream" : false,
     "file_stream" : false
   }

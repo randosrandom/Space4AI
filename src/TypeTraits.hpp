@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -134,6 +134,18 @@ using UsedResourcesOrderedType =
 */
 using UsedResourcesNumberType =
   std::vector<std::vector<size_t>>;
+
+/** For each [ResourceType::Edge/VM, ComputationalLayer idx] save a pair<bool, size_t>
+*   to indicate whether the specific layer has been selected in a solution
+*   or not.
+*
+*   This is needed at Run-time, to keep track of the selected solution at
+*   Design-Time: if in a layer I select a resource at design-time, at run-time
+*   I can't choose another resource at that layer. FaaS layer are not tracked,
+*   since they are all located in a single one.
+*/
+using DTSelectedResourcesType =
+  std::vector<std::vector<std::pair<bool, size_t>>>;
 
 /** Function that converts a ResourceType::member to its corresponding index
 *

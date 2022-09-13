@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ class Solution
     */
     Solution():
       feasibility(false),
-      total_cost(-1)
+      total_cost(-1.0)
     {}
 
     /** Method that reads the configuration of the Solution, if you want to load
@@ -56,10 +56,14 @@ class Solution
     *
     *   \param file String containing the directory of the .json file
     *               that describes the configuration of the Solution
-    *
     *   \param system Object containing all the data structures of the System
+    *
+    *   \return dt_selected_resources: return an objext of type DTSelectedResourcesType
+    *           that stores the resources selected at each layer (see
+    *           SystemData.dt_selected_resources for further info)
     */
-    void read_solution_from_file(
+    DTSelectedResourcesType
+    read_solution_from_file(
       const std::string& file,
       const System& system
     );

@@ -166,6 +166,7 @@ RandomGreedyDT::create_random_initial_solution(
   const auto& all_resources = system_data.get_all_resources();
   const auto& comp_name_to_idx = system_data.get_comp_name_to_idx();
   const auto& compatibility_matrix = system_data.get_compatibility_matrix();
+  const auto& dt_selected_resources_system = system_data.get_dt_selected_resources();
   Logger::Debug("create_random_initial_solution: Initializing and resizing members ...");
   //declare solution members
   YHatType y_hat;
@@ -173,13 +174,14 @@ RandomGreedyDT::create_random_initial_solution(
   UsedResourcesNumberType n_used_resources;
   const size_t comp_num = comp_name_to_idx.size();
   const size_t res_type_idx_count = ResIdxFromType(ResourceType::Count);
+  // resize y_hat, used_resources
+  y_hat.resize(comp_num);
+  used_resources.resize(comp_num);
   //resize n_used_resources
   n_used_resources.resize(2); // Edge, VM (don't like the two ...)
   n_used_resources[ResIdxFromType(ResourceType::Edge)].resize(all_resources.get_number_resources(ResIdxFromType(ResourceType::Edge))); // Index of Edge must be 0
   n_used_resources[ResIdxFromType(ResourceType::VM)].resize(all_resources.get_number_resources(ResIdxFromType(ResourceType::VM)));    // Index of VM must be 1
-  // resize y_hat
-  y_hat.resize(comp_num);
-  used_resources.resize(comp_num);
+
 
   //loop on components
   for(size_t i = 0; i < comp_num; ++i)
@@ -213,7 +215,7 @@ RandomGreedyDT::create_random_initial_solution(
     }
     else
     {
-      candidate_resources[i].resize(n_res, false);  // other we have to select the candidate_resources
+      candidate_resources[i].resize(n_res, false);  // otherwise we have to select the candidate_resources, one for each layer
     }
   }
 
@@ -223,22 +225,33 @@ RandomGreedyDT::create_random_initial_solution(
 
   for(size_t i = 0; i < res_type_idx_count - 1; ++i) // Faas already selected!
   {
-    {
       Logger::Trace("create_random_initial_solution: edge or VM resource");
 
       //loop over the cls
       for(size_t j = 0; j < cls[i].size(); ++j)
       {
-        //pick a random resource of the cl
-        const std::vector<size_t> res_idxs = cls[i][j].get_res_idxs();
-        const size_t n_res = res_idxs.size();
-        std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
-        const size_t random_res_idx = res_idxs[dist(rng)];
-        candidate_resources[i][random_res_idx] = true;
-        Logger::Trace("create_random_initial_solution:  selecting resource " + std::to_string(random_res_idx) + " of type " + std::to_string(i));
+        if(dt_selected_resources_system.size() > 0 && dt_selected_resources_system[i][j].first)
+        {
+          const auto res_idx = dt_selected_resources_system[i][j].second;
+          Logger::Trace(
+            "create_random_initial_solution: setting as Candidate resource one that has been already selected at Design time..."
+            "resource_type " + std::to_string(i) + " resource index: " + std::to_string(res_idx));
+          candidate_resources[i][res_idx] = true;
+        }
+        else
+        {
+          //pick a random resource of the cl
+          const std::vector<size_t> res_idxs = cls[i][j].get_res_idxs();
+          const size_t n_res = res_idxs.size();
+          std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
+          const size_t random_res_idx = res_idxs[dist(rng)];
+          candidate_resources[i][random_res_idx] = true;
+          Logger::Trace(
+            "create_random_initial_solution: selecting Random Candidate resource..."
+            "resource_type: " + std::to_string(i) + " res_idx: " + std::to_string(random_res_idx));
+        }
       }
     }
-  }
 
   //Assign components
   //loop over components
@@ -290,7 +303,7 @@ RandomGreedyDT::create_random_initial_solution(
       //update used resources and y_hat
       used_resources[comp_idx].emplace_back(part_idx, random_resource.first, random_resource.second);
       y_hat[comp_idx][random_resource.first][part_idx][random_resource.second] = 1;
-      Logger::Trace("create_random_initial_solution: Updated y, y_hat and used_resources");
+        Logger::Trace("create_random_initial_solution: Updated y, y_hat and used_resources");
     }
   }
 

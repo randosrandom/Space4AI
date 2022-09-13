@@ -84,6 +84,7 @@ SystemData::read_json(const nl::json& configuration_file)
 
   Logger::Info("Resizing cls...");
   this->cls.resize(ResIdxFromType(ResourceType::Count));
+  this->cl_name_to_idx.resize(ResIdxFromType(ResourceType::Count));
   Logger::Info("Done!");
   bool at_least_one_resource_type = false;
 
