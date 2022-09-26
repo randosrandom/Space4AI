@@ -37,7 +37,7 @@ main(int argc, char** argv)
 
   // initialize pybind11
   pybind11::scoped_interpreter guard{};
-  
+
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     std::cout << std::endl;
@@ -49,7 +49,8 @@ main(int argc, char** argv)
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
     my_chrono.start();
-    const auto elite_result = sp::RandomGreedyDT::random_greedy(
+    sp::RandomGreedyDT rg;
+    const auto elite_result = rg.random_greedy(
       system,
       basic_config.at("Algorithm").at("n_iterations").get<size_t>(),
       basic_config.at("Algorithm").at("max_num_sols").get<size_t>(),

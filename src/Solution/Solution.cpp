@@ -23,11 +23,13 @@ Copyright 2021 AI-SPRINT
 * \author Giulia Mazzilli
 */
 
+#include <algorithm>
+
 #include "src/Solution/Solution.hpp"
 
 namespace Space4AI
 {
-DTSelectedResourcesType
+void
 Solution::read_solution_from_file(
   const std::string& file_run,
   const System& system
@@ -42,9 +44,6 @@ Solution::read_solution_from_file(
     Logger::Error("Exiting without opening the solution...");
     throw std::runtime_error(err_message);
   }
-
-  DTSelectedResourcesType dt_selected_resources;
-  dt_selected_resources.resize(ResIdxFromType(ResourceType::Count));
 
   Logger::Info("solution::read_solution_from_file: Reading Design Time Solution...");
 
@@ -93,8 +92,11 @@ Solution::read_solution_from_file(
   for(std::size_t j = 0; j < res_type_idx_count-1; ++j)
   {
     solution_data.n_used_resources[j].resize(all_resources.get_number_resources(j));
-    dt_selected_resources[j].resize(cls[j].size());
   }
+
+  // resize selected_resources.selected_edge and sele
+  selected_resources.selected_edge.resize(solution_data.n_used_resources[ResIdxFromType(ResourceType::Edge)].size());
+  selected_resources.selected_vms.resize(cls[ResIdxFromType(ResourceType::VM)].size());
 
   Logger::Debug("solution::read_solution_from_file: Data structure resized!");
 
@@ -141,7 +143,16 @@ Solution::read_solution_from_file(
             const auto number = static_cast<size_t>(res_data.at("number"));
             solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = number;
             solution_data.n_used_resources[res_type_idx][res_idx] = number;
-            dt_selected_resources[res_type_idx][cl_name_to_idx[res_type_idx].at(cl)] = std::make_pair(true, res_idx);
+
+            if(res_type_idx ==  ResIdxFromType(ResourceType::Edge))
+            {
+              selected_resources.selected_edge[res_idx] = true;
+            }
+            else // VM
+            {
+              selected_resources.selected_vms[cl_name_to_idx[ResIdxFromType(ResourceType::VM)].at(cl)] =
+                std::pair<bool, size_t>{true, res_idx};
+            }
           }
           solution_data.used_resources[comp_idx].emplace_back(part_idx, res_type_idx, res_idx);
         }
@@ -163,10 +174,7 @@ Solution::read_solution_from_file(
       throw("In *Solution::read_configuration_file(...): path response_time not a number ... At the moment program crash");
     }
   }
-
   total_cost = configuration_file.at("total_cost").get<CostType>();
-
-  return dt_selected_resources;
 }
 
 nl::json
@@ -181,7 +189,7 @@ Solution::to_json(const System& system) const
   nl::json jcomponents;
 
   //loop over components
-  for(std::size_t i = 0; i < solution_data.used_resources.size(); ++i)
+  for(std::size_t i = 0; i < components.size(); ++i)
   {
     //get component name
     const auto& comp_name = components[i].get_name();
@@ -304,6 +312,36 @@ Solution::print_solution(const System& system, const std::string& path) const
   outputsol << std::setw(4) << jsolution << std::endl;
   outputsol.close();
   Logger::Info("Solution saved with success at: " + path);
+}
+
+void
+Solution::set_selected_resources(const System& system)
+{
+  const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
+  const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
+  const size_t num_cls_vm = system.get_system_data().get_cls()[vm_type_idx].size();
+
+  // Selected EDGE
+  selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
+  std::copy(
+    solution_data.n_used_resources[edge_type_idx].begin(),
+    solution_data.n_used_resources[edge_type_idx].end(),
+    selected_resources.selected_edge.begin()
+  );
+
+  // Selected VMs
+  selected_resources.selected_vms.resize(num_cls_vm);
+  const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& cl_name_to_idx_vm = system.get_system_data().get_cl_name_to_idx()[vm_type_idx];
+  for(size_t res_idx = 0; res_idx < solution_data.n_used_resources[vm_type_idx].size(); ++res_idx)
+  {
+    if(solution_data.n_used_resources[vm_type_idx][res_idx] > 0)
+    {
+      const auto& cl_name = all_resources.get_cl_name(ResourceType::VM, res_idx);
+      const size_t cl_idx = cl_name_to_idx_vm.at(cl_name);
+      selected_resources.selected_vms[cl_idx] = std::make_pair(true, res_idx);
+    }
+  }
 }
 
 bool

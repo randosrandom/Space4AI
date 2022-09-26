@@ -58,24 +58,15 @@ class SolutionData
 
     /** y_hat getter */
     const YHatType&
-    get_y_hat() const
-    {
-      return y_hat;
-    }
+    get_y_hat() const { return y_hat; }
 
     /** used_resources getter */
     const UsedResourcesOrderedType&
-    get_used_resources() const
-    {
-      return used_resources;
-    }
+    get_used_resources() const { return used_resources; }
 
     /** n_used_resources getter */
     const UsedResourcesNumberType&
-    get_n_used_resources() const
-    {
-      return n_used_resources;
-    }
+    get_n_used_resources() const { return n_used_resources; }
 
     /** default destructor */
     ~SolutionData() = default;

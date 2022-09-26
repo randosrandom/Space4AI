@@ -74,18 +74,6 @@ System::read_configuration_file(const std::string& system_file)
   }
 }
 
-Solution
-System::read_configuration_file(
-  const std::string& system_file,
-  const std::string& dt_solution_file
-)
-{
-  read_configuration_file(system_file);
-  Solution sol;
-  system_data.dt_selected_resources = sol.read_solution_from_file(dt_solution_file, *this);
-  return sol;
-}
-
 void
 System::initialize_performance(const nl::json& performance_json)
 {

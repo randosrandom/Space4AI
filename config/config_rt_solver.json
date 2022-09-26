@@ -12,7 +12,7 @@
   "Algorithm" : {
     "n_iterations" : 5000,
     "max_num_sols" : 1,
-    "reproducibility" : false
+    "reproducibility" : true
   },
 
   "Logger" : {

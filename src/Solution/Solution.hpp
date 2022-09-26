@@ -31,6 +31,7 @@ Copyright 2021 AI-SPRINT
 #include <fstream>
 #include <limits>
 
+#include "src/Solution/SelectedResources.hpp"
 #include "src/System/System.hpp"
 #include "src/Performance/SystemPE.hpp"
 
@@ -58,11 +59,8 @@ class Solution
     *               that describes the configuration of the Solution
     *   \param system Object containing all the data structures of the System
     *
-    *   \return dt_selected_resources: return an objext of type DTSelectedResourcesType
-    *           that stores the resources selected at each layer (see
-    *           SystemData.dt_selected_resources for further info)
     */
-    DTSelectedResourcesType
+    void
     read_solution_from_file(
       const std::string& file,
       const System& system
@@ -120,10 +118,14 @@ class Solution
     const UsedResourcesNumberType&
     get_n_used_resources() const {return solution_data.n_used_resources;}
 
+    /** selected resource getter */
+    const SelectedResources&
+    get_selected_resources() const {return selected_resources;}
+
     /** y_hat setter */
     template <class T>
     void
-    set_y_hat(T&& y_h) { solution_data.y_hat = std::forward<T>(y_h); }
+    set_y_hat(T&& y_h) {solution_data.y_hat = std::forward<T>(y_h);}
 
     /** used_resources setter
     *
@@ -134,22 +136,17 @@ class Solution
     void
     set_used_resources(T&& u_r)
     {
-      for(auto& vec : u_r)
-      {
-        std::sort(vec.begin(), vec.end());
-      }
-
+      for(auto& vec : u_r) {std::sort(vec.begin(), vec.end());}
       solution_data.used_resources = std::forward<T>(u_r);
     }
 
     /** n_used_resources setter */
     template <class T>
     void
-    set_n_used_resources(T&& n_u_r) { solution_data.n_used_resources = std::forward<T>(n_u_r); }
+    set_n_used_resources(T&& n_u_r) {solution_data.n_used_resources = std::forward<T>(n_u_r);}
 
-    /** total_cost setter */
     void
-    set_total_cost(CostType cost) {total_cost = cost;}
+    set_selected_resources(const System& system);
 
     /** "<" operator definition:
     *   the solutions will be ordered by cost, meaning that a Solution with a smaller
@@ -243,9 +240,7 @@ class Solution
     /** feasibility of the Solution: true if feasible, false otherwise */
     bool feasibility;
 
-    /** SolutionData object storing:
-    *   SolutionData.y_hat, SolutionData.used_resources, and SolutionData.n_used_resources
-    */
+    /** SolutionData object storing y_hat, used_resources, n_used_resources */
     SolutionData solution_data;
 
     /** Cost of the Solution */
@@ -266,6 +261,11 @@ class Solution
 
     /** paths performance times */
     std::vector<TimeType> path_perfs;
+
+    /** SelectedResources object.
+    *   Store the selected edge and vm resources, if the solution is feasible.
+    */
+    SelectedResources selected_resources;
 
 };
 

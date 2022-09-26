@@ -81,8 +81,10 @@ main(int argc, char** argv)
     system.read_configuration_file(system_config_file);
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
+    sp::RandomGreedyDT rg;
+
     my_chrono.start();
-    const auto elite_result = sp::RandomGreedyDT::random_greedy(
+    const auto elite_result = rg.random_greedy(
       system, n_iterations, max_num_sols, reproducibility
     );
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
@@ -139,8 +141,6 @@ main(int argc, char** argv)
     std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
     std::cout << "Random Greedy running time (in seconds): " << algorithm_run_time << std::endl;
     std::cout << std::endl;
-
   }
-
   return 0;
 }

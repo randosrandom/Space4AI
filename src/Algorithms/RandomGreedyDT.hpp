@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +39,11 @@ class RandomGreedyDT
 {
   public:
 
+    RandomGreedyDT() = default;
+
+    RandomGreedyDT(const SelectedResources& selected_resources_)
+    : selected_resources(selected_resources_) {}
+
     /** Method to generate random greedy solutions
     *
     *   \param system Object containing all the data structures of the System
@@ -48,7 +53,6 @@ class RandomGreedyDT
     * 	\param reproducibility_flag Flag to make the random greedy solutions reproducible
     *   \return EliteResult class containing num_top_sols solutions ordered by cost
     */
-    static
     EliteResult random_greedy(
       const System& system,
       std::size_t max_it,
@@ -67,7 +71,6 @@ class RandomGreedyDT
     *   \param system Object containing all the data structures of the System
     *   \return A Solution object
     */
-    static
     Solution step(const System& system);
 
     /** Method to create the initial random Solution
@@ -78,7 +81,6 @@ class RandomGreedyDT
     *   \param system Object containing all the data structures of the System
     *   \return Solution object
     */
-    static
     Solution create_random_initial_solution(
       const System& system
     );
@@ -92,7 +94,6 @@ class RandomGreedyDT
     *   \param system Object describing the System under analysis
     *   \return Updated Solution with reduced cluster
     */
-    static
     Solution reduce_cluster_size(
       const Solution& solution,
       const size_t res_type_idx,
@@ -104,15 +105,16 @@ class RandomGreedyDT
 
     /* Initial seed for the random device */
     inline static const size_t fixed_initial_seed = 121298;
-
     /* Additional factor for the random device seed */
     inline static const size_t seed_adding_factor = 1000;
-
     /* Seed for the random device */
     inline static size_t current_seed = 0;
-
     /* Flag to make the random greedy solutions reproducible */
     inline static bool reproducibility = true;
+
+    /** Previously selected resources (e.g., at design-time) on Edge and VM */
+    SelectedResources selected_resources;
+
 
 };
 

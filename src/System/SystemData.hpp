@@ -110,7 +110,7 @@ class SystemData
     get_cls() const {return cls;}
 
     /** cl_name_to_idx getter */
-    const std::vector<std::unordered_map<std::string, std::size_t>>
+    const std::vector<std::unordered_map<std::string, std::size_t>>&
     get_cl_name_to_idx() const {return cl_name_to_idx;}
 
     /** resources getter */
@@ -120,10 +120,6 @@ class SystemData
     /** res_name_to_type_and_idx getter */
     const std::unordered_map<std::string, std::pair<ResourceType, std::size_t>>&
     get_res_name_to_type_and_idx() const {return res_name_to_type_and_idx;}
-
-    /** dt_selected_resources getter */
-    const DTSelectedResourcesType&
-    get_dt_selected_resources() const {return dt_selected_resources;}
 
     /** compatibility matrix getter */
     const CompatibilityMatrixType&
@@ -269,17 +265,6 @@ class SystemData
     */
     std::unordered_map<std::string, std::pair<ResourceType, std::size_t>>
     res_name_to_type_and_idx;
-
-    /** For each [ResourceType::Edge/VM, ComputationalLayer idx] save a pair<bool, size_t>
-    *   to indicate whether the specific layer has been selected in a solution
-    *   or not.
-    *
-    *   This is needed at Run-time, to keep track of the selected solution at
-    *   Design-Time: if in a layer I select a resource at design-time, at run-time
-    *   I can't choose another resource at that layer. FaaS layer are not tracked,
-    *   since they are all located in a single one.
-    */
-    DTSelectedResourcesType dt_selected_resources;
 
     /** Object storing the compatibility matrix */
     CompatibilityMatrixType compatibility_matrix;

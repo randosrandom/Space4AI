@@ -76,7 +76,6 @@ main(int argc, char** argv)
     my_chrono.start();
     const std::string system_config_file = basic_config.at("ConfigFiles")[i].get<std::string>();
     const std::string solution_config_file = basic_config.at("DTSolutions")[i].get<std::string>();
-
     if(enable_file_output)
     {
       std::string filename_ = system_config_file;
@@ -85,12 +84,18 @@ main(int argc, char** argv)
       std::replace(filename_.begin(), filename_.end(), '/', '_');
       Logger::EnableFileOutput(true, filename_);
     }
-
-    system.read_configuration_file(system_config_file, solution_config_file);
+    system.read_configuration_file(system_config_file);
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
     my_chrono.start();
-    const auto elite_result = sp::RandomGreedyDT::random_greedy(
+    sp::Solution sol;
+    sol.read_solution_from_file(solution_config_file, system);
+    const double sol_read_time = my_chrono.wallTimeNow() * 1e-6;
+
+    sp::RandomGreedyDT rg(sol.get_selected_resources());
+
+    my_chrono.start();
+    const auto elite_result = rg.random_greedy(
       system, n_iterations, max_num_sols, reproducibility
     );
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;

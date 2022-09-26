@@ -5,13 +5,13 @@
   ],
 
   "Algorithm" : {
-    "n_iterations" : 5000,
+    "n_iterations" : 100,
     "max_num_sols" : 1,
-    "reproducibility" : false
+    "reproducibility" : true
   },
 
   "Logger" : {
-    "priority" : 5,
+    "priority" : 1,
     "terminal_stream" : false,
     "file_stream" : false
   }

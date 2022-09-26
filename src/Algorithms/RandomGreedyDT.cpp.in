@@ -71,28 +71,30 @@ RandomGreedyDT::random_greedy(
     std::cout << message << std::endl;
     omp_set_num_threads(1);
   }
-
 #endif // PARALLELIZATION
 
   MY_PRAGMA(omp parallel for default(none) shared(max_it, num_top_sols, elite, system) schedule(dynamic))
-    for(size_t it = 0; it < max_it; ++it)
-    {
-      Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
-      Solution new_sol(step(system)); // using copy elision
+  for(size_t it = 0; it < max_it; ++it)
+  {
+    Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
+    Solution new_sol(step(system)); // using copy elision
 
-      if(new_sol.get_feasibility())
-      {
-        MY_PRAGMA(omp critical)
-        elite.add(std::move(new_sol));
-        Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
-      }
+    if(new_sol.get_feasibility())
+    {
+      new_sol.set_selected_resources(system);
+      MY_PRAGMA(omp critical)
+      elite.add(std::move(new_sol));
+      Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
     }
+  }
   Logger::Info("Finished Random Greedy DT algorithm");
   Logger::Info("Number of top feasible solutions found: " + std::to_string(elite.get_size()));
+
 #ifdef PARALLELIZATION
   elite.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
   omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
 #endif
+
   return elite;
 }
 
@@ -166,7 +168,10 @@ RandomGreedyDT::create_random_initial_solution(
   const auto& all_resources = system_data.get_all_resources();
   const auto& comp_name_to_idx = system_data.get_comp_name_to_idx();
   const auto& compatibility_matrix = system_data.get_compatibility_matrix();
-  const auto& dt_selected_resources_system = system_data.get_dt_selected_resources();
+
+  const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
+  const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
+
   Logger::Debug("create_random_initial_solution: Initializing and resizing members ...");
   //declare solution members
   YHatType y_hat;
@@ -179,9 +184,8 @@ RandomGreedyDT::create_random_initial_solution(
   used_resources.resize(comp_num);
   //resize n_used_resources
   n_used_resources.resize(2); // Edge, VM (don't like the two ...)
-  n_used_resources[ResIdxFromType(ResourceType::Edge)].resize(all_resources.get_number_resources(ResIdxFromType(ResourceType::Edge))); // Index of Edge must be 0
-  n_used_resources[ResIdxFromType(ResourceType::VM)].resize(all_resources.get_number_resources(ResIdxFromType(ResourceType::VM)));    // Index of VM must be 1
-
+  n_used_resources[edge_type_idx].resize(all_resources.get_number_resources(edge_type_idx)); // Index of Edge must be 0
+  n_used_resources[vm_type_idx].resize(all_resources.get_number_resources(vm_type_idx));    // Index of VM must be 1
 
   //loop on components
   for(size_t i = 0; i < comp_num; ++i)
@@ -219,39 +223,53 @@ RandomGreedyDT::create_random_initial_solution(
     }
   }
 
-  //loop on computational layers and select one resource for each cl (for faas all resources are already selected)
-  //loop on resource type
+  // Selecting candidate_resources (Edge and VM, Faas already selected all)
   Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
 
-  for(size_t i = 0; i < res_type_idx_count - 1; ++i) // Faas already selected!
-  {
-      Logger::Trace("create_random_initial_solution: edge or VM resource");
+  const auto& selected_edge = selected_resources.get_selected_edge();
+  const auto& selected_vms = selected_resources.get_selected_vms();
 
-      //loop over the cls
-      for(size_t j = 0; j < cls[i].size(); ++j)
-      {
-        if(dt_selected_resources_system.size() > 0 && dt_selected_resources_system[i][j].first)
-        {
-          const auto res_idx = dt_selected_resources_system[i][j].second;
-          Logger::Trace(
-            "create_random_initial_solution: setting as Candidate resource one that has been already selected at Design time..."
-            "resource_type " + std::to_string(i) + " resource index: " + std::to_string(res_idx));
-          candidate_resources[i][res_idx] = true;
-        }
-        else
-        {
-          //pick a random resource of the cl
-          const std::vector<size_t> res_idxs = cls[i][j].get_res_idxs();
-          const size_t n_res = res_idxs.size();
-          std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
-          const size_t random_res_idx = res_idxs[dist(rng)];
-          candidate_resources[i][random_res_idx] = true;
-          Logger::Trace(
-            "create_random_initial_solution: selecting Random Candidate resource..."
-            "resource_type: " + std::to_string(i) + " res_idx: " + std::to_string(random_res_idx));
-        }
-      }
+  // EDGE RESOURCES
+  if(selected_edge.size() > 0)  // If I provided old selected resources
+  {
+    candidate_resources[edge_type_idx] = selected_edge;
+  }
+  else // randomly select a resource for each cls
+  {
+    for(size_t cl_idx=0; cl_idx < cls[edge_type_idx].size(); ++cl_idx)
+    {
+      //pick a random resource of the cl
+      const std::vector<size_t> res_idxs = cls[edge_type_idx][cl_idx].get_res_idxs();
+      const size_t n_res = res_idxs.size();
+      std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
+      const size_t random_res_idx = res_idxs[dist(rng)];
+      candidate_resources[edge_type_idx][random_res_idx] = true;
+      Logger::Trace(
+        "create_random_initial_solution: selecting Random Candidate resource..."
+        "resource_type: " + std::to_string(edge_type_idx) + " res_idx: " + std::to_string(random_res_idx));
     }
+  }
+
+  // VM RESOURCES
+  for(size_t cl_idx = 0; cl_idx < cls[vm_type_idx].size(); ++cl_idx)
+  {
+    if(selected_vms.size() > 0 && selected_vms[cl_idx].first)
+    {
+      candidate_resources[vm_type_idx][selected_vms[cl_idx].second] = true;
+    }
+    else
+    {
+      //pick a random resource of the cl
+      const std::vector<size_t> res_idxs = cls[vm_type_idx][cl_idx].get_res_idxs();
+      const size_t n_res = res_idxs.size();
+      std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
+      const size_t random_res_idx = res_idxs[dist(rng)];
+      candidate_resources[vm_type_idx][random_res_idx] = true;
+      Logger::Trace(
+        "create_random_initial_solution: selecting Random Candidate resource..."
+        "resource_type: " + std::to_string(vm_type_idx) + " res_idx: " + std::to_string(random_res_idx));
+    }
+  }
 
   //Assign components
   //loop over components
@@ -303,13 +321,13 @@ RandomGreedyDT::create_random_initial_solution(
       //update used resources and y_hat
       used_resources[comp_idx].emplace_back(part_idx, random_resource.first, random_resource.second);
       y_hat[comp_idx][random_resource.first][part_idx][random_resource.second] = 1;
-        Logger::Trace("create_random_initial_solution: Updated y, y_hat and used_resources");
+      Logger::Trace("create_random_initial_solution: Updated y, y_hat and used_resources");
     }
   }
 
   std::vector<std::vector<bool>> already_updated_cluster_size(2);
-  already_updated_cluster_size[ResIdxFromType(ResourceType::Edge)].resize(all_resources.get_number_resources(ResIdxFromType(ResourceType::Edge)), false);
-  already_updated_cluster_size[ResIdxFromType(ResourceType::VM)].resize(all_resources.get_number_resources(ResIdxFromType(ResourceType::VM)), false);
+  already_updated_cluster_size[edge_type_idx].resize(all_resources.get_number_resources(edge_type_idx), false);
+  already_updated_cluster_size[vm_type_idx].resize(all_resources.get_number_resources(vm_type_idx), false);
   //loop over edge and VM types
   Logger::Debug("create_random_initial_solution: Selecting number of edge and VM resources...");
 
