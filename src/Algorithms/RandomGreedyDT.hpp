@@ -33,8 +33,7 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
-/** Class to define the Random Greedy algorithm to solve the optimization problem
-*/
+/** Class to define the Random Greedy algorithm to solve the optimization problem */
 class RandomGreedyDT
 {
   public:

@@ -170,6 +170,20 @@ class Solution
       const System& system
     ) const;
 
+    /** Method to check if each Partition of the passed component is assigned to exactly one Resource,
+    *   if the Solution is coherent with the SystemData.compatibility_matrix and
+    *   if the number of used resources does not exceed the number of available
+    *   resources.
+    *
+    *   \param system Object containing all the data structures of the System
+    *   \param comp_idx Component index to check
+    *   \return true if the Solution satisfies the constraints, false otherwise
+    */
+    bool preliminary_constraints_check_assignments(
+      const System& system,
+      size_t comp_idx
+    ) const;
+
     /** Method to check if the Solution satisfies the memory constraints.
     *
     *   \param system Object containing all the data structures of the System

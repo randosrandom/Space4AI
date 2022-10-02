@@ -350,45 +350,58 @@ Solution::preliminary_constraints_check_assignments(
 ) const
 {
   bool feasible = true;
-  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
-  const auto& all_resources = system.get_system_data().get_all_resources();
-  const auto& components = system.get_system_data().get_components();
-  const std::size_t tot_comp = components.size();
+  const std::size_t tot_comp = system.get_system_data().get_components().size();
 
   // loop over components
   for(std::size_t comp_idx = 0; comp_idx < tot_comp && feasible; ++comp_idx)
   {
-    std::vector<bool> parts_with_res(components[comp_idx].get_partitions().size(), false);
+    feasible = feasible && preliminary_constraints_check_assignments(system, comp_idx);
+  }
+  return feasible;
+}
 
-    for(auto [part_idx, res_type_idx, res_idx] : solution_data.used_resources[comp_idx])
+bool
+Solution::preliminary_constraints_check_assignments(
+  const System& system,
+  size_t comp_idx
+) const
+{
+  bool feasible = true;
+
+  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+  const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& components = system.get_system_data().get_components();
+
+  std::vector<bool> parts_with_res(components[comp_idx].get_partitions().size(), false);
+
+  for(auto [part_idx, res_type_idx, res_idx] : solution_data.used_resources[comp_idx])
+  {
+    // check that each component partition is assigned to exactly one resource
+    bool already_inserted = parts_with_res[part_idx];
+
+    // check if the parition was inserted and it is compatible
+    if(!already_inserted && compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
     {
-      // check that each component partition is assigned to exactly one resource
-      bool already_inserted = parts_with_res[part_idx];
-
-      // check if the parition was inserted and it is compatible
-      if(!already_inserted && compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
-      {
-        parts_with_res[part_idx] = true;
-
-        // check that the number of resources assigned to each
-        // component partition is at most equal to the number of
-        // available resources of that type
-        // (cheking all the components, in principle only VM should be checked)
-        if(solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] > all_resources.get_number_avail(ResTypeFromIdx(res_type_idx), res_idx))
-        {
-          feasible = false;
-          break;
-        }
-      }
-      else
+      parts_with_res[part_idx] = true;
+      // check that the number of resources assigned to each
+      // component partition is at most equal to the number of
+      // available resources of that type
+      // (cheking all the components, in principle only VM should be checked)
+      if(solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] > all_resources.get_number_avail(ResTypeFromIdx(res_type_idx), res_idx))
       {
         feasible = false;
         break;
       }
     }
+    else
+    {
+      feasible = false;
+      break;
+    }
   }
 
   return feasible;
+
 }
 
 bool
