@@ -407,42 +407,93 @@ Solution::preliminary_constraints_check_assignments(
 bool
 Solution::memory_constraints_check(
   const System& system
-) const
+)
 {
   bool feasible = true;
   const auto& components = system.get_system_data().get_components();
   const auto& all_resources = system.get_system_data().get_all_resources();
-  std::vector<std::vector<DataType>> mem_occupation(
-      ResIdxFromType(ResourceType::Count)
-    );
 
-  for(size_t type_idx = 0; type_idx < mem_occupation.size(); ++type_idx)
+  memory_slack_values.resize(ResIdxFromType(ResourceType::Count));
+
+  // Initialize memort_slack_values
+  for(size_t type_idx = 0; type_idx < ResIdxFromType(ResourceType::Count); ++type_idx)
   {
-    mem_occupation[type_idx].resize(all_resources.get_number_resources(type_idx), 0.0);
+    const auto NaN = std::numeric_limits<DataType>::quiet_NaN();
+    memory_slack_values[type_idx].resize(all_resources.get_number_resources(type_idx), NaN);
   }
 
+  // check memory occupations
   for(size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
   {
     const auto& partitions = components[comp_idx].get_partitions();
 
-    for(auto [part_idx, res_type_idx, res_idx] : solution_data.used_resources[comp_idx])
+    for(auto [p_idx, r_type_idx, r_idx] : solution_data.used_resources[comp_idx])
     {
-      mem_occupation[res_type_idx][res_idx] += partitions[part_idx].get_memory();
-      const auto max_memory = (res_type_idx != ResIdxFromType(ResourceType::Faas)) ?
-        solution_data.n_used_resources[res_type_idx][res_idx] *
-        all_resources.get_memory(ResTypeFromIdx(res_type_idx), res_idx)
-        :
-        all_resources.get_memory(ResTypeFromIdx(res_type_idx), res_idx);
+      if(memory_slack_values[r_type_idx][r_idx] == std::numeric_limits<DataType>::quiet_NaN())
+      {
+        memory_slack_values[r_type_idx][r_idx] = (r_type_idx != ResIdxFromType(ResourceType::Faas)) ?
+          solution_data.n_used_resources[r_type_idx][r_idx] *
+          all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx)
+          :
+          all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx);
+      }
 
-      if(mem_occupation[res_type_idx][res_idx] > max_memory)
+      memory_slack_values[r_type_idx][r_idx] -= partitions[p_idx].get_memory();
+
+      if(memory_slack_values[r_type_idx][r_idx] > 0)
       {
         feasible = false;
         break;
       }
     }
   }
+  return feasible;
+}
+
+bool
+Solution::memory_constraints_check(
+  const System& system,
+  size_t res_type_idx,
+  size_t res_idx
+)
+{
+  bool feasible = true;
+  const auto& components = system.get_system_data().get_components();
+  const auto& all_resources = system.get_system_data().get_all_resources();
+
+  if(memory_slack_values.size())
+  {
+    memory_slack_values[res_type_idx][res_idx] =
+      all_resources.get_memory(ResTypeFromIdx(res_type_idx), res_idx);
+
+    // check memory occupations
+    for(size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
+    {
+      const auto& partitions = components[comp_idx].get_partitions();
+
+      for(auto [p_idx, r_type_idx, r_idx] : solution_data.used_resources[comp_idx])
+      {
+        if(res_type_idx == r_idx && res_idx == r_idx)
+        {
+          memory_slack_values[res_type_idx][res_idx] -= partitions[p_idx].get_memory();
+
+          if(memory_slack_values[res_type_idx][res_idx] > 0)
+          {
+            feasible = false;
+            break;
+          }
+        }
+      }
+    }
+  }
+  else
+  {
+    Logger::Error("memory_constraints_check(res_type_idx, res_idx): memory_slack_values is empty!");
+    throw std::runtime_error("memory_constraints_check(res_type_idx, res_idx): memory_slack_values is empty!");
+  }
 
   return feasible;
+
 }
 
 bool

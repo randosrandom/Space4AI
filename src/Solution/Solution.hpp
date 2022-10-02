@@ -191,7 +191,21 @@ class Solution
     */
     bool memory_constraints_check(
       const System& system
-    ) const;
+    );
+
+    /** Method to check if a specific resource satisfy the memory constraints.
+    *
+    *   \param system Object containing all the data structures of the System
+    *   \param res_type_idx resource type index
+    *   \param res_idx resource index
+    *   \return true if the resource meet the memory constraints
+    */
+    bool
+    memory_constraints_check(
+      const System& system,
+      size_t res_type_idx,
+      size_t res_idx
+    );
 
     /** Method to check that, if a Component Partition object is executed
     *   on a ResourceType::VM or a ResourceType::Faas, all its successors
@@ -254,11 +268,19 @@ class Solution
     /** feasibility of the Solution: true if feasible, false otherwise */
     bool feasibility;
 
+    /** Cost of the Solution */
+    CostType total_cost;
+
     /** SolutionData object storing y_hat, used_resources, n_used_resources */
     SolutionData solution_data;
 
-    /** Cost of the Solution */
-    CostType total_cost;
+    /** SelectedResources object.
+    *   Store the selected edge and vm resources, if the solution is feasible.
+    */
+    SelectedResources selected_resources;
+
+    /* For each resource save the slack memory remaining in the solution */
+    MemoryOccupationType memory_slack_values;
 
     /** For each Component, saves difference between the constraint of max time
     *   and the actual performance time
@@ -276,10 +298,7 @@ class Solution
     /** paths performance times */
     std::vector<TimeType> path_perfs;
 
-    /** SelectedResources object.
-    *   Store the selected edge and vm resources, if the solution is feasible.
-    */
-    SelectedResources selected_resources;
+
 
 };
 

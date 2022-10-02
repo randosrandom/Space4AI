@@ -146,6 +146,11 @@ using UsedResourcesNumberType =
 using SelectedVMType =
   std::vector<std::pair<bool, size_t>>;
 
+/** For each [ResourceType, Resource idx] tracks the memory being used in a solution.
+*/
+using MemoryOccupationType =
+  std::vector<std::vector<DataType>>;
+
 /** Function that converts a ResourceType::member to its corresponding index
 *
 *   \param resType A ResourceType::member
