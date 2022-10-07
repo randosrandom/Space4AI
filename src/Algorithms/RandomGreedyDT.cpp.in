@@ -161,7 +161,7 @@ RandomGreedyDT::create_random_initial_solution(
     rng.seed(dev());
   }
 
-  Solution solution;
+  Solution solution(system);
   const auto& system_data = system.get_system_data();
   const auto& components = system_data.get_components();
   const auto& cls = system_data.get_cls();

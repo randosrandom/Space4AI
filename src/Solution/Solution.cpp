@@ -20,7 +20,6 @@ Copyright 2021 AI-SPRINT
 * \brief Defines the methods of the class Solution.
 *
 * \author Randeep Singh
-* \author Giulia Mazzilli
 */
 
 #include <algorithm>
@@ -29,6 +28,29 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
+Solution::Solution(const System& system):
+  feasibility(false),
+  total_cost(-1)
+{
+  // Here I don't resize solution_data.* objects, since they are constructed by
+  // the external class algorithm. However, here it is worth resizing all the
+  // members that would be initialized during feasibility check, otherwise.
+  const auto comp_size = system.get_system_data().get_components().size();
+  const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& paths_size = system.get_system_data().get_global_constraints().size();
+  // Initialize memory_slack_values
+  memory_slack_values.resize(ResIdxFromType(ResourceType::Count));
+  for(size_t type_idx = 0; type_idx < ResIdxFromType(ResourceType::Count); ++type_idx)
+  {
+    memory_slack_values[type_idx].resize(all_resources.get_number_resources(type_idx), NaN);
+  }
+  time_perfs.local_parts_perfs.resize(comp_size);
+  time_perfs.local_parts_delays.resize(comp_size);
+  time_perfs.comp_perfs.resize(comp_size, 0.0);
+  time_perfs.comp_delays.resize(comp_size-1, NaN);
+  time_perfs.path_perfs.resize(paths_size, 0.0);
+}
+
 void
 Solution::read_solution_from_file(
   const std::string& file_run,
@@ -67,9 +89,6 @@ Solution::read_solution_from_file(
   solution_data.y_hat.resize(comp_num);
   solution_data.used_resources.resize(comp_num);
   solution_data.n_used_resources.resize(ResIdxFromType(ResourceType::Count));
-
-  this->comp_perfs.resize(comp_num);
-  this->path_perfs.resize(gc_name_to_idx.size());
 
   // resize y_hat
   // loop on components
@@ -115,7 +134,7 @@ Solution::read_solution_from_file(
     {
       if(part == "response_time")
       {
-        comp_perfs[comp_idx] = part_data.get<TimeType>();
+        time_perfs.comp_perfs[comp_idx] = part_data.get<TimeType>();
         continue;
       }
 
@@ -166,7 +185,7 @@ Solution::read_solution_from_file(
 
     if(path_data.at("path_response_time").is_number())
     {
-      this->path_perfs[path_idx] = path_data.at("path_response_time").get<TimeType>();
+      time_perfs.path_perfs[path_idx] = path_data.at("path_response_time").get<TimeType>();
     }
     else
     {
@@ -252,7 +271,7 @@ Solution::to_json(const System& system) const
     }
 
     //get response time of the component i
-    jcomponents[comp_name]["response_time"] = comp_perfs[i];
+    jcomponents[comp_name]["response_time"] = time_perfs.comp_perfs[i];
     jcomponents[comp_name]["response_time_threshold"] = local_constraints[i].get_max_res_time();
   }
 
@@ -283,7 +302,7 @@ Solution::to_json(const System& system) const
     //populate the global constraint json
     jgc[path_name]["components"] = jpath_comps;
     //get path_response_time
-    jgc[path_name]["path_response_time"] = path_perfs[k];
+    jgc[path_name]["path_response_time"] = time_perfs.path_perfs[k];
     //get path_response_time_threshold
     jgc[path_name]["path_response_time_threshold"] = global_constraints[k].get_max_res_time();
   }
@@ -412,15 +431,6 @@ Solution::memory_constraints_check(
   bool feasible = true;
   const auto& components = system.get_system_data().get_components();
   const auto& all_resources = system.get_system_data().get_all_resources();
-
-  memory_slack_values.resize(ResIdxFromType(ResourceType::Count));
-
-  // Initialize memort_slack_values
-  for(size_t type_idx = 0; type_idx < ResIdxFromType(ResourceType::Count); ++type_idx)
-  {
-    const auto NaN = std::numeric_limits<DataType>::quiet_NaN();
-    memory_slack_values[type_idx].resize(all_resources.get_number_resources(type_idx), NaN);
-  }
 
   // check memory occupations
   for(size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
@@ -589,132 +599,41 @@ Solution::performance_assignment_check(
 
 bool
 Solution::local_constraints_check(
-  const System& system
-)
+  const System& system)
 {
   bool feasible = true;
   const auto& local_constraints = system.get_system_data().get_local_constraints();
-  comp_perfs.resize(local_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
-  local_slack_values.resize(local_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
 
-  for(size_t i = 0; i < local_constraints.size(); ++i)
+  for(size_t i = 0; i < local_constraints.size() && feasible; ++i)
   {
-    comp_perfs[i] =
-      SystemPE::get_perf_evaluation(
-        local_constraints[i].get_comp_idx(),
-        system,
-        solution_data
-      );
+    time_perfs.compute_local_perf(local_constraints[i].get_comp_idx(), system, solution_data);
 
-    // this takes into account the compute_utilization.
-    // If utiilization > 1, response_time is negative- (get_perf_evaluation return -1)
-    // Check lables of response_time (when is negative, NaN, +inf, max ...)
-    if(comp_perfs[i] < 0)
+    if(isnan(time_perfs.comp_perfs[i]) || time_perfs.comp_perfs[i] > local_constraints[i].get_max_res_time())
     {
       feasible = false;
     }
-    else
-    {
-      this->local_slack_values[i] = local_constraints[i].get_max_res_time() - comp_perfs[i];
-
-      if(this->local_slack_values[i] < 0)
-      {
-        feasible = false;
-      }
-    }
   }
-
   return feasible;
 }
 
 bool
 Solution::global_constraints_check(
-  const System& system
-)
+  const System& system)
 {
   bool feasible = true;
   const auto& global_constraints = system.get_system_data().get_global_constraints();
-  path_perfs.resize(global_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
-  this->global_slack_values.resize(global_constraints.size(), std::numeric_limits<TimeType>::quiet_NaN());
 
-  for(size_t i = 0; i < global_constraints.size(); ++i)
+  for(size_t i = 0; i < global_constraints.size() && feasible; ++i)
   {
-    const auto [path_feasible, path_response_time] =
-      this->path_global_constraint_check(
-        global_constraints[i].get_comp_idxs(),
-        system
-      );
-    feasible = feasible && path_feasible;
-    path_perfs[i] = path_response_time;
-    global_slack_values[i] = global_constraints[i].get_max_res_time() - this->path_perfs[i];
-    feasible = feasible && (global_slack_values[i] >= 0);
+    time_perfs.compute_global_perf(i, system, solution_data);
+
+    if(isnan(time_perfs.path_perfs[i]) || time_perfs.path_perfs[i] > global_constraints[i].get_max_res_time())
+    {
+      feasible = false;
+    }
   }
 
   return feasible;
-}
-
-std::pair<bool, double>
-Solution::path_global_constraint_check(
-  const std::vector<size_t>& comp_idxs,
-  const System& system
-) const
-{
-  std::vector<double> perf_components_path(comp_idxs.size(), 0.0);
-  const auto& components = system.get_system_data().get_components();
-
-  for(size_t i = 0; i < comp_idxs.size(); ++i)
-  {
-    perf_components_path[i] = comp_perfs[comp_idxs[i]];
-
-    if(isnan(perf_components_path[i]))
-    {
-      return std::make_pair(false, std::numeric_limits<double>::quiet_NaN());
-    }
-  }
-
-  // sum the response times of all components in the current path
-  double sum = std::accumulate(
-      perf_components_path.begin(),
-      perf_components_path.end(),
-      0.0
-    );
-
-  // network delay
-  for(size_t i = 0; i < comp_idxs.size() - 1; ++i)
-  {
-    // get the indices of the current and the next component
-    const auto curr_comp_idx = comp_idxs[i];
-    const auto next_comp_idx = comp_idxs[i + 1];
-    // resource index of the last partition
-    const auto [curr_comp_last_part_idx, res1_type_idx, res1_idx] =
-      *(solution_data.used_resources[curr_comp_idx].crbegin());
-    //resource index of the first partition
-    const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
-      *(solution_data.used_resources[next_comp_idx].cbegin());
-
-    // different resources.
-    if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
-    {
-      const auto data_size =
-        components[curr_comp_idx].get_partition(curr_comp_last_part_idx).get_data_size();
-      sum +=
-        SystemPE:: get_network_delay(
-          ResTypeFromIdx(res1_type_idx), res1_idx,
-          ResTypeFromIdx(res2_type_idx), res2_idx,
-          data_size,
-          system
-        );
-    }
-  }
-
-  if(!isnan(sum))
-  {
-    return std::make_pair(true, sum);
-  }
-  else
-  {
-    return std::make_pair(false, sum);
-  }
 }
 
 bool
@@ -822,7 +741,7 @@ Solution::objective_function(
         else // Faas
         {
           const auto res_cost = all_resources.get_resource<ResourceType::Faas>(res_idx).get_cost();
-          const double time = system.get_system_data().get_time();
+          const TimeType time = system.get_system_data().get_time();
           // ATTENTO: LORO USANO COMP_LAMBDA... SECONDO ME E' GIUSTO PART_LAMBDA INVECE
           const auto part_lambda = components[comp_idx].get_partition(part_idx).get_part_lambda();
           const auto warm_time =

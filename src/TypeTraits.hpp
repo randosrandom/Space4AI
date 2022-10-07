@@ -26,6 +26,7 @@ Copyright 2021 AI-SPRINT
 #ifndef TYPETRAITS_HPP_
 #define TYPETRAITS_HPP_
 
+#include <limits>
 #include <memory>
 #include <utility>
 #include <set>
@@ -150,6 +151,9 @@ using SelectedVMType =
 */
 using MemoryOccupationType =
   std::vector<std::vector<DataType>>;
+
+const auto NaN =
+  std::numeric_limits<TimeType>::quiet_NaN();
 
 /** Function that converts a ResourceType::member to its corresponding index
 *

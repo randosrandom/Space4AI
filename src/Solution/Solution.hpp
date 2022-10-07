@@ -20,7 +20,6 @@ Copyright 2021 AI-SPRINT
 * \brief Defines the class to store the a solution to the System configuration provided.
 *
 * \author Randeep Singh
-* \author Giulia Mazzilli
 */
 
 #ifndef SOLUTION_HPP_
@@ -29,7 +28,6 @@ Copyright 2021 AI-SPRINT
 #include <algorithm>
 #include <chrono>
 #include <fstream>
-#include <limits>
 
 #include "src/Solution/SelectedResources.hpp"
 #include "src/System/System.hpp"
@@ -44,13 +42,14 @@ class Solution
 {
   public:
 
-    /** Solution default constructor that initializes feasibility to false
-    *   and total_cost to -1.
+    /** Solution default constructor */
+    // Solution(): feasibility(false), total_cost(-1) {}
+
+    /** Solution constructor that initializes feasibility to false
+    *   and total_cost to -1, and resize all the data scturctures according
+    *   to data contained in system;
     */
-    Solution():
-      feasibility(false),
-      total_cost(-1.0)
-    {}
+    Solution(const System& system);
 
     /** Method that reads the configuration of the Solution, if you want to load
     *   a previous Solution saved in file.
@@ -249,20 +248,6 @@ class Solution
       const System& system
     );
 
-    /** Method to check if the Solution path satisfies the GlobalConstraint constraints
-    *   and to compute the path response time.
-    *
-    *   \param comp_idxs vector containing the indexes of the selected components
-    *                    in SystemData.components
-    *   \param system Object containing all the data structures of the System
-    *   \return pair: [true if the Solution path satisfies the global constraints, false otherwise;
-    *           response time of the Solution path]
-    */
-    std::pair<bool, TimeType> path_global_constraint_check(
-      const std::vector<size_t>& comp_idxs,
-      const System& system
-    ) const;
-
   private:
 
     /** feasibility of the Solution: true if feasible, false otherwise */
@@ -282,23 +267,8 @@ class Solution
     /* For each resource save the slack memory remaining in the solution */
     MemoryOccupationType memory_slack_values;
 
-    /** For each Component, saves difference between the constraint of max time
-    *   and the actual performance time
-    */
-    std::vector<TimeType> local_slack_values;
-
-    /** For each global path listed in the config file, saves difference between
-    *   the constraint of max time and the actual performance time
-    */
-    std::vector<TimeType> global_slack_values;
-
-    /** Component performance times */
-    std::vector<TimeType> comp_perfs;
-
-    /** paths performance times */
-    std::vector<TimeType> path_perfs;
-
-
+    /** Local and Global performance */
+    SystemPE time_perfs;
 
 };
 

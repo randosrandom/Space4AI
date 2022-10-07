@@ -88,7 +88,7 @@ main(int argc, char** argv)
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
     my_chrono.start();
-    sp::Solution sol;
+    sp::Solution sol(system);
     sol.read_solution_from_file(solution_config_file, system);
     const double sol_read_time = my_chrono.wallTimeNow() * 1e-6;
 

@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,8 @@ QTPE::predict(
 
   if(utilization > 1) // This is en error! utilization cannot be bigger than -1;
   {
+    Logger::Warn("QTPE::predict(): Utilization > 1"); // if needed add which components are the problem.
+    //throw std::runtime_error("QTPE::predict(): Utilization > 1");
     response_time = -1.;  // manage error in the caller function
   }
   else
@@ -49,7 +51,6 @@ QTPE::predict(
       /
       (1 - utilization);
   }
-
   return response_time;
 }
 

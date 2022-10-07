@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@ Copyright 2021 AI-SPRINT
 /**
 * \file SystemPE.hpp
 *
-* \brief Defines the evaluators to measure the performance of the System
+* \brief Defines the evaluators to measure the performance of the components and paths
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -26,75 +26,58 @@ Copyright 2021 AI-SPRINT
 #ifndef SYSTEMPE_HPP_
 #define SYSTEMPE_HPP_
 
+#include <algorithm>
+
 #include "src/Solution/SolutionData.hpp"
 #include "src/System/System.hpp"
 #include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {
-/** Class designed to evaluate the performance of a NetworkDomain object.
-*
-*   The performance can be defined as the time
-*   required to transfer data between two consecutive Component or Partition
-*   objects executed on different devices in the same NetworkDomain.
-*/
-class NetworkPE
-{
-  public:
-
-    /** Static method to compute the transfer time in a NetworkDomain.
-    *
-    *   \param access_delay Access delay characterizing the NetworkDomain
-    *   \param bandwidth Bandwidth characterizing the NetworkDomain
-    *   \param data Amount of transferred data
-    *   \return transfer time
-    */
-    static
-    TimeType
-    predict(
-      TimeType access_delay,
-      double bandwidth,
-      DataType data
-    )
-    {
-      return access_delay + (data / bandwidth);
-    }
-
-};
-
 /** Class used to evaluate the performance (response times) of the whole System. */
 class SystemPE
 {
   public:
 
-    /** Static method to evaluate the response time of the all Component objects.
-    *
-    *   \param system Object containing all the data structures of the System
-    *   \param solution_data SolutionData object
-    *   \return vector with the response times of all components
-    */
-    static
-    std::vector<TimeType> compute_performance(
-      const System& system,
-      const SolutionData& solution_data
-    );
+    friend class Solution;
 
-    /** Static method to evaluate the response time of the Component object
+    // /** Method to evaluate the response time of the all Component objects.
+    // *
+    // *   \param system Object containing all the data structures of the System
+    // *   \param solution_data SolutionData object
+    // */
+    // void
+    // compute_local_perfs(
+    //   const System& system,
+    //   const SolutionData& solution_data
+    // ); // CURRENTLY NOT BEING USED!
+
+    /** Method to evaluate the response time of the Component object
     *   identified by the given index.
     *
     *   \param comp_idx Index of the Component
     *   \param system Object containing all the data structures of the System
     *   \param solution_data SolutionData object
-    *   \return Response time of the Component
     */
-    static
-    TimeType get_perf_evaluation(
+    void
+    compute_local_perf(
       size_t comp_idx,
       const System& system,
-      const SolutionData& solution_data
-    );
+      const SolutionData& solution_data);
 
-    /** Static method to compute the network delay due to data transfer
+    /** Method to evaluate the performance of a path
+    *
+    *   \param path_idx Index of the path
+    *   \param system System object
+    *   \param solution_data SolutionData object
+    */
+    void
+    compute_global_perf(
+      size_t path_idx,
+      const System& system,
+      const SolutionData& solution_data);
+
+    /** Method to compute the network delay due to data transfer
     *   operations between two consecutive Components or Partitions object, executed
     *   on different resources in the same NetworkDomain.
     *
@@ -104,14 +87,42 @@ class SystemPE
     *   \param res2_idx Second Resource index
     *   \param data_size Amount of data to be transferred
     *   \param system System under analysis
-    *   \return Network transfer time
     */
-    static
-    TimeType get_network_delay(
+    TimeType
+    compute_network_delay(
       ResourceType res1_type, size_t res1_idx, ResourceType res2_type, size_t res2_idx,
-      double data_size,
-      const System& system
-    );
+      DataType data_size,
+      const System& system);
+
+    /** Method to compute the transfer time in a NetworkDomain.
+    *
+    *   \param access_delay Access delay characterizing the NetworkDomain
+    *   \param bandwidth Bandwidth characterizing the NetworkDomain
+    *   \param data Amount of transferred data
+    *   \return transfer time
+    */
+    TimeType
+    get_network_delay(
+      TimeType access_delay,
+      double bandwidth,
+      DataType data) { return access_delay + (data / bandwidth); }
+
+  private:
+
+    /** For each component, save timings of the chosen deployment partition */
+    std::vector<std::vector<TimeType>> local_parts_perfs;
+
+    /** For each component, save network delays between partitions */
+    std::vector<std::vector<TimeType>> local_parts_delays;
+
+    /** Component (local) performance */
+    std::vector<TimeType> comp_perfs;
+
+    /** Delays between components */
+    std::vector<TimeType> comp_delays;
+
+    /** Global paths performance */
+    std::vector<TimeType> path_perfs;
 
 };
 
