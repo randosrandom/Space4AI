@@ -33,7 +33,6 @@ Copyright 2021 AI-SPRINT
 
 #include "src/Algorithms/RandomGreedyDT.hpp"
 
-#include <random>
 #ifdef PARALLELIZATION
   #include <omp.h>
 #endif // PARALELLIZATION
@@ -50,11 +49,17 @@ RandomGreedyDT::random_greedy(
 )
 {
   Logger::Info("Starting Random Greedy DT algorithm with reproducibility flag raised to: " + std::to_string(reproducibility_flag));
+
   reproducibility = reproducibility_flag;
 
-  if(reproducibility_flag)
+  if(reproducibility)
   {
-    current_seed = fixed_initial_seed;
+    rng.seed(seed);
+  }
+  else
+  {
+    std::random_device dev;
+    rng.seed(dev());
   }
 
   EliteResult elite(num_top_sols);
@@ -148,19 +153,6 @@ RandomGreedyDT::create_random_initial_solution(
   const System& system
 )
 {
-  std::mt19937 rng;
-
-  if(reproducibility)
-  {
-    current_seed += seed_adding_factor;
-    rng.seed(current_seed);
-  }
-  else
-  {
-    std::random_device dev;
-    rng.seed(dev());
-  }
-
   Solution solution(system);
   const auto& system_data = system.get_system_data();
   const auto& components = system_data.get_components();
@@ -212,16 +204,16 @@ RandomGreedyDT::create_random_initial_solution(
   for(size_t i = 0; i < res_type_idx_count; ++i)
   {
     const size_t n_res = all_resources.get_number_resources(i);
-
     if(i == ResIdxFromType(ResourceType::Faas))
     {
-      candidate_resources[i].resize(n_res, true);  // if we have faas, we have to select all res
+      candidate_resources[i].resize(n_res, true); // select all the faas as candidates
     }
     else
     {
-      candidate_resources[i].resize(n_res, false);  // otherwise we have to select the candidate_resources, one for each layer
+      candidate_resources[i].resize(n_res, false);
     }
   }
+
 
   // Selecting candidate_resources (Edge and VM, Faas already selected all)
   Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
@@ -249,7 +241,6 @@ RandomGreedyDT::create_random_initial_solution(
         "resource_type: " + std::to_string(edge_type_idx) + " res_idx: " + std::to_string(random_res_idx));
     }
   }
-
   // VM RESOURCES
   for(size_t cl_idx = 0; cl_idx < cls[vm_type_idx].size(); ++cl_idx)
   {
@@ -295,20 +286,32 @@ RandomGreedyDT::create_random_initial_solution(
       std::vector<std::pair<size_t, size_t>> resources_instersection;
 
       //get the indices of compatible resources and compute the
-      //intersection with the selected resources in each
-      //computational layer
-      for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count; ++res_type_idx)
+      //intersection with the selected resources in each computational layer
+      // Edge and VM
+      for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count-1; ++res_type_idx) // Edge or VM
       {
         //loop over the resources of type j
         for(size_t res_idx = 0; res_idx < candidate_resources[res_type_idx].size(); ++res_idx)
         {
           //compute the intersection
-          if(compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx] && candidate_resources[res_type_idx][res_idx])
+          if(candidate_resources[res_type_idx][res_idx] && compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
           {
             resources_instersection.emplace_back(res_type_idx, res_idx);
             Logger::Trace("create_random_initial_solution: added to the intersection resource " + std::to_string(res_idx) + " of type " + std::to_string(res_type_idx));
           }
         }
+      }
+      //Faas
+      const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
+      const float prob = resources_instersection.size()>0 ? 0.6 : 1;
+      std::bernoulli_distribution be(prob);
+      for(size_t res_idx = 0; res_idx < candidate_resources[faas_type_idx].size(); ++res_idx)
+      {
+        if(be(rng) && candidate_resources[faas_type_idx][res_idx] && compatibility_matrix[comp_idx][faas_type_idx][part_idx][res_idx])
+          {
+            resources_instersection.emplace_back(faas_type_idx, res_idx);
+            Logger::Trace("create_random_initial_solution: added to the intersection resource " + std::to_string(res_idx) + " of type " + std::to_string(faas_type_idx));
+          }
       }
 
       // OBS: resources_instersection is NEVER EMPTY! Indeed, all FaaS are candidate resource

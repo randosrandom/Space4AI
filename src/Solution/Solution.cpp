@@ -47,7 +47,7 @@ Solution::Solution(const System& system):
   time_perfs.local_parts_perfs.resize(comp_size);
   time_perfs.local_parts_delays.resize(comp_size);
   time_perfs.comp_perfs.resize(comp_size, 0.0);
-  time_perfs.comp_delays.resize(comp_size-1, NaN);
+  time_perfs.comp_delays.resize(comp_size-1, 0.0);
   time_perfs.path_perfs.resize(paths_size, 0.0);
 }
 
@@ -433,24 +433,21 @@ Solution::memory_constraints_check(
   const auto& all_resources = system.get_system_data().get_all_resources();
 
   // check memory occupations
-  for(size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
+  for(size_t comp_idx = 0; comp_idx<components.size() && feasible; ++comp_idx)
   {
     const auto& partitions = components[comp_idx].get_partitions();
 
     for(auto [p_idx, r_type_idx, r_idx] : solution_data.used_resources[comp_idx])
     {
-      if(memory_slack_values[r_type_idx][r_idx] == std::numeric_limits<DataType>::quiet_NaN())
-      {
-        memory_slack_values[r_type_idx][r_idx] = (r_type_idx != ResIdxFromType(ResourceType::Faas)) ?
-          solution_data.n_used_resources[r_type_idx][r_idx] *
-          all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx)
-          :
-          all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx);
-      }
+      memory_slack_values[r_type_idx][r_idx] = (r_type_idx != ResIdxFromType(ResourceType::Faas)) ?
+        solution_data.n_used_resources[r_type_idx][r_idx] *
+        all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx)
+        :
+        all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx);
 
       memory_slack_values[r_type_idx][r_idx] -= partitions[p_idx].get_memory();
 
-      if(memory_slack_values[r_type_idx][r_idx] > 0)
+      if(memory_slack_values[r_type_idx][r_idx] < 0)
       {
         feasible = false;
         break;
@@ -460,6 +457,7 @@ Solution::memory_constraints_check(
   return feasible;
 }
 
+/*
 bool
 Solution::memory_constraints_check(
   const System& system,
@@ -505,6 +503,7 @@ Solution::memory_constraints_check(
   return feasible;
 
 }
+*/
 
 bool
 Solution::move_backward_check(
@@ -606,7 +605,7 @@ Solution::local_constraints_check(
 
   for(size_t i = 0; i < local_constraints.size() && feasible; ++i)
   {
-    time_perfs.compute_local_perf(local_constraints[i].get_comp_idx(), system, solution_data);
+    time_perfs.compute_local_perf(i, system, solution_data);
 
     if(isnan(time_perfs.comp_perfs[i]) || time_perfs.comp_perfs[i] > local_constraints[i].get_max_res_time())
     {

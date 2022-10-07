@@ -79,6 +79,10 @@ SystemPE::compute_global_perf(
           data_size,
           system);
     }
+    else
+    {
+      comp_delays[curr_comp_idx] = 0.0;
+    }
     path_perfs[path_idx] += comp_delays[curr_comp_idx];
   }
   // last component

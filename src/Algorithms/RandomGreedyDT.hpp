@@ -27,6 +27,8 @@ Copyright 2021 AI-SPRINT
 #ifndef RANDOM_GREEDY_DT_HPP_
 #define RANDOM_GREEDY_DT_HPP_
 
+#include <random>
+
 #include "src/System/System.hpp"
 #include "src/Solution/Solution.hpp"
 #include "src/Solution/EliteResult.hpp"
@@ -102,14 +104,14 @@ class RandomGreedyDT
 
   private:
 
+    /** random number generator */
+    std::mt19937_64 rng;
+
     /* Initial seed for the random device */
-    inline static const size_t fixed_initial_seed = 121298;
-    /* Additional factor for the random device seed */
-    inline static const size_t seed_adding_factor = 1000;
-    /* Seed for the random device */
-    inline static size_t current_seed = 0;
-    /* Flag to make the random greedy solutions reproducible */
-    inline static bool reproducibility = true;
+    const size_t seed = 121298;
+
+    /** reproducibility flag */
+    bool reproducibility = true;
 
     /** Previously selected resources (e.g., at design-time) on Edge and VM */
     SelectedResources selected_resources;
