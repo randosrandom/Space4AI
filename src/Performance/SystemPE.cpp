@@ -26,28 +26,74 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
-/*
 void
-SystemPE::compute_local_perfs(
+SystemPE::compute_local_perf(
+  size_t comp_idx,
   const System& system,
-  const SolutionData& solution_data)
+  const SolutionData& solution_data,
+  const LocalInfo& local_info)
 {
-  const auto& components = system.get_system_data().get_components();
-  local_parts_perf.resize(components.size(), NaN);
-  local_parts_delays.resize(components.size(), NaN);
-  comp_perfs.resize(components.size(), NaN);
+  const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
+  local_parts_perfs[comp_idx].resize(used_resources_comp.size(), 0.0);
 
-  for(size_t comp_idx = 0; comp_idx < components.size(); ++comp_idx)
+  const auto& performance_comp = system.get_performance()[comp_idx];
+
+  Logger::Debug("Evaluating performance of component" + std::to_string(comp_idx));
+
+  for(size_t i=0; i<used_resources_comp.size(); ++i)
   {
-    comp_eval(comp_idx, system, solution_data);
+    const auto& [p_idx, r_type_idx, r_idx] = used_resources_comp[i];
+
+    if(!local_info.active || (local_info.active && local_info.modified_res[r_type_idx][r_idx]))
+    {
+      #warning py::scoped_release to make it parallel?
+
+      const TimeType perf_p_idx = performance_comp[r_type_idx][p_idx][r_idx]->predict(
+       comp_idx, p_idx, ResTypeFromIdx(r_type_idx), r_idx,
+       system.get_system_data(), solution_data);
+
+       // this takes into account the compute_utilization.
+       // If utilization > 1, response_time is negative- (get_perf_evaluation return -1)
+       // Check lables of response_time (when is negative, NaN, +inf, max ...)
+       local_parts_perfs[comp_idx][i] = perf_p_idx !=-1 ? perf_p_idx : NaN;
+    }
+
+    // network delays
+    if(local_info.active && local_info.modified_comp.first)
+    {
+      if(local_info.modified_comp.second == comp_idx)
+      {
+        if(local_info.modified_single_part.first)
+        {
+          network_delay_parts(comp_idx, used_resources_comp, system,
+            std::make_pair(true, local_info.modified_single_part.second));
+        }
+        else
+        {
+          network_delay_parts(comp_idx, used_resources_comp, system);
+        }
+      }
+    }
+    else
+    {
+      network_delay_parts(comp_idx, used_resources_comp, system);
+    }
+    // logger messages
   }
+  const TimeType parts_total_time = std::accumulate(
+    local_parts_perfs[comp_idx].cbegin(), local_parts_perfs[comp_idx].cend(), 0.0);
+  const TimeType parts_total_delay_time = std::accumulate(
+    local_parts_delays[comp_idx].cbegin(), local_parts_delays[comp_idx].cend(), 0.0);
+
+  comp_perfs[comp_idx] = parts_total_time + parts_total_delay_time;
 }
-*/
+
 void
 SystemPE::compute_global_perf(
   size_t path_idx,
   const System& system,
-  const SolutionData& solution_data)
+  const SolutionData& solution_data,
+  const LocalInfo& local_info)
 {
   const auto& global_constraint = system.get_system_data().get_global_constraints()[path_idx];
   path_perfs[path_idx] = 0.0;
@@ -60,28 +106,30 @@ SystemPE::compute_global_perf(
     // get the indices of the current and the next component
     const auto curr_comp_idx = comp_idxs[i];
     const auto next_comp_idx = comp_idxs[i+1];
-    // used resources
-    const auto& used_resources = solution_data.get_used_resources();
-    // resource index of the last partition
-    const auto [curr_comp_last_part_idx, res1_type_idx, res1_idx] =
-      *(used_resources[curr_comp_idx].crbegin());
-    //resource index of the first partition
-    const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
-      *(used_resources[next_comp_idx].cbegin());
-      // different resources.
-    if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
+
+    if(!local_info.active || !local_info.modified_comp.first ||
+        (local_info.modified_comp.second == curr_comp_idx || local_info.modified_comp.second == next_comp_idx)
+      )
     {
-      const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
-      const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_data_size();
-      comp_delays[curr_comp_idx] = compute_network_delay(
-          ResTypeFromIdx(res1_type_idx), res1_idx,
-          ResTypeFromIdx(res2_type_idx), res2_idx,
-          data_size,
-          system);
-    }
-    else
-    {
-      comp_delays[curr_comp_idx] = 0.0;
+      // used resources
+      const auto& used_resources = solution_data.get_used_resources();
+      // resource index of the last partition
+      const auto [curr_comp_last_part_idx, res1_type_idx, res1_idx] =
+        *(used_resources[curr_comp_idx].crbegin());
+      //resource index of the first partition
+      const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
+        *(used_resources[next_comp_idx].cbegin());
+        // different resources.
+      if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
+      {
+        const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
+        const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_data_size();
+        comp_delays[curr_comp_idx] = compute_network_delay(
+            ResTypeFromIdx(res1_type_idx), res1_idx,
+            ResTypeFromIdx(res2_type_idx), res2_idx,
+            data_size,
+            system);
+      }
     }
     path_perfs[path_idx] += comp_delays[curr_comp_idx];
   }
@@ -90,69 +138,39 @@ SystemPE::compute_global_perf(
 }
 
 void
-SystemPE::compute_local_perf(
+SystemPE::network_delay_parts(
   size_t comp_idx,
-  const System& system,
-  const SolutionData& solution_data)
+  const UsedResourcesOrderedType::value_type& used_resources_comp, const System& system,
+  std::pair<bool, size_t> part_info)
 {
-  const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
-  local_parts_perfs[comp_idx].resize(used_resources_comp.size(), 0.0);
-
-  const auto& performance_comp = system.get_performance()[comp_idx];
-  const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
-
-  Logger::Debug("Evaluating performance of component" + std::to_string(comp_idx));
-
-  for(size_t i=0; i<used_resources_comp.size(); ++i)
+  if(used_resources_comp.size() > 1) // I have to compute network delay
   {
-    const auto& [p_idx, r_type_idx, r_idx] = used_resources_comp[i];
+    local_parts_delays[comp_idx].resize(used_resources_comp.size()-1);
 
-    const TimeType perf_p_idx = performance_comp[r_type_idx][p_idx][r_idx]->predict(
-      comp_idx, p_idx, ResTypeFromIdx(r_type_idx), r_idx,
-      system.get_system_data(),
-      solution_data);
-    // this takes into account the compute_utilization.
-    // If utilization > 1, response_time is negative- (get_perf_evaluation return -1)
-    // Check lables of response_time (when is negative, NaN, +inf, max ...)
-    local_parts_perfs[comp_idx][i] = perf_p_idx !=-1 ? perf_p_idx : NaN;
+    const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
 
-    if(used_resources_comp.size() > 1) // I have to compute network delay
+    for(size_t i=0; i<used_resources_comp.size()-1; ++i)
     {
-      local_parts_delays[comp_idx].clear();
-      local_parts_delays[comp_idx].reserve(used_resources_comp.size()-1);
+      const auto [p_idx1, res1_type_idx, res1_idx] = used_resources_comp[i];
+      const auto [p_idx2, res2_type_idx, res2_idx] = used_resources_comp[i+1];
 
-      for(auto it = used_resources_comp.cbegin(); it != std::prev(used_resources_comp.cend()); ++it)
+      if(!part_info.first || (part_info.first && (part_info.second == p_idx1 || part_info.second == p_idx2)))
       {
-        const auto data_size = partitions_comp[std::get<0>(*it)].get_data_size();
-        const auto res1_type_idx = std::get<1>(*it);
-        const auto res1_idx = std::get<2>(*it);
-        const auto res2_type_idx = std::get<1>(*std::next(it));
-        const auto res2_idx = std::get<2>(*std::next(it));
+        const auto data_size = partitions_comp[p_idx1].get_data_size();
 
         // I have to compute the network delay only if the two resources running
         // the two partitions are different!
         if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
         {
           // logger messages
-          local_parts_delays[comp_idx].push_back(compute_network_delay(
+          local_parts_delays[comp_idx][i] = compute_network_delay(
               ResTypeFromIdx(res1_type_idx), res1_idx,
               ResTypeFromIdx(res2_type_idx), res2_idx, data_size,
-              system));
-        }
-        else
-        {
-          local_parts_delays[comp_idx].push_back(0.0);
+              system);
         }
       }
     }
-    // logger messages
   }
-  const TimeType parts_total_time = std::accumulate(
-    local_parts_perfs[comp_idx].cbegin(), local_parts_perfs[comp_idx].cend(), 0.0);
-  const TimeType parts_total_delay_time = std::accumulate(
-    local_parts_delays[comp_idx].cbegin(), local_parts_delays[comp_idx].cend(), 0.0);
-
-  comp_perfs[comp_idx] = parts_total_time + parts_total_delay_time;
 }
 
 TimeType
@@ -189,7 +207,7 @@ SystemPE::compute_network_delay(
   {
     const auto access_delay = network_domains[*network_domains_intersect.begin()].get_access_delay();
     const auto bandwidth = network_domains[*network_domains_intersect.begin()].get_bandwidth();
-    network_delay = get_network_delay(access_delay, bandwidth, data_size);
+    network_delay = access_delay + (data_size / bandwidth);
   }
   else // more than one network_domain
   {
@@ -199,7 +217,7 @@ SystemPE::compute_network_delay(
     {
       const auto access_delay = network_domains[idx].get_access_delay();
       const auto bandwidth = network_domains[idx].get_bandwidth();
-      new_network_delay = get_network_delay(access_delay, bandwidth, data_size);
+      new_network_delay = access_delay + (data_size / bandwidth);
       network_delay = new_network_delay < network_delay ?
         new_network_delay : network_delay;
     }

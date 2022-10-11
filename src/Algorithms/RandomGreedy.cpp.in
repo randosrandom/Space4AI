@@ -15,9 +15,9 @@ Copyright 2021 AI-SPRINT
 */
 
 /**
-* \file RandomGreedyDT.cpp.in
+* \file RandomGreedy.cpp.in
 *
-* \brief Defines the methods of the RandomGreedyDT class
+* \brief Defines the methods of the RandomGreedy class
 *
 * \author Randeep Singh
 * \author Giulia Mazzilli
@@ -31,7 +31,7 @@ Copyright 2021 AI-SPRINT
   #define MY_PRAGMA(OPTIONS) do {} while(0);
 #endif // PARALLELIZATION
 
-#include "src/Algorithms/RandomGreedyDT.hpp"
+#include "src/Algorithms/RandomGreedy.hpp"
 
 #ifdef PARALLELIZATION
   #include <omp.h>
@@ -41,7 +41,7 @@ namespace Space4AI
 {
 
 EliteResult
-RandomGreedyDT::random_greedy(
+RandomGreedy::random_greedy(
   const System& system,
   size_t max_it,
   size_t num_top_sols,
@@ -104,7 +104,7 @@ RandomGreedyDT::random_greedy(
 }
 
 Solution
-RandomGreedyDT::step(const System& system)
+RandomGreedy::step(const System& system)
 {
   //generate a random solution
   Logger::Debug("step: Creating a random initial solution...");
@@ -149,7 +149,7 @@ RandomGreedyDT::step(const System& system)
 }
 
 Solution
-RandomGreedyDT::create_random_initial_solution(
+RandomGreedy::create_random_initial_solution(
   const System& system
 )
 {
@@ -163,6 +163,7 @@ RandomGreedyDT::create_random_initial_solution(
 
   const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
+  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
 
   Logger::Debug("create_random_initial_solution: Initializing and resizing members ...");
   //declare solution members
@@ -197,8 +198,7 @@ RandomGreedyDT::create_random_initial_solution(
     }
   }
 
-  std::vector<std::vector<bool>> candidate_resources; //per ogni tipo di risorsa, per ogni risorsa, si o no
-  candidate_resources.resize(res_type_idx_count);
+  std::vector<std::vector<bool>> candidate_resources(res_type_idx_count); //per ogni tipo di risorsa, per ogni risorsa, si o no
 
   // initialize candidate resources
   for(size_t i = 0; i < res_type_idx_count; ++i)
@@ -221,7 +221,8 @@ RandomGreedyDT::create_random_initial_solution(
   const auto& selected_edge = selected_resources.get_selected_edge();
   const auto& selected_vms = selected_resources.get_selected_vms();
 
-  // EDGE RESOURCES
+
+  // EDGE RESOURCES (CODE REPETITION ... BAD)
   if(selected_edge.size() > 0)  // If I provided old selected resources
   {
     candidate_resources[edge_type_idx] = selected_edge;
@@ -241,14 +242,14 @@ RandomGreedyDT::create_random_initial_solution(
         "resource_type: " + std::to_string(edge_type_idx) + " res_idx: " + std::to_string(random_res_idx));
     }
   }
-  // VM RESOURCES
-  for(size_t cl_idx = 0; cl_idx < cls[vm_type_idx].size(); ++cl_idx)
+  // VM RESOURCES (CODE REPETITION ... BAD)
+  if(selected_vms.size() > 0)
   {
-    if(selected_vms.size() > 0 && selected_vms[cl_idx].first)
-    {
-      candidate_resources[vm_type_idx][selected_vms[cl_idx].second] = true;
-    }
-    else
+    candidate_resources[vm_type_idx] = selected_vms;
+  }
+  else
+  {
+    for(size_t cl_idx=0; cl_idx < cls[vm_type_idx].size(); ++cl_idx)
     {
       //pick a random resource of the cl
       const std::vector<size_t> res_idxs = cls[vm_type_idx][cl_idx].get_res_idxs();
@@ -284,6 +285,7 @@ RandomGreedyDT::create_random_initial_solution(
       //list of the resources in the intersection between candidate and compatible resources.
       //pair.first= resource type, pair.second= resource idx
       std::vector<std::pair<size_t, size_t>> resources_instersection;
+      resources_instersection.reserve(compatibility_matrix[comp_idx][faas_type_idx][0].size());
 
       //get the indices of compatible resources and compute the
       //intersection with the selected resources in each computational layer
@@ -302,8 +304,7 @@ RandomGreedyDT::create_random_initial_solution(
         }
       }
       //Faas
-      const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
-      const float prob = resources_instersection.size()>0 ? 0.6 : 1;
+      const float prob = resources_instersection.size()>0 ? 0.5 : 1;
       std::bernoulli_distribution be(prob);
       for(size_t res_idx = 0; res_idx < candidate_resources[faas_type_idx].size(); ++res_idx)
       {
@@ -314,8 +315,9 @@ RandomGreedyDT::create_random_initial_solution(
           }
       }
 
-      // OBS: resources_instersection is NEVER EMPTY! Indeed, all FaaS are candidate resource
-      // so, at worst, we select Faas for the partition
+      // OBS: resources_instersection is NEVER EMPTY! Indeed, the computational layers
+      // are built such in a way that if a select one random resource from each layer
+      // resources_instersection is never empty
       // THAT'S WHY I DO NOT HAVE TO CHECK if n_inter_res = 0 (~)
       const size_t n_inter_res = resources_instersection.size();
       std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_inter_res - 1);
@@ -372,7 +374,7 @@ RandomGreedyDT::create_random_initial_solution(
 }
 
 Solution
-RandomGreedyDT::reduce_cluster_size(
+RandomGreedy::reduce_cluster_size(
   const Solution& solution,
   const size_t res_type_idx,
   const size_t res_idx,

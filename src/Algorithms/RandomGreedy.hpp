@@ -15,7 +15,7 @@ Copyright 2021 AI-SPRINT
 */
 
 /**
-* \file RandomGreedyDT.hpp
+* \file RandomGreedy.hpp
 *
 * \brief Defines the Random Greedy (Design time version) algorithm to solve the
 *        optimization problem
@@ -24,8 +24,8 @@ Copyright 2021 AI-SPRINT
 * \author Giulia Mazzilli
 */
 
-#ifndef RANDOM_GREEDY_DT_HPP_
-#define RANDOM_GREEDY_DT_HPP_
+#ifndef RANDOM_GREEDY_HPP_
+#define RANDOM_GREEDY_HPP_
 
 #include <random>
 
@@ -36,13 +36,13 @@ Copyright 2021 AI-SPRINT
 namespace Space4AI
 {
 /** Class to define the Random Greedy algorithm to solve the optimization problem */
-class RandomGreedyDT
+class RandomGreedy
 {
   public:
 
-    RandomGreedyDT() = default;
+    RandomGreedy() = default;
 
-    RandomGreedyDT(const SelectedResources& selected_resources_)
+    RandomGreedy(const SelectedResources& selected_resources_)
     : selected_resources(selected_resources_) {}
 
     /** Method to generate random greedy solutions

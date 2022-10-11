@@ -63,7 +63,8 @@ class SystemPE
     compute_local_perf(
       size_t comp_idx,
       const System& system,
-      const SolutionData& solution_data);
+      const SolutionData& solution_data,
+      const LocalInfo& local_info);
 
     /** Method to evaluate the performance of a path
     *
@@ -75,7 +76,16 @@ class SystemPE
     compute_global_perf(
       size_t path_idx,
       const System& system,
-      const SolutionData& solution_data);
+      const SolutionData& solution_data,
+      const LocalInfo& local_info = LocalInfo());
+
+private:
+
+    void
+    network_delay_parts(
+      size_t comp_idx,
+      const UsedResourcesOrderedType::value_type& used_resources_comp, const System& system,
+      std::pair<bool, size_t> part_info = std::make_pair(false, 0));
 
     /** Method to compute the network delay due to data transfer
     *   operations between two consecutive Components or Partitions object, executed
@@ -93,19 +103,6 @@ class SystemPE
       ResourceType res1_type, size_t res1_idx, ResourceType res2_type, size_t res2_idx,
       DataType data_size,
       const System& system);
-
-    /** Method to compute the transfer time in a NetworkDomain.
-    *
-    *   \param access_delay Access delay characterizing the NetworkDomain
-    *   \param bandwidth Bandwidth characterizing the NetworkDomain
-    *   \param data Amount of transferred data
-    *   \return transfer time
-    */
-    TimeType
-    get_network_delay(
-      TimeType access_delay,
-      double bandwidth,
-      DataType data) { return access_delay + (data / bandwidth); }
 
   private:
 

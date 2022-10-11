@@ -49,7 +49,7 @@ main(int argc, char** argv)
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
     my_chrono.start();
-    sp::RandomGreedyDT rg;
+    sp::RandomGreedy rg;
     const auto elite_result = rg.random_greedy(
       system,
       basic_config.at("Algorithm").at("n_iterations").get<size_t>(),

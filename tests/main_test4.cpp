@@ -66,7 +66,7 @@ main(int argc, char** argv)
 
     system.read_configuration_file(system_config_file);
 
-    sp::RandomGreedyDT rg;
+    sp::RandomGreedy rg;
 
     const auto elite_result = rg.random_greedy(
       system,

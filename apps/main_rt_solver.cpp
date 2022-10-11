@@ -92,7 +92,7 @@ main(int argc, char** argv)
     sol.read_solution_from_file(solution_config_file, system);
     const double sol_read_time = my_chrono.wallTimeNow() * 1e-6;
 
-    sp::RandomGreedyDT rg(sol.get_selected_resources());
+    sp::RandomGreedy rg(sol.get_selected_resources());
 
     my_chrono.start();
     const auto elite_result = rg.random_greedy(

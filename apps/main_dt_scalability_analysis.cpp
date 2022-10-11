@@ -89,9 +89,10 @@ main(int argc, char** argv)
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
     my_chrono.start();
-    const auto elite_result = sp::RandomGreedyDT::random_greedy(
-      system, n_iterations, max_num_sols, true
-    );
+    sp::RandomGreedy rg;
+    const auto elite_result = rg.random_greedy(
+      system, n_iterations, max_num_sols, true);
+
     const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
 
     std::string suffix_sol = system_config_file;

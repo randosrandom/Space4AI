@@ -42,7 +42,7 @@ main(int argc, char** argv)
     const std::string system_config_file = basic_config.at("ConfigFiles")[i].get<std::string>();
     system.read_configuration_file(system_config_file);
 
-    sp::RandomGreedyDT rg;
+    sp::RandomGreedy rg;
     const auto elite_result = rg.random_greedy(
       system,
       basic_config.at("Algorithm").at("n_iterations").get<size_t>(),

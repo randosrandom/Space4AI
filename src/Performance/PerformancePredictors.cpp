@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,12 +35,9 @@ Pacsltk::predict(
   TimeType demandWarm, TimeType demandCold, TimeType idle_time_before_kill
 )
 {
-  Timings::Chrono c;
-  c.start();
   TimeType demand = pacsltk_predictor(
       part_lambda, demandWarm, demandCold, idle_time_before_kill
     ).cast<TimeType>();
-  time_spent += c.wallTimeNow() * 1e-6;
   return demand;
 }
 } // namespace Space4AI

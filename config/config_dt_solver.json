@@ -1,16 +1,17 @@
 {
   "ConfigFiles" : [
-    "config/LargeScale/7-components/instance9/system_description9.json"
+    "config/LargeScale/5-components/instance1/system_description1.json",
+    "config/LargeScale/15-components/instance1/system_description1.json"
   ],
 
   "Algorithm" : {
     "n_iterations" : 5000,
     "max_num_sols" : 1,
-    "reproducibility" : false
+    "reproducibility" : true
   },
 
   "Logger" : {
-    "priority" : 1,
+    "priority" : 5,
     "terminal_stream" : false,
     "file_stream" : false
   }

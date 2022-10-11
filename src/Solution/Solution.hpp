@@ -40,6 +40,8 @@ namespace Space4AI
 */
 class Solution
 {
+  friend class LocalSearch;
+
   public:
 
     /** Solution default constructor */
@@ -60,10 +62,7 @@ class Solution
     *
     */
     void
-    read_solution_from_file(
-      const std::string& file,
-      const System& system
-    );
+    read_solution_from_file( const std::string& file, const System& system);
 
     /** Method to write the Solution in a .json file.
     *
@@ -84,18 +83,14 @@ class Solution
     *   \param system Object containing all the data structures of the System
     *   \return true if the Solution is feasible, false otherwise
     */
-    bool check_feasibility(
-      const System& system
-    );
+    bool check_feasibility(const System& system);
 
     /** Method to compute the cost of a Solution.
     *
     *   \param system Object containing all the data structures of the System
     *   \return cost of the Solution
     */
-    CostType objective_function(
-      const System& system
-    );
+    CostType objective_function(const System& system);
 
     /** feasibility getter */
     bool
@@ -165,9 +160,7 @@ class Solution
     *   \param system Object containing all the data structures of the System
     *   \return true if the Solution satisfies the constraints, false otherwise
     */
-    bool preliminary_constraints_check_assignments(
-      const System& system
-    ) const;
+    bool preliminary_constraints_check_assignments(const System& system) const; // It should not be needed to check it after RG. The solution is built satisfying preliminary constraints!
 
     /** Method to check if each Partition of the passed component is assigned to exactly one Resource,
     *   if the Solution is coherent with the SystemData.compatibility_matrix and
@@ -178,33 +171,23 @@ class Solution
     *   \param comp_idx Component index to check
     *   \return true if the Solution satisfies the constraints, false otherwise
     */
-    bool preliminary_constraints_check_assignments(
-      const System& system,
-      size_t comp_idx
-    ) const;
+    bool preliminary_constraints_check_assignments(size_t comp_idx,
+      const System& system) const;
 
     /** Method to check if the Solution satisfies the memory constraints.
     *
     *   \param system Object containing all the data structures of the System
     *   \return true if the Solution satisfies the memory constraints, false otherwise
     */
-    bool memory_constraints_check(
-      const System& system
-    );
+    bool memory_constraints_check(const System& system);
 
-    /** Method to check if a specific resource satisfy the memory constraints.
+    /** Method to change memory of resources during local search.
     *
-    *   \param system Object containing all the data structures of the System
-    *   \param res_type_idx resource type index
-    *   \param res_idx resource index
-    *   \return true if the resource meet the memory constraints
+    *   \param local_info local information on the modified resources and partitions
+    *   \return true if the Solution satisfies the memory constraints
     */
     bool
-    memory_constraints_check(
-      const System& system,
-      size_t res_type_idx,
-      size_t res_idx
-    );
+    memory_constraints_check(const System& system, const LocalInfo& local_info);
 
     /** Method to check that, if a Component Partition object is executed
     *   on a ResourceType::VM or a ResourceType::Faas, all its successors
@@ -214,9 +197,11 @@ class Solution
     *   \param system Object containing all the data structures of the System
     *   \return True if the constraint is satisfied
     */
-    bool move_backward_check(
-      const System& system
-    ) const;
+    bool
+    move_backward_check(const System& system) const;
+
+    bool
+    move_backward_check(size_t comp_idx) const;
 
     /** Method to verify if resources that don't allow colocation are overloaded
     *   (namely more than one Partition is running on the Resource).
@@ -225,8 +210,8 @@ class Solution
     *   \return true if the Solution satisfies the constraint, false otherwise
     */
     bool performance_assignment_check(
-      const System& system
-    ) const;  // It should not be needed to check it after RG. The solution is built satisfying preliminary constraints!
+      const System& system,
+      const LocalInfo& local_info = LocalInfo());
 
     /** Method to check if LocalConstraint constraints are satisfied by the Solution.
     *
@@ -235,8 +220,8 @@ class Solution
     *           false otherwise
     */
     bool local_constraints_check(
-      const System& system
-    );
+      const System& system,
+      const LocalInfo& local_info=LocalInfo());
 
     /** Method to check if GlobalConstraint constraints are satisfied by the Solution.
     *
@@ -245,8 +230,8 @@ class Solution
     *           false otherwise
     */
     bool global_constraints_check(
-      const System& system
-    );
+      const System& system,
+      const LocalInfo& local_info = LocalInfo());
 
   private:
 

@@ -43,8 +43,12 @@ public:
   get_selected_edge() const { return selected_edge; }
 
   /** selected_vms getter */
-  const SelectedVMType&
+  const std::vector<bool>&
   get_selected_vms() const { return selected_vms; }
+
+  /** selected_vms_vy_cl getter */
+  const SelectedVMType&
+  get_selected_vms_by_cl() const { return selected_vms_by_cl; }
 
 private:
 
@@ -56,9 +60,17 @@ private:
   */
   std::vector<bool> selected_edge;
 
-  /** Store the selected VMs by computational layer
+
+  /** Store the selected vms resources in the solution.
+  *
+  *   selected[i] = true, if the vm device with index i has been selected in the
+  *   solution.
+  *
   */
-  SelectedVMType selected_vms;
+  std::vector<bool> selected_vms;
+
+  /** Store the selected VMs by computational layer */
+  SelectedVMType selected_vms_by_cl;
 
 };
 

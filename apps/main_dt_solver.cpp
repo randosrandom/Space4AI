@@ -81,7 +81,7 @@ main(int argc, char** argv)
     system.read_configuration_file(system_config_file);
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
-    sp::RandomGreedyDT rg;
+    sp::RandomGreedy rg;
 
     my_chrono.start();
     const auto elite_result = rg.random_greedy(
