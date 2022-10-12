@@ -32,46 +32,6 @@ namespace Space4AI
 {
 class Solution; // forward declaration
 
-/** Class used to save which components, resources and partitions has been modified
-*   by the local algortithms.
-*/
-class LocalInfo
-{
-public:
-
-  /** Method to reset modified_res */
-  void
-  reset() {
-    active = false;
-    for(auto& vec : modified_res)
-      vec.resize(vec.size());
-    old_used_resources_comp_ptr = nullptr;
-    modified_comp = std::make_pair(false, 0);
-    modified_single_part = std::make_pair(false, 0);
-  }
-
-public:
-
-  /** flag set to true if the class in not empty */
-  bool active = false;
-
-  /** For each resource type and resource, true if that device has been modified
-  * by the local search */
-  std::vector<std::vector<bool>> modified_res;
-
-  /** Index of the modified component */
-  std::pair<bool, size_t> modified_comp;
-
-  /** <true,*> if a single partition has been modifies. Second element contain
-  *   the position index of the partition in the old used_resources.
-  */
-  std::pair<bool, size_t> modified_single_part;
-
-  /** pointer to the original used_resources for comp_idx */
-  UsedResourcesOrderedType::value_type const * old_used_resources_comp_ptr = nullptr;
-
-};
-
 /** Class to store the main data of the Solution. */
 class SolutionData
 {

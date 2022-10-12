@@ -116,6 +116,14 @@ class Solution
     const SelectedResources&
     get_selected_resources() const {return selected_resources;}
 
+    /** memory occupations getter */
+    const MemoryOccupationType&
+    get_memory_slack_values() const {return memory_slack_values;}
+
+    /** time_perfs getter */
+    const SystemPE&
+    get_time_perfs() const {return time_perfs;}
+
     /** y_hat setter */
     template <class T>
     void

@@ -34,12 +34,55 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
+  /** Class used to save which components, resources and partitions has been modified
+  *   by the local algortithms.
+  */
+  class LocalInfo
+  {
+  public:
+
+    /** Method to reset modified_res */
+    void
+    reset() {
+      active = false;
+      for(auto& vec : modified_res)
+        vec.resize(vec.size());
+      modified_comp = std::make_pair(false, 0);
+      old_used_resources_comp_ptr = nullptr;
+      old_local_parts_perfs_ptr = nullptr;
+      old_local_parts_delays_ptr = nullptr;
+    }
+
+  public:
+
+    /** flag set to true if the class in not empty */
+    bool active = false;
+
+    /** For each resource type and resource, true if that device has been modified
+    * by the local search */
+    std::vector<std::vector<bool>> modified_res;
+
+    /** Index of the modified component */
+    std::pair<bool, size_t> modified_comp;
+
+    /** pointer to the original used_resources for comp_idx */
+    UsedResourcesOrderedType::value_type const * old_used_resources_comp_ptr = nullptr;
+
+    /** pointer to the original local_parts_perfs */
+    std::vector<std::vector<TimeType>> const * old_local_parts_perfs_ptr = nullptr;
+
+    /** pointer to the original local_parts_delays */
+    std::vector<std::vector<TimeType>> const * old_local_parts_delays_ptr = nullptr;
+
+  };
+
 /** Class used to evaluate the performance (response times) of the whole System. */
 class SystemPE
 {
   public:
 
     friend class Solution;
+    friend class LocalSearch;
 
     // /** Method to evaluate the response time of the all Component objects.
     // *
@@ -80,12 +123,6 @@ class SystemPE
       const LocalInfo& local_info = LocalInfo());
 
 private:
-
-    void
-    network_delay_parts(
-      size_t comp_idx,
-      const UsedResourcesOrderedType::value_type& used_resources_comp, const System& system,
-      std::pair<bool, size_t> part_info = std::make_pair(false, 0));
 
     /** Method to compute the network delay due to data transfer
     *   operations between two consecutive Components or Partitions object, executed

@@ -27,8 +27,8 @@ Copyright 2021 AI-SPRINT
 
 #include <random>
 
-#include "src/System/System.hpp"
 #include "src/Solution/Solution.hpp"
+#include "src/System/System.hpp"
 
 namespace Space4AI
 {
@@ -38,13 +38,12 @@ namespace Space4AI
 */
 class LocalSearch
 {
-
 public:
 
   LocalSearch(
     const Solution& init_sol_,
     const System& system_,
-    const SelectedResources& selected_resources_);
+    bool reproducibility_);
 
   Solution
   run(size_t max_it);
@@ -80,9 +79,6 @@ protected:
 
   /** System object */
   const System& system;
-
-  /** Selected resources */
-  const SelectedResources& selected_resources;
 
   /** current best solution */
   Solution curr_sol;

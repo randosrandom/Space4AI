@@ -44,7 +44,9 @@ SystemPE::compute_local_perf(
   {
     const auto& [p_idx, r_type_idx, r_idx] = used_resources_comp[i];
 
-    if(!local_info.active || (local_info.active && local_info.modified_res[r_type_idx][r_idx]))
+    if(
+      !local_info.active || // Random Greedy
+      local_info.modified_res[r_type_idx][r_idx]) // Ls and I am evaluating a modifed res
     {
       #warning py::scoped_release to make it parallel?
 
@@ -57,26 +59,45 @@ SystemPE::compute_local_perf(
        // Check lables of response_time (when is negative, NaN, +inf, max ...)
        local_parts_perfs[comp_idx][i] = perf_p_idx !=-1 ? perf_p_idx : NaN;
     }
-
-    // network delays
-    if(local_info.active && local_info.modified_comp.first)
+    else
     {
-      if(local_info.modified_comp.second == comp_idx)
+      local_parts_perfs[comp_idx][i] = (*local_info.old_local_parts_perfs_ptr)[comp_idx][i];
+    }
+
+    // network_delays
+    if(used_resources_comp.size() > 1) // I have to compute network delay
+    {
+      local_parts_delays[comp_idx].resize(used_resources_comp.size()-1);
+
+      const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
+
+      for(size_t i=0; i<used_resources_comp.size()-1; ++i)
       {
-        if(local_info.modified_single_part.first)
+        const auto [p_idx1, res1_type_idx, res1_idx] = used_resources_comp[i];
+        const auto [p_idx2, res2_type_idx, res2_idx] = used_resources_comp[i+1];
+
+        if(
+          !local_info.active || // Random Greedy
+          local_info.modified_res[res1_type_idx][res1_idx] || local_info.modified_res[res2_type_idx][res2_idx])
         {
-          network_delay_parts(comp_idx, used_resources_comp, system,
-            std::make_pair(true, local_info.modified_single_part.second));
+          const auto data_size = partitions_comp[p_idx1].get_data_size();
+
+          // I have to compute the network delay only if the two resources running
+          // the two partitions are different!
+          if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
+          {
+            // logger messages
+            local_parts_delays[comp_idx][i] = compute_network_delay(
+                ResTypeFromIdx(res1_type_idx), res1_idx,
+                ResTypeFromIdx(res2_type_idx), res2_idx, data_size,
+                system);
+          }
         }
         else
         {
-          network_delay_parts(comp_idx, used_resources_comp, system);
+          local_parts_delays[comp_idx][i] = (*local_info.old_local_parts_delays_ptr)[comp_idx][i];
         }
       }
-    }
-    else
-    {
-      network_delay_parts(comp_idx, used_resources_comp, system);
     }
     // logger messages
   }
@@ -135,42 +156,6 @@ SystemPE::compute_global_perf(
   }
   // last component
   path_perfs[path_idx] += comp_perfs[comp_idxs.back()];
-}
-
-void
-SystemPE::network_delay_parts(
-  size_t comp_idx,
-  const UsedResourcesOrderedType::value_type& used_resources_comp, const System& system,
-  std::pair<bool, size_t> part_info)
-{
-  if(used_resources_comp.size() > 1) // I have to compute network delay
-  {
-    local_parts_delays[comp_idx].resize(used_resources_comp.size()-1);
-
-    const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
-
-    for(size_t i=0; i<used_resources_comp.size()-1; ++i)
-    {
-      const auto [p_idx1, res1_type_idx, res1_idx] = used_resources_comp[i];
-      const auto [p_idx2, res2_type_idx, res2_idx] = used_resources_comp[i+1];
-
-      if(!part_info.first || (part_info.first && (part_info.second == p_idx1 || part_info.second == p_idx2)))
-      {
-        const auto data_size = partitions_comp[p_idx1].get_data_size();
-
-        // I have to compute the network delay only if the two resources running
-        // the two partitions are different!
-        if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
-        {
-          // logger messages
-          local_parts_delays[comp_idx][i] = compute_network_delay(
-              ResTypeFromIdx(res1_type_idx), res1_idx,
-              ResTypeFromIdx(res2_type_idx), res2_idx, data_size,
-              system);
-        }
-      }
-    }
-  }
 }
 
 TimeType

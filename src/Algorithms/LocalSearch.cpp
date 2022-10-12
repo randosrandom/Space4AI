@@ -30,9 +30,9 @@ namespace Space4AI
 LocalSearch::LocalSearch(
   const Solution& init_sol_,
   const System& system_,
-  const SelectedResources& selected_resources_)
-  : best_sol(init_sol_), system(system_), selected_resources(selected_resources_),
-    curr_sol(Solution(system_))
+  bool reproducibility_)
+  : best_sol(init_sol_), system(system_), curr_sol(Solution(system_)),
+    reproducibility(reproducibility_)
 {
   const auto& all_resources = system.get_system_data().get_all_resources();
 
@@ -42,6 +42,16 @@ LocalSearch::LocalSearch(
   for(size_t i=0; i<local_info.modified_res.size(); ++i)
   {
     local_info.modified_res[i].resize(all_resources.get_number_resources(i));
+  }
+
+  if(reproducibility)
+  {
+    rng.seed(seed);
+  }
+  else
+  {
+    std::random_device dev;
+    rng.seed(dev());
   }
 }
 
@@ -57,7 +67,7 @@ LocalSearch::run(size_t max_it)
     change_deployment();
   }
 
-  return std::move(curr_sol);
+  return curr_sol;
 }
 
 void
@@ -69,7 +79,7 @@ LocalSearch::migrate_vm_to_edge()
   const size_t comp_idx = dist(rng);
 
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
-  const auto& selected_edge = selected_resources.get_selected_edge();
+  const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
 
   // Find the first part being executed on VM
@@ -103,7 +113,7 @@ LocalSearch::migrate_faas_to_vm()
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
 
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
-  const auto& selected_vms = selected_resources.get_selected_vms();
+  const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
 
   // Find the first part being executed on Faas
   for(size_t i=0; i<used_resources_comp.size(); ++i)
@@ -165,8 +175,10 @@ LocalSearch::migration_tweaking(
     local_info.modified_res[res_type_idx_new][random_resource] = true;
 
     local_info.modified_comp = std::make_pair(true, comp_idx);
-    local_info.modified_single_part = std::make_pair(true, part_pos_idx);
+
     local_info.old_used_resources_comp_ptr = &(best_sol.solution_data.used_resources[comp_idx]);
+    local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+    local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
     // CONSTRAINTS
     #warning I AM NOT CHECKING ALLOW_COLOCATION. ASK ARDAGNA
@@ -205,8 +217,9 @@ LocalSearch::change_deployment()
   local_info.reset();
   local_info.active = true;
   local_info.modified_comp = std::make_pair(true, comp_idx);
-  local_info.modified_single_part = std::make_pair(false, 0);
   local_info.old_used_resources_comp_ptr = &(used_resources_comp_old);
+  local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+  local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
   // Choose random deployment
   const auto& deployments = components[comp_idx].get_deployments();
@@ -244,11 +257,11 @@ LocalSearch::change_deployment()
   {
     if(i == edge_type_idx)
     {
-      candidate_resources[i] = selected_resources.get_selected_edge();
+      candidate_resources[i] = best_sol.selected_resources.get_selected_edge();
     }
     if(i == vm_type_idx)
     {
-      candidate_resources[i] = selected_resources.get_selected_vms();
+      candidate_resources[i] = best_sol.selected_resources.get_selected_vms();
     }
     if(i == faas_type_idx)
     {
@@ -318,7 +331,7 @@ LocalSearch::change_deployment()
     curr_sol.local_constraints_check(system, local_info) &&
     curr_sol.global_constraints_check(system, local_info);
 
-  if(feasible && curr_sol.objective_function(system) < best_sol.get_cost())
+  if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
   {
       best_sol = curr_sol;
       ++change_deployment_count;
