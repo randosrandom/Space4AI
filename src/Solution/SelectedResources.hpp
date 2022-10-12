@@ -59,8 +59,7 @@ private:
   *
   */
   std::vector<bool> selected_edge;
-
-
+  
   /** Store the selected vms resources in the solution.
   *
   *   selected[i] = true, if the vm device with index i has been selected in the

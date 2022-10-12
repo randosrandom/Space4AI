@@ -574,10 +574,6 @@ Solution::performance_assignment_check(
             }
           }
         }
-        if(count_part == 0)
-        {
-          solution_data.n_used_resources[res_type_idx][res_idx] = 0;
-        }
       }
 
     }
