@@ -48,7 +48,7 @@ namespace Space4AI
       for(auto& vec : modified_res)
         vec.resize(vec.size());
       modified_comp = std::make_pair(false, 0);
-      old_used_resources_comp_ptr = nullptr;
+    //  old_used_resources_comp_ptr = nullptr;
       old_local_parts_perfs_ptr = nullptr;
       old_local_parts_delays_ptr = nullptr;
     }
@@ -65,8 +65,8 @@ namespace Space4AI
     /** Index of the modified component */
     std::pair<bool, size_t> modified_comp;
 
-    /** pointer to the original used_resources for comp_idx */
-    UsedResourcesOrderedType::value_type const * old_used_resources_comp_ptr = nullptr;
+    /** pointer to the original used_resources for comp_idx */ // DEPRECATING
+    // UsedResourcesOrderedType::value_type const * old_used_resources_comp_ptr = nullptr; // not used for now
 
     /** pointer to the original local_parts_perfs */
     std::vector<std::vector<TimeType>> const * old_local_parts_perfs_ptr = nullptr;

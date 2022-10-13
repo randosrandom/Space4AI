@@ -60,6 +60,9 @@ protected:
   change_deployment();
 
   void
+  drop_resource();
+
+  void
   reduce_vm_size();
 
   bool
@@ -72,6 +75,16 @@ protected:
     size_t res_type_idx_new,
     const std::vector<bool>& selected_devices);
 
+  std::pair<size_t, size_t>
+  sample_random_resource(
+    size_t comp_idx, size_t part_idx,
+    const std::vector<std::vector<bool>>& candidate_resources,
+    const CompatibilityMatrixType& compatibility_matrix);
+
+  std::pair<size_t, size_t>
+  find_resource_to_drop();
+
+
 protected:
 
   /** initial solution passed to the LS algorithm */
@@ -80,9 +93,13 @@ protected:
   /** System object */
   const System& system;
 
+  /** DT selcted resources */
+  const SelectedResources selected_resources;
+
   /** current best solution */
   Solution curr_sol;
 
+  /** local info to track modifications od Local Search */
   LocalInfo local_info;
 
   /** Random number generator */
@@ -99,6 +116,8 @@ protected:
   size_t faas_to_vm_count = 0;
   /** counter of change deployments migrations */
   size_t change_deployment_count = 0;
+  /** counter of drop resource */
+  size_t drop_resource_count = 0;
 };
 
 } // namespace Space4AI

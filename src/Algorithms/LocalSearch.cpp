@@ -65,6 +65,7 @@ LocalSearch::run(size_t max_it)
     migrate_vm_to_edge();
     migrate_faas_to_vm();
     change_deployment();
+    drop_resource();
   }
 
   return curr_sol;
@@ -176,7 +177,6 @@ LocalSearch::migration_tweaking(
 
     local_info.modified_comp = std::make_pair(true, comp_idx);
 
-    local_info.old_used_resources_comp_ptr = &(best_sol.solution_data.used_resources[comp_idx]);
     local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
     local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
@@ -217,7 +217,6 @@ LocalSearch::change_deployment()
   local_info.reset();
   local_info.active = true;
   local_info.modified_comp = std::make_pair(true, comp_idx);
-  local_info.old_used_resources_comp_ptr = &(used_resources_comp_old);
   local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
@@ -272,38 +271,8 @@ LocalSearch::change_deployment()
 
   for(size_t part_idx : random_dep.get_partition_indices())
   {
-    std::vector<std::pair<size_t, size_t>> resources_instersection;
-    resources_instersection.reserve(compatibility_matrix[comp_idx][faas_type_idx][0].size());
-
-    // Edge and VM
-    for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count-1; ++res_type_idx) // Edge or VM
-    {
-      //loop over the resources of type j
-      for(size_t res_idx = 0; res_idx < candidate_resources[res_type_idx].size(); ++res_idx)
-      {
-        //compute the intersection
-        if(candidate_resources[res_type_idx][res_idx] && compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
-        {
-          resources_instersection.emplace_back(res_type_idx, res_idx);
-        }
-      }
-    }
-    //Faas
-    const float prob = resources_instersection.size()>0 ? 0.5 : 1;
-    std::bernoulli_distribution be(prob);
-    for(size_t res_idx = 0; res_idx < candidate_resources[faas_type_idx].size(); ++res_idx)
-    {
-      if(be(rng) && candidate_resources[faas_type_idx][res_idx] && compatibility_matrix[comp_idx][faas_type_idx][part_idx][res_idx])
-        {
-          resources_instersection.emplace_back(faas_type_idx, res_idx);
-        }
-    }
-    const size_t n_inter_res = resources_instersection.size();
-    std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_inter_res - 1);
-    const size_t random_idx = dist(rng);
-    const auto& random_resource = resources_instersection[random_idx];
-
-    curr_sol.solution_data.used_resources[comp_idx].emplace_back(part_idx, random_resource.first, random_resource.second);
+    const auto random_resource = sample_random_resource(
+      comp_idx, part_idx, candidate_resources, compatibility_matrix);
 
     if(random_resource.first == faas_type_idx)
     {
@@ -314,6 +283,7 @@ LocalSearch::change_deployment()
       curr_sol.solution_data.y_hat[comp_idx][random_resource.first][part_idx][random_resource.second] =
         curr_sol.solution_data.n_used_resources[random_resource.first][random_resource.second];
     }
+    curr_sol.solution_data.used_resources[comp_idx].emplace_back(part_idx, random_resource.first, random_resource.second);
 
     local_info.modified_res[random_resource.first][random_resource.second] = true;
   }
@@ -323,7 +293,6 @@ LocalSearch::change_deployment()
 
   #warning performance_assignment_check is not efficient. Better to save the number of partitions \
   running on each resources...
-
   feasible =
     curr_sol.move_backward_check(comp_idx) &&
     curr_sol.memory_constraints_check(system) &&
@@ -340,6 +309,201 @@ LocalSearch::change_deployment()
   {
     curr_sol = best_sol;
   }
+}
+
+void
+LocalSearch::drop_resource()
+{
+  const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
+  const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
+  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
+  const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
+
+  local_info.reset();
+  local_info.active = true;
+  local_info.modified_comp = std::make_pair(false, 0);
+  local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+  local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
+
+  const auto del_res = find_resource_to_drop();
+  if(del_res.first == res_type_idx_count)
+  {
+    return; // no resource to drop found!
+  }
+  curr_sol.solution_data.n_used_resources[del_res.first][del_res.second] = 0;
+
+  // select new resources for the new deployment
+  std::vector<std::vector<bool>> candidate_resources(res_type_idx_count);
+  for(size_t i = 0; i < res_type_idx_count; ++i)
+  {
+    if(i == edge_type_idx)
+    {
+      candidate_resources[i] = best_sol.selected_resources.get_selected_edge();
+    }
+    if(i == vm_type_idx)
+    {
+      candidate_resources[i] = best_sol.selected_resources.get_selected_vms();
+    }
+    if(i == faas_type_idx)
+    {
+      const size_t n_res = system.get_system_data().get_all_resources().get_number_resources(i);
+      candidate_resources[i].resize(n_res, true); // select all the faas as candidates
+    }
+  }
+  candidate_resources[del_res.first][del_res.second] = false; // remove the deleted resource from candidates
+  local_info.modified_res[del_res.first][del_res.second] = true; // ACTUALLY NOT NEEDED SINCE I AM DELETING THE RES!
+
+  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+
+  for(size_t comp_idx=0; comp_idx < best_sol.solution_data.used_resources.size(); ++comp_idx)
+  {
+    const auto& used_resources_comp = best_sol.solution_data.used_resources[comp_idx];
+
+    for(size_t i=0; i < used_resources_comp.size(); ++i)
+    {
+      const auto [part_idx, res_type_idx, res_idx] = used_resources_comp[i];
+
+      if(res_type_idx == del_res.first && res_idx == del_res.second)
+      {
+        curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = 0;
+
+        const auto random_resource = sample_random_resource(
+          comp_idx, part_idx, candidate_resources, compatibility_matrix);
+
+        if(random_resource.first == res_type_idx_count)
+        {
+          curr_sol = best_sol;
+          return;
+        }
+        else if(random_resource.first == faas_type_idx)
+        {
+          curr_sol.solution_data.y_hat[comp_idx][random_resource.first][part_idx][random_resource.second] = 1;
+        }
+        else // Edge or VM
+        {
+          curr_sol.solution_data.y_hat[comp_idx][random_resource.first][part_idx][random_resource.second] =
+            curr_sol.solution_data.n_used_resources[random_resource.first][random_resource.second];
+        }
+        curr_sol.solution_data.used_resources[comp_idx][i] =
+          std::make_tuple(part_idx, random_resource.first, random_resource.second);
+
+        local_info.modified_res[random_resource.first][random_resource.second] = true;
+      }
+    }
+  }
+
+  // check_constraints
+  bool feasible = true;
+
+  #warning performance_assignment_check is not efficient. Better to save the number of partitions \
+  running on each resources...
+  feasible =
+    curr_sol.move_backward_check(system) &&
+    curr_sol.memory_constraints_check(system) &&
+    curr_sol.performance_assignment_check(system, local_info) &&
+    curr_sol.local_constraints_check(system, local_info) &&
+    curr_sol.global_constraints_check(system, local_info);
+
+  if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
+  {
+      curr_sol.set_selected_resources(system);
+      best_sol = curr_sol;
+      ++drop_resource_count;
+
+      std::cout << "NON HO PERSO TEMPO" << std::endl;
+  }
+  else
+  {
+    curr_sol = best_sol;
+  }
+}
+
+std::pair<size_t, size_t>
+LocalSearch::sample_random_resource(
+  size_t comp_idx, size_t part_idx,
+  const std::vector<std::vector<bool>>& candidate_resources,
+  const CompatibilityMatrixType& compatibility_matrix)
+{
+  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
+  const size_t res_type_idx_count = ResIdxFromType(ResourceType::Count);
+
+  std::vector<std::pair<size_t, size_t>> resources_instersection;
+  resources_instersection.reserve(compatibility_matrix[comp_idx][faas_type_idx][0].size()); // just to reserve enough...
+
+  // Edge and VM
+  for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count-1; ++res_type_idx) // Edge or VM
+  {
+    //loop over the resources of type j
+    for(size_t res_idx = 0; res_idx < candidate_resources[res_type_idx].size(); ++res_idx)
+    {
+      //compute the intersection
+      if(candidate_resources[res_type_idx][res_idx] && compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
+      {
+        resources_instersection.emplace_back(res_type_idx, res_idx);
+      }
+    }
+  }
+  //Faas
+  const float prob = resources_instersection.size()>0 ? 0.5 : 1;
+  std::bernoulli_distribution be(prob);
+  for(size_t res_idx = 0; res_idx < candidate_resources[faas_type_idx].size(); ++res_idx)
+  {
+    if(be(rng) && candidate_resources[faas_type_idx][res_idx] && compatibility_matrix[comp_idx][faas_type_idx][part_idx][res_idx])
+      {
+        resources_instersection.emplace_back(faas_type_idx, res_idx);
+      }
+  }
+  const size_t n_inter_res = resources_instersection.size();
+  if(n_inter_res == 0)
+  {
+    return std::make_pair(res_type_idx_count, 0);
+  }
+  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_inter_res - 1);
+  const size_t random_idx = dist(rng);
+  return resources_instersection[random_idx];
+}
+
+std::pair<size_t, size_t>
+LocalSearch::find_resource_to_drop()
+{
+  std::vector<std::pair<size_t, size_t>> active_res;
+
+  const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
+  const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
+  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
+  const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
+
+  const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
+  const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
+
+  const auto& dt_selected_edge = this->selected_resources.get_selected_edge();
+  const auto& dt_selected_vms = this->selected_resources.get_selected_vms();
+
+  if(dt_selected_edge.size() == 0) // If am at DT I can drop Edge!
+  {
+    for(size_t i=0; i<selected_edge.size(); ++i)
+    {
+      if(selected_edge[i])
+      {
+        active_res.emplace_back(edge_type_idx,i);
+      }
+    }
+  }
+  for(size_t i=0; i<selected_vms.size(); ++i)
+  {
+    if(selected_vms[i] && (dt_selected_vms.size() == 0 || !dt_selected_vms[i])) // IMPORTANTE NON POSSO DROPPARE VM GIA' SCELTO (CHIEDI!)
+    {
+      active_res.emplace_back(vm_type_idx,i);
+    }
+  }
+  const size_t n_inter_res = active_res.size();
+  if(n_inter_res == 0)
+  {
+    return std::make_pair(res_type_idx_count, 0);
+  }
+  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_inter_res-1);
+  const size_t rand_res_idx = dist(rng);
+  return active_res[rand_res_idx];
 }
 
 } // namespace Space4AI
