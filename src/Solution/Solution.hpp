@@ -185,17 +185,11 @@ class Solution
     /** Method to check if the Solution satisfies the memory constraints.
     *
     *   \param system Object containing all the data structures of the System
+    *   \param local_info local information on the modified resources and partitions
     *   \return true if the Solution satisfies the memory constraints, false otherwise
     */
-    bool memory_constraints_check(const System& system);
-
-    /** Method to change memory of resources during local search.
-    *
-    *   \param local_info local information on the modified resources and partitions
-    *   \return true if the Solution satisfies the memory constraints
-    */
     bool
-    memory_constraints_check(const System& system, const LocalInfo& local_info);
+    memory_constraints_check(const System& system, const LocalInfo& local_info = LocalInfo());
 
     /** Method to check that, if a Component Partition object is executed
     *   on a ResourceType::VM or a ResourceType::Faas, all its successors

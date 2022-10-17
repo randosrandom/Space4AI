@@ -288,8 +288,8 @@ RandomGreedy::create_random_initial_solution(
 
       //get the indices of compatible resources and compute the
       //intersection with the selected resources in each computational layer
-      // Edge and VM
-      for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count-1; ++res_type_idx) // Edge or VM
+      // Edge and VM and Faas
+      for(size_t res_type_idx = 0; res_type_idx < res_type_idx_count; ++res_type_idx) // Edge or VM
       {
         //loop over the resources of type j
         for(size_t res_idx = 0; res_idx < candidate_resources[res_type_idx].size(); ++res_idx)
@@ -302,18 +302,6 @@ RandomGreedy::create_random_initial_solution(
           }
         }
       }
-      //Faas
-      const float prob = resources_instersection.size()>0 ? 0.5 : 1;
-      std::bernoulli_distribution be(prob);
-      for(size_t res_idx = 0; res_idx < candidate_resources[faas_type_idx].size(); ++res_idx)
-      {
-        if(be(rng) && candidate_resources[faas_type_idx][res_idx] && compatibility_matrix[comp_idx][faas_type_idx][part_idx][res_idx])
-          {
-            resources_instersection.emplace_back(faas_type_idx, res_idx);
-            Logger::Trace("create_random_initial_solution: added to the intersection resource " + std::to_string(res_idx) + " of type " + std::to_string(faas_type_idx));
-          }
-      }
-
       // OBS: resources_instersection is NEVER EMPTY! Indeed, the computational layers
       // are built such in a way that if a select one random resource from each layer
       // resources_instersection is never empty

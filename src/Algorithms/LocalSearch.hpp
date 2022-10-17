@@ -118,6 +118,8 @@ protected:
   size_t change_deployment_count = 0;
   /** counter of drop resource */
   size_t drop_resource_count = 0;
+  /** counter of change_resource_by_cl */
+  size_t change_resource = 0;
 };
 
 } // namespace Space4AI

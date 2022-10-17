@@ -436,7 +436,7 @@ Solution::preliminary_constraints_check_assignments(size_t comp_idx, const Syste
 }
 
 bool
-Solution::memory_constraints_check(const System& system)
+Solution::memory_constraints_check(const System& system, const LocalInfo& local_info)
 {
   Logger::Debug("check_feasibility: Checking memory constraints ... ");
 
@@ -448,11 +448,14 @@ Solution::memory_constraints_check(const System& system)
   {
     for(size_t r_idx=0; r_idx<memory_slack_values[r_type_idx].size(); ++r_idx)
     {
+      if(!local_info.active || local_info.modified_res[r_type_idx][r_idx])
+      {
       memory_slack_values[r_type_idx][r_idx] = (r_type_idx != ResIdxFromType(ResourceType::Faas)) ?
         solution_data.n_used_resources[r_type_idx][r_idx] *
         all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx)
         :
         all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx);
+      }
     }
   }
   // check memory occupations
@@ -462,12 +465,15 @@ Solution::memory_constraints_check(const System& system)
 
     for(auto [p_idx, r_type_idx, r_idx] : solution_data.used_resources[comp_idx])
     {
-      memory_slack_values[r_type_idx][r_idx] -= partitions[p_idx].get_memory();
-
-      if(memory_slack_values[r_type_idx][r_idx] < 0)
+      if(!local_info.active || local_info.modified_res[r_type_idx][r_idx])
       {
-        feasible = false;
-        break;
+        memory_slack_values[r_type_idx][r_idx] -= partitions[p_idx].get_memory();
+
+        if(memory_slack_values[r_type_idx][r_idx] < 0)
+        {
+          feasible = false;
+          break;
+        }
       }
     }
   }
@@ -574,8 +580,11 @@ Solution::performance_assignment_check(
             }
           }
         }
+        if(count_part == 0)
+        {
+          solution_data.n_used_resources[res_type_idx][res_idx] = 0;
+        }
       }
-
     }
   }
 
