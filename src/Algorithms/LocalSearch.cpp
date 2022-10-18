@@ -64,12 +64,13 @@ LocalSearch::run(size_t max_it)
   {
     migrate_vm_to_edge();
     migrate_faas_to_vm();
+    migrate_faas_to_faas();
     change_deployment();
     drop_resource();
     change_resource();
   }
 
-  return best_sol;
+  return curr_sol;
 }
 
 void
@@ -191,20 +192,105 @@ LocalSearch::migration_tweaking(
       curr_sol.local_constraints_check(system, local_info) &&
       curr_sol.global_constraints_check(system, local_info);
   }
-  if(!feasible)
+
+  # warning Inefficiency here: Should manage cost by single resource. However, for the resources \
+  whith colocation, I should keep track of the number of partitions running on the resource. \
+  Maybe change n_used_resources, adding a std::pair where the second element is the number of partition running.
+  if(feasible && (curr_sol.objective_function(system)) < best_sol.get_cost())
+  {
+    best_sol = curr_sol;
+  }
+  else
   {
     curr_sol = best_sol; // reset solution
   }
-  else // assigning curr_sol to best sol even though cost will be similar
-  {
-    # warning Inefficiency here: Should manage cost by single resource. However, for the resources \
-    whith colocation, I should keep track of the number of partitions running on the resource. \
-    Maybe change n_used_resources, adding a std::pair where the second element is the number of partition running.
-
-    curr_sol.objective_function(system);
-    best_sol = curr_sol;
-  }
   return feasible;
+}
+
+void
+LocalSearch::migrate_faas_to_faas()
+{
+  // Choose a random component
+  const auto& components = system.get_system_data().get_components();
+  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size()-1);
+  const size_t comp_idx = dist(rng);
+
+  local_info.reset();
+  local_info.active = true;
+  local_info.modified_comp = std::make_pair(true, comp_idx);
+  local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+  local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
+
+  const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
+  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+  const auto& all_resources = system.get_system_data().get_all_resources();
+
+  // candiates faas (all in the layer)
+  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
+  const size_t n_res = system.get_system_data().get_all_resources().get_number_resources(faas_type_idx);
+  std::vector<bool> candidate_resources(n_res);
+
+  // Try to change Faas one by one
+  bool changed_flag = false;
+
+  for(size_t i=0; i<used_resources_comp.size() && !changed_flag; ++i)
+  {
+    const auto [part_idx, res_type_idx, res_idx] = used_resources_comp[i];
+
+    if(res_type_idx == faas_type_idx)
+    {
+      std::vector<size_t> resources_instersection;
+      resources_instersection.reserve(n_res);
+
+      for(size_t i = 0; i < candidate_resources.size(); ++i)
+      {
+        if(compatibility_matrix[comp_idx][res_type_idx][part_idx][i])
+        {
+          resources_instersection.push_back(i);
+        }
+      }
+      const CostType old_res_cost = all_resources.get_cost(ResourceType::Faas, res_idx);
+      for(size_t new_res_idx : resources_instersection)
+      {
+        if(all_resources.get_cost(ResourceType::Faas, new_res_idx) < old_res_cost)
+        {
+          changed_flag = true;
+
+          local_info.modified_res[faas_type_idx][res_idx] = true;
+          local_info.modified_res[faas_type_idx][new_res_idx] = true;
+
+          curr_sol.solution_data.y_hat[comp_idx][faas_type_idx][part_idx][res_idx] = 0;
+          curr_sol.solution_data.y_hat[comp_idx][faas_type_idx][part_idx][new_res_idx] = 1;
+
+          curr_sol.solution_data.used_resources[comp_idx][i] =
+           std::make_tuple(part_idx, faas_type_idx, new_res_idx);
+
+          break;
+        }
+      }
+    }
+  }
+  if(!changed_flag)
+  {
+    return;
+  }
+  // check constraints
+  // CONSTRAINTS
+  bool feasible =
+    curr_sol.memory_constraints_check(system, local_info) &&
+    curr_sol.performance_assignment_check(system, local_info) &&
+    curr_sol.local_constraints_check(system, local_info) &&
+    curr_sol.global_constraints_check(system, local_info);
+
+  if(feasible && curr_sol.objective_function(system) < best_sol.get_cost())
+  {
+    best_sol = curr_sol;
+    ++faas_to_faas_count;
+  }
+  else
+  {
+    curr_sol = best_sol;
+  }
 }
 
 void
@@ -708,7 +794,6 @@ LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
         }
       }
     }
-
     feasible =
       curr_sol.memory_constraints_check(system, local_info) &&
       curr_sol.local_constraints_check(system, local_info) &&

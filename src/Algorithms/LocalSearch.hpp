@@ -57,6 +57,9 @@ protected:
   migrate_faas_to_vm();
 
   void
+  migrate_faas_to_faas();
+
+  void
   change_deployment();
 
   void
@@ -117,6 +120,8 @@ protected:
   size_t vm_to_edge_count = 0;
   /** counter of Faas to VM migrations */
   size_t faas_to_vm_count = 0;
+  /** counter of mifration faas to faas */
+  size_t faas_to_faas_count = 0;
   /** counter of change deployments migrations */
   size_t change_deployment_count = 0;
   /** counter of drop resource */
