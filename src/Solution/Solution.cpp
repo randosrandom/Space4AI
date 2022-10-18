@@ -477,7 +477,6 @@ Solution::memory_constraints_check(const System& system, const LocalInfo& local_
       }
     }
   }
-
   Logger::Debug("check_feasibility: DONE memory constraints ... ");
 
   return feasible;

@@ -66,9 +66,10 @@ LocalSearch::run(size_t max_it)
     migrate_faas_to_vm();
     change_deployment();
     drop_resource();
+    change_resource();
   }
 
-  return curr_sol;
+  return best_sol;
 }
 
 void
@@ -184,9 +185,6 @@ LocalSearch::migration_tweaking(
     local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
     // CONSTRAINTS
-    #warning I AM NOT CHECKING ALLOW_COLOCATION. ASK ARDAGNA
-    #warning AT THE MOMENT I AM CHECKING MEMORY FROM SCRATCH SINCE THE CODE'S GOING TO VARY SOON
-    // memory
     feasible =
       curr_sol.memory_constraints_check(system, local_info) &&
       curr_sol.performance_assignment_check(system, local_info) &&
@@ -278,7 +276,7 @@ LocalSearch::change_deployment()
     const auto random_resource = sample_random_resource(
       comp_idx, part_idx, candidate_resources, compatibility_matrix);
 
-    if(random_resource.first == res_type_idx_count)
+    if(random_resource.first == res_type_idx_count) // no resource present to allocate part_idx
     {
       curr_sol = best_sol;
       return;
@@ -360,7 +358,7 @@ LocalSearch::drop_resource()
     }
   }
   candidate_resources[del_res.first][del_res.second] = false; // remove the deleted resource from candidates
-  local_info.modified_res[del_res.first][del_res.second] = true; // ACTUALLY NOT NEEDED SINCE I AM DELETING THE RES!
+  local_info.modified_res[del_res.first][del_res.second] = true;
 
   const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
 
@@ -380,11 +378,6 @@ LocalSearch::drop_resource()
           comp_idx, part_idx, candidate_resources, compatibility_matrix);
 
         if(random_resource.first == res_type_idx_count)
-        {
-          curr_sol = best_sol;
-          return;
-        }
-        else if(random_resource.first == res_type_idx_count)
         {
           curr_sol = best_sol;
           return;
@@ -423,8 +416,189 @@ LocalSearch::drop_resource()
       curr_sol.set_selected_resources(system);
       best_sol = curr_sol;
       ++drop_resource_count;
+  }
+  else
+  {
+    curr_sol = best_sol;
+  }
+}
 
-      std::cout << "NON HO PERSO TEMPO" << std::endl;
+void
+LocalSearch::change_resource()
+{
+  const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& cl_name_to_idx = system.get_system_data().get_cl_name_to_idx();
+  const auto& cls = system.get_system_data().get_cls();
+
+  const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
+  const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
+  const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
+
+  local_info.reset();
+  local_info.active = true;
+  local_info.modified_comp = std::make_pair(false, 0);
+  local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+  local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
+
+  const auto del_res = find_resource_to_drop();
+  if(del_res.first == res_type_idx_count)
+  {
+    return; // no resource to change found!
+  }
+  curr_sol.solution_data.n_used_resources[del_res.first][del_res.second] = 0;
+  local_info.modified_res[del_res.first][del_res.second] = true;
+
+  // populate candidate resurces with what already selected and what selectable
+  std::vector<size_t> altern_resources;
+  altern_resources.reserve(all_resources.get_number_resources(del_res.first));
+
+  std::vector<bool> already_selected_cls(cls[del_res.first].size());
+  const auto del_res_cl_name = all_resources.get_cl_name(ResTypeFromIdx(del_res.first), del_res.second);
+  already_selected_cls[cl_name_to_idx[del_res.first].at(del_res_cl_name)] = true; // the layer of the resource I am deleting cannot be used for altern_resources
+
+  if(del_res.first == edge_type_idx)
+  {
+    const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
+    for(size_t i=0; i<selected_edge.size(); ++i)
+    {
+      if(selected_edge[i] && i != del_res.second) // I add as alternative_Resources all the current selected devices but the one to change!
+      {
+        const auto cl_name = all_resources.get_cl_name(ResTypeFromIdx(edge_type_idx), i);
+        already_selected_cls[cl_name_to_idx[edge_type_idx].at(cl_name)] = true;
+        altern_resources.push_back(i);
+      }
+    }
+  }
+  else // VM
+  {
+    const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
+    for(size_t i=0; i<selected_vms.size(); ++i)
+    {
+      if(selected_vms[i] && i != del_res.second)
+      {
+        const auto cl_name = all_resources.get_cl_name(ResTypeFromIdx(vm_type_idx), i);
+        already_selected_cls[cl_name_to_idx[vm_type_idx].at(cl_name)] = true;
+        altern_resources.push_back(i);
+      }
+    }
+  }
+  // populate candidate_resources by comp layer
+  // IMPORTANT: if I am at RT and I selected a VM at a layer (even if a dropped it before), I can select
+  // only the same old resource at that layer...
+  const auto& selected_vms_by_cl = this->selected_resources.get_selected_vms_by_cl();
+  for(size_t cl_idx=0; cl_idx < cls[del_res.first].size(); ++cl_idx)
+  {
+    if(!already_selected_cls[cl_idx])
+    {
+      if(selected_vms_by_cl.size() > 0 && selected_vms_by_cl[cl_idx].first)
+      {
+        altern_resources.push_back(selected_vms_by_cl[cl_idx].second);
+      }
+      else
+      {
+        //pick a random resource of the cl
+        const std::vector<size_t> res_idxs = cls[del_res.first][cl_idx].get_res_idxs();
+        const size_t n_res = res_idxs.size();
+        std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
+        const size_t random_res_idx = res_idxs[dist(rng)];
+        altern_resources.push_back(random_res_idx);
+      }
+    }
+  }
+
+  // Selecte a resource from altern_resources
+  const auto num_altern_res = altern_resources.size();
+  size_t count = 0;
+  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, num_altern_res-1);
+  size_t idx = dist(rng);
+  bool found_new_res = false;
+
+  const CostType orig_cost =
+    best_sol.solution_data.n_used_resources[del_res.first][del_res.second] *
+    all_resources.get_cost(ResTypeFromIdx(del_res.first), del_res.second);
+
+  while(count<num_altern_res && !found_new_res)
+  {
+    const CostType new_single_cost = all_resources.get_cost(ResTypeFromIdx(del_res.first), altern_resources[idx]);
+    const size_t inc_clust_size = static_cast<size_t>(orig_cost / new_single_cost);
+
+    if(best_sol.solution_data.n_used_resources[del_res.first][altern_resources[idx]] > 0 || inc_clust_size > 0)
+    {
+      found_new_res = true;
+      const size_t max_num_istance_avail = all_resources.get_number_avail(ResTypeFromIdx(del_res.first), altern_resources[idx]);
+      const size_t new_clust_size =
+       (best_sol.solution_data.n_used_resources[del_res.first][altern_resources[idx]] + inc_clust_size) <= max_num_istance_avail ?
+       (best_sol.solution_data.n_used_resources[del_res.first][altern_resources[idx]] + inc_clust_size)
+       :
+       max_num_istance_avail;
+
+      curr_sol.solution_data.n_used_resources[del_res.first][altern_resources[idx]] = new_clust_size;
+    }
+    else
+    {
+      idx = (idx+1) % num_altern_res;
+      ++count;
+    }
+  }
+  if(found_new_res)
+  {
+    local_info.modified_res[del_res.first][altern_resources[idx]] = true;
+  }
+  else
+  {
+    curr_sol = best_sol;
+    return;
+  }
+
+  // assign partitions of old component to new component
+  bool feasible = true;
+
+  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+
+  for(size_t comp_idx=0; comp_idx < best_sol.solution_data.used_resources.size() && feasible; ++comp_idx)
+  {
+    const auto& used_resources_comp = best_sol.solution_data.used_resources[comp_idx];
+
+    for(size_t i=0; i < used_resources_comp.size() && feasible; ++i)
+    {
+      const auto [part_idx, res_type_idx, res_idx] = used_resources_comp[i];
+
+      if(res_type_idx == del_res.first && res_idx == del_res.second)
+      {
+        curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = 0;
+
+        if(compatibility_matrix[comp_idx][res_type_idx][part_idx][altern_resources[idx]])
+        {
+          curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][altern_resources[idx]] =
+            curr_sol.solution_data.n_used_resources[res_type_idx][altern_resources[idx]];
+
+          curr_sol.solution_data.used_resources[comp_idx][i] =
+            std::make_tuple(part_idx, res_type_idx, altern_resources[idx]);
+        }
+        else
+        {
+          feasible = false;
+        }
+      }
+    }
+  }
+
+  // check constraints
+  feasible = feasible &&
+    curr_sol.memory_constraints_check(system, local_info) &&
+    curr_sol.performance_assignment_check(system, local_info) &&
+    curr_sol.local_constraints_check(system, local_info) &&
+    curr_sol.global_constraints_check(system, local_info);
+
+  if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
+  {
+      curr_sol.set_selected_resources(system);
+      best_sol = curr_sol;
+      ++change_resource_count;
+      if(curr_sol.solution_data.n_used_resources[del_res.first][altern_resources[idx]] > 1)
+      {
+        reduce_cluster_size(del_res.first, altern_resources[idx]);
+      }
   }
   else
   {
@@ -474,7 +648,6 @@ LocalSearch::find_resource_to_drop()
 
   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
-  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
   const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
 
   const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
@@ -482,7 +655,7 @@ LocalSearch::find_resource_to_drop()
 
   const auto& dt_selected_edge = this->selected_resources.get_selected_edge();
 
-  if(dt_selected_edge.size() == 0) // If am at DT I can drop Edge!
+  if(dt_selected_edge.size() == 0) // If am at DT I can drop Edge, but at RT no!
   {
     for(size_t i=0; i<selected_edge.size(); ++i)
     {
@@ -492,7 +665,7 @@ LocalSearch::find_resource_to_drop()
       }
     }
   }
-  for(size_t i=0; i<selected_vms.size(); ++i)
+  for(size_t i=0; i<selected_vms.size(); ++i) // I can drop VM both at DT and RT, but I have to take care of not choosing a different vm on the same layer of the dropped one
   {
     if(selected_vms[i])
     {
@@ -509,232 +682,48 @@ LocalSearch::find_resource_to_drop()
   return active_res[rand_res_idx];
 }
 
+void
+LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
+{
+  bool feasible = true;
 
-// void
-// LocalSearch::change_resource()
-// {
-//   const auto& all_resources = system.get_system_data().get_all_resources();
-//   const auto& cl_name_to_idx = system.get_system_data().get_cl_name_to_idx();
-//   const auto& cls = system.get_system_data().get_cls();
-//
-//   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
-//   const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
-//   const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
-//   const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
-//
-//   local_info.reset();
-//   local_info.active = true;
-//   local_info.modified_comp = std::make_pair(false, 0);
-//   local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
-//   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
-//
-//   const auto del_res = find_resource_to_drop();
-//   if(del_res.first == res_type_idx_count)
-//   {
-//     return; // no resource to change found!
-//   }
-//   curr_sol.solution_data.n_used_resources[del_res.first][del_res.second] = 0;
-//
-//   // find layer of the resource to drop
-//   //
-//   const auto cl_name = all_resources.get_cl_name(ResTypeFromIdx(del_res.first), del_res.second);
-//   // populate candidate resurces with what already selected and what selectable
-//   std::vector<size_t> altern_resources;
-//   altern_resource.reserve(all_resources.get_number_resources(del_res.first));
-//   std::vector<bool> already_selected_cls(cls[del_res.first].size());
-//
-//   if(del_res.first == edge_type_idx)
-//   {
-//     const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
-//     for(size_t i=0; i<selected_edge.size(); ++i)
-//     {
-//       if(selected_edge[i] && i != del_res.second)
-//       {
-//         const auto cl_name = all_resources.get_cl_name(edge_type_idx, i);
-//         already_selected_cls[cl_name_to_idx.at(cl_name)] = true;
-//         altern_resource.push_back(i);
-//       }
-//     }
-//   }
-//   else // VM
-//   {
-//     const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
-//     candidate_resources = selected_vms;
-//     for(size_t i=0; i<selected_vms.size(); ++i)
-//     {
-//       if(selected_vms[i] && i != del_res.second)
-//       {
-//         const auto cl_name = all_resources.get_cl_name(vm_type_idx, i);
-//         already_selected_cls[cl_name_to_idx.at(cl_name)] = true;
-//         altern_resource.push_back(i);
-//       }
-//     }
-//   }
-//
-//   // populate candidate_resources by comp layer
-//   for(size_t cl_idx=0; cl_idx < cls[del_res.first].size(); ++cl_idx)
-//   {
-//     if(!already_selected_cls[cl_idx])
-//     {
-//       //pick a random resource of the cl
-//       const std::vector<size_t> res_idxs = cls[vm_type_idx][cl_idx].get_res_idxs();
-//       const size_t n_res = res_idxs.size();
-//       std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
-//       const size_t random_res_idx = res_idxs[dist(rng)];
-//       altern_resource.push_back(random_res_idx);
-//     }
-//   }
-//
-//   const auto num_altern_res = altern_resource.size();
-//   const size_t count = 0;
-//   std::uniform_int_distribution<decltype(rng)::result_type> dist(0, num_altern_res-1);
-//   size_t idx = dist(rng);
-//   bool found_new_res = false;
-//
-//   const CostType orig_cost =
-//     best_sol.solution_data.n_used_resources[del_res.first][del_res.second] *
-//     all_resources.get_cost(ResTypeFromIdx(del_res.first), del_res.second);
-//
-//   while(count<num_altern_res && !found_new_res)
-//   {
-//     const CostType new_single_cost = all_resources.get_cost(ResTypeFromIdx(del_res.first), altern_resource[idx]);
-//     const size_t inc_clust_size = static_cast<size_t>(orig_cost / new_single_cost);
-//
-//     if(best_sol.solution_data.n_used_resources[del_res.first][altern_resource[idx]] > 0 || inc_clust_size > 0)
-//     {
-//       found_new_res = true;
-//       const size_t max_num_istance_avail = all_resources.get_number_avail(ResTypeFromIdx(del_res.first), altern_resource[idx]);
-//       const size_t new_clust_size =
-//        (best_sol.solution_data.n_used_resources[del_res.first][altern_resource[idx]] + inc_clust_size) <= max_num_istance_avail ?
-//        (best_sol.solution_data.n_used_resources[del_res.first][altern_resource[idx]] + inc_clust_size)
-//        :
-//        max_num_istance_avail;
-//
-//       curr_sol.solution_data.n_used_resources[del_res.first][altern_resource[idx]] += new_clust_size;
-//     }
-//     else
-//     {
-//       idx = (idx+1) % num_altern_res;
-//       ++count;
-//     }
-//   }
-//   if(!found_new_res)
-//   {
-//     curr_sol = best_sol;
-//     return;
-//   }
-//   // assign partitions of old component to new component
-//   bool feasible = true;
-//
-//   const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
-//
-//   for(size_t comp_idx=0; comp_idx < best_sol.solution_data.used_resources.size() && feasible; ++comp_idx)
-//   {
-//     const auto& used_resources_comp = best_sol.solution_data.used_resources[comp_idx];
-//
-//     for(size_t i=0; i < used_resources_comp.size() && feasible; ++i)
-//     {
-//       const auto [part_idx, res_type_idx, res_idx] = used_resources_comp[i];
-//
-//       if(res_type_idx == del_res.first && res_idx == del_res.second)
-//       {
-//         curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = 0;
-//         if(compatibility_matrix[comp_idx][res_type_idx][part_idx][altern_resource[idx]])
-//         {
-//           curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][altern_resource[idx]] =
-//             curr_sol.solution_data.n_used_resources[res_type_idx][altern_resource[idx]];
-//
-//           curr_sol.solution_data.used_resources[comp_idx][i] =
-//             std::make_tuple(part_idx, res_type_idx, altern_resource[idx]);
-//         }
-//         else
-//         {
-//           feasible = false;
-//         }
-//       }
-//     }
-//   }
-//
-//   // check constraints
-//
-//
-//
-//   /*
-//   // find new resource on that layer
-//   const auto& all_res_idxs = cls[del_res.first][cl_name_to_idx.at(cl_name)].get_res_idxs();
-//   if(all_res_idxs.size() <= 1)
-//   {
-//     return; // cannot change resource if I have no or only one resource on the layer.
-//   }
-//   std::uniform_int_distribution<decltype(rng)::result_type> dist(0, all_res_idxs.size()-1);
-//   size_t rand_i = dist(rng);
-//   if(all_res_idxs[rand_i] == del_res.second)
-//   {
-//     rand_i = (rand_i + 1) % all_res_idxs.size();
-//   }
-//   const size_t new_res_idx = all_res_idxs[rand_i];
-//
-//   const auto orig_tot_cost =
-//     best_sol.solution_data.n_used_resources[del_res.first][del_res.second] *
-//     all_resources.get_cost(ResTypeFromIdx(del_res.first), del_res.second);
-//
-//   const auto new_cost = all_resources.get_cost(ResTypeFromIdx(del_res.first), new_res_idx);
-//   size_t clust_size = static_cast<size_t>(orig_tot_cost / new_cost);
-//   if(clust_size < 1)
-//   {
-//     return; // new cost is too high
-//   }
-//   local_info.modified_res[del_res.first][del_res.second] = true;
-//   curr_sol.solution_data.n_used_resources[del_res.first][del_res.second] = 0;
-//
-//   local_info.modified_res[del_res.first][new_res_idx] = true;
-//   curr_sol.solution_data.n_used_resources[del_res.first][new_res_idx] = clust_size;
-//
-//   for(size_t comp_idx=0; comp_idx < best_sol.solution_data.used_resources.size(); ++comp_idx)
-//   {
-//     const auto& used_resources_comp = best_sol.solution_data.used_resources[comp_idx];
-//
-//     for(size_t i=0; i<used_resources_comp.size(); ++i)
-//     {
-//       const auto [part_idx, res_type_idx, res_idx] = used_resources_comp[i];
-//
-//       if(res_type_idx == del_res.first && res_idx == del_res.second)
-//       {
-//         curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] = 0;
-//         curr_sol.solution_data.y_hat[comp_idx][res_type_idx][part_idx][new_res_idx] = clust_size;
-//
-//         curr_sol.solution_data.used_resources[comp_idx][i] =
-//           std::make_tuple(part_idx, del_res.first, new_res_idx);
-//       }
-//     }
-//   }
-//
-//   // check_constraints
-//   bool feasible = true;
-//
-//   #warning performance_assignment_check is not efficient. Better to save the number of partitions \
-//   running on each resources...
-//   feasible =
-//     curr_sol.move_backward_check(system) &&
-//     curr_sol.memory_constraints_check(system) &&
-//     curr_sol.performance_assignment_check(system, local_info) &&
-//     curr_sol.local_constraints_check(system, local_info) &&
-//     curr_sol.global_constraints_check(system, local_info);
-//
-//   if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
-//   {
-//       curr_sol.set_selected_resources(system);
-//       best_sol = curr_sol;
-//       ++drop_resource_count;
-//
-//       std::cout << "NON HO PERSO TEMPO" << std::endl;
-//   }
-//   else
-//   {
-//     curr_sol = best_sol;
-//   }
-//   */
-// }
+  local_info.reset();
+  local_info.active = true;
+  local_info.modified_res[res_type_idx][res_idx] = true;
+  local_info.modified_comp = std::make_pair(false, 0);
+  local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+  local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
+  do
+  {
+    curr_sol.solution_data.n_used_resources[res_type_idx][res_idx]--;
+
+    for(size_t comp_idx = 0; comp_idx < curr_sol.solution_data.used_resources.size(); ++comp_idx)
+    {
+      for(auto [p_idx, r_type_idx, r_idx] : curr_sol.solution_data.used_resources[comp_idx])
+      {
+        if(res_type_idx == r_type_idx && res_idx == r_idx)
+        {
+          curr_sol.solution_data.y_hat[comp_idx][r_type_idx][p_idx][r_idx]--;
+        }
+      }
+    }
+
+    feasible =
+      curr_sol.memory_constraints_check(system, local_info) &&
+      curr_sol.local_constraints_check(system, local_info) &&
+      curr_sol.global_constraints_check(system, local_info);
+
+    if(feasible)
+    {
+      curr_sol.objective_function(system);
+      best_sol = curr_sol;
+    }
+    else
+    {
+      curr_sol = best_sol;
+    }
+  }while(feasible && (curr_sol.solution_data.n_used_resources[res_type_idx][res_idx] > 1));
+}
 
 } // namespace Space4AI

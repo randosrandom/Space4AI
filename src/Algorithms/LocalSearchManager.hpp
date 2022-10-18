@@ -32,12 +32,29 @@ namespace Space4AI
 class LocalSearchManager
 {
   static
-  std::vector<Solution> // for now, but maybe it's better EliteResult ...
+  std::vector<LocalSearch> // for now, but maybe it's better EliteResult ...
   local_search(
-    const EliteResult& rg_elite_result,
+    const EliteResult& solutions_,
     size_t max_it,
-    bool reproducibility, 
-    const System& system /* selected_resources */);
+    bool reproducibility,
+    const System& system,
+    const SelectedResources& selected_resources = SelectedResources());
+
+  private:
+
+    const System& system;
+
+    const EliteResult& rg_elite_result;
+
+    const SelectedResources& selected_resources;
+
+    EliteResult ls_elite_result;
+
+    std::vector<LocalSearch> ls_vec;
+
+    bool reproducibility;
+
+    size_t max_it;
 }
 
 } //namespace Space4AI

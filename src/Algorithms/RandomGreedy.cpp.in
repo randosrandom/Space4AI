@@ -406,8 +406,7 @@ RandomGreedy::reduce_cluster_size(
     {
       Logger::Debug("reduce_cluster_size: The solution is not feasible anymore reducing cluster size of type: " + std::to_string(res_type_idx) + " and idx " + std::to_string(res_idx));
     }
-  }
-  while(feasible && (n_used_resources_new[res_type_idx][res_idx] > 1));
+  }while(feasible && (n_used_resources_new[res_type_idx][res_idx] > 1));
 
   Logger::Debug("reduce_cluster_size: Done reducing cluster size!");
   return old_sol;

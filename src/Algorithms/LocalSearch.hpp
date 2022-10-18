@@ -63,7 +63,7 @@ protected:
   drop_resource();
 
   void
-  reduce_vm_size();
+  change_resource();
 
   bool
   migration_tweaking(
@@ -83,6 +83,9 @@ protected:
 
   std::pair<size_t, size_t>
   find_resource_to_drop();
+
+  void
+  reduce_cluster_size(size_t res_type_idx, size_t res_idx);
 
 
 protected:
@@ -119,7 +122,7 @@ protected:
   /** counter of drop resource */
   size_t drop_resource_count = 0;
   /** counter of change_resource_by_cl */
-  size_t change_resource = 0;
+  size_t change_resource_count = 0;
 };
 
 } // namespace Space4AI
