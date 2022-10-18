@@ -88,9 +88,10 @@ class Solution
     /** Method to compute the cost of a Solution.
     *
     *   \param system Object containing all the data structures of the System
+    *   \param local_info Local Information from previous solution to save time (optional)
     *   \return cost of the Solution
     */
-    CostType objective_function(const System& system);
+    CostType objective_function(const System& system, const LocalInfo& local_info = LocalInfo());
 
     /** feasibility getter */
     bool
@@ -117,7 +118,7 @@ class Solution
     get_selected_resources() const {return selected_resources;}
 
     /** memory occupations getter */
-    const MemoryOccupationType&
+    const std::vector<std::vector<DataType>>&
     get_memory_slack_values() const {return memory_slack_values;}
 
     /** time_perfs getter */
@@ -247,12 +248,13 @@ class Solution
     SolutionData solution_data;
 
     /** SelectedResources object.
-    *   Store the selected edge and vm resources, if the solution is feasible.
-    */
+    *   Store the selected edge and vm resources, if the solution is feasible. */
     SelectedResources selected_resources;
 
-    /* For each resource save the slack memory remaining in the solution */
-    MemoryOccupationType memory_slack_values;
+    /** For each [ResourceType, Resource idx] tracks the memory being used in a solution. */
+    std::vector<std::vector<DataType>> memory_slack_values;
+
+    std::vector<std::vector<CostType>> res_costs;
 
     /** Local and Global performance */
     SystemPE time_perfs;

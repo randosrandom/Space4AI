@@ -40,9 +40,11 @@ Solution::Solution(const System& system):
   const auto& paths_size = system.get_system_data().get_global_constraints().size();
   // Initialize memory_slack_values
   memory_slack_values.resize(ResIdxFromType(ResourceType::Count));
+  res_costs.resize(ResIdxFromType(ResourceType::Count));
   for(size_t type_idx = 0; type_idx < ResIdxFromType(ResourceType::Count); ++type_idx)
   {
     memory_slack_values[type_idx].resize(all_resources.get_number_resources(type_idx), 0.0);
+    res_costs[type_idx].resize(all_resources.get_number_resources(type_idx), NaN);
   }
   time_perfs.local_parts_perfs.resize(comp_size);
   time_perfs.local_parts_delays.resize(comp_size);
@@ -685,11 +687,12 @@ Solution::check_feasibility(
 }
 
 CostType
-Solution::objective_function(const System& system)
+Solution::objective_function(const System& system, const LocalInfo& local_info)
 {
   Logger::Debug("objective_function: Computing objective function ... ");
-  CostType cost = 0.0;
+  this->total_cost = 0.0;
   std::vector<std::vector<bool>> res_cost_alredy_computed(ResIdxFromType(ResourceType::Count));
+
   const auto& all_resources = system.get_system_data().get_all_resources();
   const auto& components = system.get_system_data().get_components();
   const auto& performance = system.get_performance();
@@ -707,35 +710,45 @@ Solution::objective_function(const System& system)
       {
         res_cost_alredy_computed[res_type_idx][res_idx] = true;
 
-        if(res_type_idx == ResIdxFromType(ResourceType::Edge))
+        if(!local_info.active || local_info.modified_res[res_type_idx][res_idx])
         {
-          const auto res_cost = all_resources.get_resource<ResourceType::Edge>(res_idx).get_cost();
-          cost += solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] * res_cost;
+          if(res_type_idx == ResIdxFromType(ResourceType::Edge))
+          {
+            const auto res_cost = all_resources.get_resource<ResourceType::Edge>(res_idx).get_cost();
+            this->res_costs[res_type_idx][res_idx] = res_cost;
+            total_cost += solution_data.n_used_resources[res_type_idx][res_idx] * res_cost;
+          }
+          else if(res_type_idx == ResIdxFromType(ResourceType::VM))
+          {
+            const auto res_cost = all_resources.get_resource<ResourceType::VM>(res_idx).get_cost();
+            this->res_costs[res_type_idx][res_idx] = res_cost;
+            total_cost += solution_data.n_used_resources[res_type_idx][res_idx] * res_cost;
+          }
+          else // Faas
+          {
+            const auto res_cost = all_resources.get_resource<ResourceType::Faas>(res_idx).get_cost();
+            const TimeType time = system.get_system_data().get_time();
+            // ATTENTO: LORO USANO COMP_LAMBDA... SECONDO ME E' GIUSTO PART_LAMBDA INVECE
+            const auto part_lambda = components[comp_idx].get_partition(part_idx).get_part_lambda();
+            const auto warm_time =
+              static_cast<FaasPE*>(
+                performance[comp_idx][res_type_idx][part_idx][res_idx].get()
+              )->get_demandWarm();
+
+            this->res_costs[res_type_idx][res_idx] = res_cost * warm_time * part_lambda * time;
+            total_cost += this->res_costs[res_type_idx][res_idx];
+          }
         }
-        else if(res_type_idx == ResIdxFromType(ResourceType::VM))
+        else
         {
-          const auto res_cost = all_resources.get_resource<ResourceType::VM>(res_idx).get_cost();
-          cost += solution_data.y_hat[comp_idx][res_type_idx][part_idx][res_idx] * res_cost;
-        }
-        else // Faas
-        {
-          const auto res_cost = all_resources.get_resource<ResourceType::Faas>(res_idx).get_cost();
-          const TimeType time = system.get_system_data().get_time();
-          // ATTENTO: LORO USANO COMP_LAMBDA... SECONDO ME E' GIUSTO PART_LAMBDA INVECE
-          const auto part_lambda = components[comp_idx].get_partition(part_idx).get_part_lambda();
-          const auto warm_time =
-            static_cast<FaasPE*>(
-              performance[comp_idx][res_type_idx][part_idx][res_idx].get()
-            )->get_demandWarm();
-          cost += res_cost * warm_time * part_lambda * time;
+          total_cost += res_costs[res_type_idx][res_idx];
         }
       }
     }
   }
 
-  total_cost = cost;
   Logger::Debug("objective_function: Done computation of objective function!");
-  return cost;
+  return total_cost;
 }
 
 

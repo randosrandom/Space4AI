@@ -147,11 +147,6 @@ using UsedResourcesNumberType =
 using SelectedVMType =
   std::vector<std::pair<bool, size_t>>;
 
-/** For each [ResourceType, Resource idx] tracks the memory being used in a solution.
-*/
-using MemoryOccupationType =
-  std::vector<std::vector<DataType>>;
-
 const auto NaN =
   std::numeric_limits<TimeType>::quiet_NaN();
 
