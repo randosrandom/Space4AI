@@ -46,7 +46,7 @@ namespace Space4AI
     reset() {
       active = false;
       for(auto& vec : modified_res)
-        vec.resize(vec.size());
+        vec.assign(vec.size(), false);
       modified_comp = std::make_pair(false, 0);
       old_local_parts_perfs_ptr = nullptr;
       old_local_parts_delays_ptr = nullptr;

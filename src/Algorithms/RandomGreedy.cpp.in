@@ -45,12 +45,10 @@ RandomGreedy::random_greedy(
   const System& system,
   size_t max_it,
   size_t num_top_sols,
-  bool reproducibility_flag
+  bool reproducibility
 )
 {
-  Logger::Info("Starting Random Greedy DT algorithm with reproducibility flag raised to: " + std::to_string(reproducibility_flag));
-
-  reproducibility = reproducibility_flag;
+  Logger::Info("Starting Random Greedy DT algorithm with reproducibility flag raised to: " + std::to_string(reproducibility));
 
   if(reproducibility)
   {
@@ -218,8 +216,8 @@ RandomGreedy::create_random_initial_solution(
   // Selecting candidate_resources (Edge and VM, Faas already selected all)
   Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
 
-  const auto& selected_edge = selected_resources.get_selected_edge();
-  const auto& selected_vms_by_cl = selected_resources.get_selected_vms_by_cl();
+  const auto& selected_edge = curr_rt_sol_selected_resources.get_selected_edge();
+  const auto& selected_vms_by_cl = curr_rt_sol_selected_resources.get_selected_vms_by_cl();
 
   // EDGE RESOURCES
   if(selected_edge.size() > 0)  // If I provided old selected resources

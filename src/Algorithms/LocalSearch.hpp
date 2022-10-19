@@ -38,15 +38,26 @@ namespace Space4AI
 */
 class LocalSearch
 {
+  friend class LocalSearchManager;
+
 public:
 
   LocalSearch(
-    const Solution& init_sol_,
-    const System& system_,
-    bool reproducibility_);
+    System const * const system_,
+    SelectedResources const * const curr_rt_sol_sel_res_):
+  best_sol(Solution(nullptr)), curr_sol(Solution(nullptr)),
+  system(system_), curr_rt_sol_selected_resources(curr_rt_sol_sel_res_) {};
 
-  Solution
-  run(size_t max_it);
+  LocalSearch(
+    const Solution& init_sol_,
+    System const * const system_,
+    SelectedResources const * const selected_resources_);
+
+  void
+  run(size_t max_it, bool reproducibility);
+
+  const Solution&
+  get_best_sol() const {return best_sol;}
 
 protected:
 
@@ -90,20 +101,19 @@ protected:
   void
   reduce_cluster_size(size_t res_type_idx, size_t res_idx);
 
-
 protected:
 
   /** initial solution passed to the LS algorithm */
   Solution best_sol;
 
-  /** System object */
-  const System& system;
-
-  /** DT selcted resources */
-  const SelectedResources selected_resources;
-
   /** current best solution */
   Solution curr_sol;
+
+  /** System object */
+  System const * system;
+
+  /** Curr run-time sol selcted resources */
+  SelectedResources const * curr_rt_sol_selected_resources;
 
   /** local info to track modifications od Local Search */
   LocalInfo local_info;
@@ -111,9 +121,7 @@ protected:
   /** Random number generator */
   std::mt19937_64 rng;
   /** seed */
-  const size_t seed = 121298;
-  /** reproducibility  flag */
-  bool reproducibility = true;
+  inline static constexpr size_t seed = 20122022;
 
   // counter of feasible neighborhoods
   /** counter of VM to Edge migrations */

@@ -14,6 +14,7 @@ configure_file(${CMAKE_SOURCE_DIR}/src/Algorithms/RandomGreedy.cpp.in ${CMAKE_BI
 set(SRCS
 "${CMAKE_BINARY_DIR}/src/Algorithms/RandomGreedy.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Algorithms/LocalSearch.cpp;\
+${CMAKE_SOURCE_DIR}/src/Algorithms/LocalSearchManager.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Graph/Dag.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Performance/PerformanceModels.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Performance/PerformancePredictors.cpp;\

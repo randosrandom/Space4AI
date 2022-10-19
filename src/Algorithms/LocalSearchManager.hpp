@@ -31,31 +31,51 @@ namespace Space4AI
 {
 class LocalSearchManager
 {
-  static
-  std::vector<LocalSearch> // for now, but maybe it's better EliteResult ...
-  local_search(
-    const EliteResult& solutions_,
-    size_t max_it,
-    bool reproducibility,
-    const System& system,
-    const SelectedResources& selected_resources = SelectedResources());
+public:
+
+    LocalSearchManager(
+      const EliteResult& rg_elite_result_,
+      const System& system_,
+      bool reproducibility_,
+      size_t max_it_);
+
+    LocalSearchManager(
+      const EliteResult& rg_elite_result_,
+      const System& system_,
+      bool reproducibility_,
+      size_t max_it_,
+      const SelectedResources& curr_rt_sol_sel_res_);
+
+    void
+    run();
+
+    const EliteResult&
+    get_ls_elite_result() const {return ls_elite_result;};
+
+    const std::vector<LocalSearch>&
+    get_ls_vec() const {return ls_vec;};
+
 
   private:
 
-    const System& system;
-
+    /** elite_result output of the Random Greedy*/
     const EliteResult& rg_elite_result;
 
-    const SelectedResources& selected_resources;
-
-    EliteResult ls_elite_result;
-
-    std::vector<LocalSearch> ls_vec;
+    const System& system;
 
     bool reproducibility;
 
     size_t max_it;
-}
+
+    /** contains the selected_resources in the previous solution, empty if working at design time */
+    const SelectedResources curr_rt_sol_selected_resources;
+
+    /** EliteResult after the Local Search */
+    EliteResult ls_elite_result;
+
+    /** Local Search data for each solution */
+    std::vector<LocalSearch> ls_vec;
+};
 
 } //namespace Space4AI
 

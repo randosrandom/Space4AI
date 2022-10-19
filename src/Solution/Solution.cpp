@@ -30,7 +30,7 @@ namespace Space4AI
 {
 Solution::Solution(const System& system):
   feasibility(false),
-  total_cost(-1)
+  total_cost(std::numeric_limits<CostType>::infinity())
 {
   // Here I don't resize solution_data.* objects, since they are constructed by
   // the external class algorithm. However, here it is worth resizing all the

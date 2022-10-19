@@ -45,13 +45,13 @@ class Solution
   public:
 
     /** Solution default constructor */
-    // Solution(): feasibility(false), total_cost(-1) {}
+    explicit Solution(void*): feasibility(false), total_cost(-1) {}
 
     /** Solution constructor that initializes feasibility to false
     *   and total_cost to -1, and resize all the data scturctures according
     *   to data contained in system;
     */
-    Solution(const System& system);
+    explicit Solution(const System& system);
 
     /** Method that reads the configuration of the Solution, if you want to load
     *   a previous Solution saved in file.
@@ -254,6 +254,7 @@ class Solution
     /** For each [ResourceType, Resource idx] tracks the memory being used in a solution. */
     std::vector<std::vector<DataType>> memory_slack_values;
 
+    /** For each [ResourceType, Resource idx] save the cost of the resource */
     std::vector<std::vector<CostType>> res_costs;
 
     /** Local and Global performance */

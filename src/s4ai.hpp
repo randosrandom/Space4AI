@@ -28,7 +28,7 @@ Copyright 2021 AI-SPRINT
 
 #include "src/Logger.hpp"
 
-#include "src/Algorithms/LocalSearch.hpp"
+#include "src/Algorithms/LocalSearchManager.hpp"
 #include "src/Algorithms/RandomGreedy.hpp"
 #include "src/Solution/Solution.hpp"
 #include "src/System/System.hpp"

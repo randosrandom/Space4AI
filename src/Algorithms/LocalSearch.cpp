@@ -29,36 +29,38 @@ namespace Space4AI
 
 LocalSearch::LocalSearch(
   const Solution& init_sol_,
-  const System& system_,
-  bool reproducibility_)
-  : best_sol(init_sol_), system(system_), curr_sol(Solution(system_)),
-    reproducibility(reproducibility_)
+  System const * const system_,
+  SelectedResources const * const curr_rt_sol_sel_res_)
+  : best_sol(init_sol_), curr_sol(init_sol_),
+    system(system_), curr_rt_sol_selected_resources(curr_rt_sol_sel_res_)
 {
-  const auto& all_resources = system.get_system_data().get_all_resources();
+  rng.seed(seed);
 
-  local_info.active = true;
+  const auto& all_resources = system->get_system_data().get_all_resources();
 
   local_info.modified_res.resize(ResIdxFromType(ResourceType::Count));
   for(size_t i=0; i<local_info.modified_res.size(); ++i)
   {
     local_info.modified_res[i].resize(all_resources.get_number_resources(i));
   }
-
-  if(reproducibility)
-  {
-    rng.seed(seed);
-  }
-  else
-  {
-    std::random_device dev;
-    rng.seed(dev());
-  }
 }
 
-Solution
-LocalSearch::run(size_t max_it)
+void
+LocalSearch::run(size_t max_it, bool reproducibility)
 {
   curr_sol = best_sol;
+
+  // rng.seed(seed);
+
+  // if(reproducibility)
+  // {
+  //   rng.seed(seed);
+  // }
+  // else
+  // {
+  //   std::random_device dev;
+  //   rng.seed(dev());
+  // }
 
   for(size_t it=0; it<max_it; ++it)
   {
@@ -69,15 +71,13 @@ LocalSearch::run(size_t max_it)
     drop_resource();
     change_resource();
   }
-
-  return curr_sol;
 }
 
 void
 LocalSearch::migrate_vm_to_edge()
 {
   // Choose a random component
-  const auto& components = system.get_system_data().get_components();
+  const auto& components = system->get_system_data().get_components();
   std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size()-1);
   const size_t comp_idx = dist(rng);
 
@@ -100,7 +100,7 @@ LocalSearch::migrate_vm_to_edge()
           comp_idx, p_idx, i, r_type_idx, r_idx, edge_type_idx, selected_edge))
       {
         ++vm_to_edge_count;
-        curr_sol.set_selected_resources(system); // VM can be switched off
+        curr_sol.set_selected_resources(*system); // VM can be switched off
       }
       interrupt = true;
     }
@@ -111,7 +111,7 @@ void
 LocalSearch::migrate_faas_to_vm()
 {
   // Choose a random component
-  const auto& components = system.get_system_data().get_components();
+  const auto& components = system->get_system_data().get_components();
 
   std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size()-1);
   const size_t comp_idx = dist(rng);
@@ -149,7 +149,7 @@ LocalSearch::migration_tweaking(
 {
   bool feasible{false};
 
-  const auto compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+  const auto compatibility_matrix = system->get_system_data().get_compatibility_matrix();
 
   std::vector<size_t> resources_instersection;
   resources_instersection.reserve(selected_devices.size());
@@ -187,16 +187,16 @@ LocalSearch::migration_tweaking(
 
     // CONSTRAINTS
     feasible =
-      curr_sol.memory_constraints_check(system, local_info) &&
-      curr_sol.performance_assignment_check(system, local_info) &&
-      curr_sol.local_constraints_check(system, local_info) &&
-      curr_sol.global_constraints_check(system, local_info);
+      curr_sol.memory_constraints_check(*system, local_info) &&
+      curr_sol.performance_assignment_check(*system, local_info) &&
+      curr_sol.local_constraints_check(*system, local_info) &&
+      curr_sol.global_constraints_check(*system, local_info);
   }
 
   # warning Inefficiency here: Should manage cost by single resource. However, for the resources \
   whith colocation, I should keep track of the number of partitions running on the resource. \
   Maybe change n_used_resources, adding a std::pair where the second element is the number of partition running.
-  if(feasible && (curr_sol.objective_function(system)) < best_sol.get_cost())
+  if(feasible && (curr_sol.objective_function(*system)) < best_sol.get_cost())
   {
     best_sol = curr_sol;
   }
@@ -211,7 +211,7 @@ void
 LocalSearch::migrate_faas_to_faas()
 {
   // Choose a random component
-  const auto& components = system.get_system_data().get_components();
+  const auto& components = system->get_system_data().get_components();
   std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size()-1);
   const size_t comp_idx = dist(rng);
 
@@ -222,12 +222,12 @@ LocalSearch::migrate_faas_to_faas()
   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
 
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
-  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
-  const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& compatibility_matrix = system->get_system_data().get_compatibility_matrix();
+  const auto& all_resources = system->get_system_data().get_all_resources();
 
   // candiates faas (all in the layer)
   const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
-  const size_t n_res = system.get_system_data().get_all_resources().get_number_resources(faas_type_idx);
+  const size_t n_res = system->get_system_data().get_all_resources().get_number_resources(faas_type_idx);
   std::vector<bool> candidate_resources(n_res);
 
   // Try to change Faas one by one
@@ -277,12 +277,12 @@ LocalSearch::migrate_faas_to_faas()
   // check constraints
   // CONSTRAINTS
   bool feasible =
-    curr_sol.memory_constraints_check(system, local_info) &&
-    curr_sol.performance_assignment_check(system, local_info) &&
-    curr_sol.local_constraints_check(system, local_info) &&
-    curr_sol.global_constraints_check(system, local_info);
+    curr_sol.memory_constraints_check(*system, local_info) &&
+    curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.local_constraints_check(*system, local_info) &&
+    curr_sol.global_constraints_check(*system, local_info);
 
-  if(feasible && curr_sol.objective_function(system) < best_sol.get_cost())
+  if(feasible && curr_sol.objective_function(*system) < best_sol.get_cost())
   {
     best_sol = curr_sol;
     ++faas_to_faas_count;
@@ -297,7 +297,7 @@ void
 LocalSearch::change_deployment()
 {
   // Choose a random component
-  const auto& components = system.get_system_data().get_components();
+  const auto& components = system->get_system_data().get_components();
   std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size()-1);
   const size_t comp_idx = dist(rng);
   const auto& used_resources_comp_old = best_sol.get_used_resources()[comp_idx];
@@ -327,8 +327,8 @@ LocalSearch::change_deployment()
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
   const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
   const size_t res_type_idx_count = ResIdxFromType(ResourceType::Count);
-  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
-  const auto& all_resources = system.get_system_data().get_all_resources();
+  const auto& compatibility_matrix = system->get_system_data().get_compatibility_matrix();
+  const auto& all_resources = system->get_system_data().get_all_resources();
 
   // clear current solution comp_idx used_resources
   for(auto [p_idx, r_type_idx, r_idx]: used_resources_comp_old)
@@ -388,12 +388,12 @@ LocalSearch::change_deployment()
   running on each resources...
   feasible =
     curr_sol.move_backward_check(comp_idx) &&
-    curr_sol.memory_constraints_check(system) &&
-    curr_sol.performance_assignment_check(system, local_info) &&
-    curr_sol.local_constraints_check(system, local_info) &&
-    curr_sol.global_constraints_check(system, local_info);
+    curr_sol.memory_constraints_check(*system) &&
+    curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.local_constraints_check(*system, local_info) &&
+    curr_sol.global_constraints_check(*system, local_info);
 
-  if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
+  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
       best_sol = curr_sol;
       ++change_deployment_count;
@@ -439,14 +439,14 @@ LocalSearch::drop_resource()
     }
     if(i == faas_type_idx)
     {
-      const size_t n_res = system.get_system_data().get_all_resources().get_number_resources(i);
+      const size_t n_res = system->get_system_data().get_all_resources().get_number_resources(i);
       candidate_resources[i].resize(n_res, true); // select all the faas as candidates
     }
   }
   candidate_resources[del_res.first][del_res.second] = false; // remove the deleted resource from candidates
   local_info.modified_res[del_res.first][del_res.second] = true;
 
-  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+  const auto& compatibility_matrix = system->get_system_data().get_compatibility_matrix();
 
   for(size_t comp_idx=0; comp_idx < best_sol.solution_data.used_resources.size(); ++comp_idx)
   {
@@ -491,15 +491,15 @@ LocalSearch::drop_resource()
   #warning performance_assignment_check is not efficient. Better to save the number of partitions \
   running on each resources...
   feasible =
-    curr_sol.move_backward_check(system) &&
-    curr_sol.memory_constraints_check(system, local_info) &&
-    curr_sol.performance_assignment_check(system, local_info) &&
-    curr_sol.local_constraints_check(system, local_info) &&
-    curr_sol.global_constraints_check(system, local_info);
+    curr_sol.move_backward_check(*system) &&
+    curr_sol.memory_constraints_check(*system, local_info) &&
+    curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.local_constraints_check(*system, local_info) &&
+    curr_sol.global_constraints_check(*system, local_info);
 
-  if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
+  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
-      curr_sol.set_selected_resources(system);
+      curr_sol.set_selected_resources(*system);
       best_sol = curr_sol;
       ++drop_resource_count;
   }
@@ -512,9 +512,9 @@ LocalSearch::drop_resource()
 void
 LocalSearch::change_resource()
 {
-  const auto& all_resources = system.get_system_data().get_all_resources();
-  const auto& cl_name_to_idx = system.get_system_data().get_cl_name_to_idx();
-  const auto& cls = system.get_system_data().get_cls();
+  const auto& all_resources = system->get_system_data().get_all_resources();
+  const auto& cl_name_to_idx = system->get_system_data().get_cl_name_to_idx();
+  const auto& cls = system->get_system_data().get_cls();
 
   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
@@ -571,7 +571,7 @@ LocalSearch::change_resource()
   // populate candidate_resources by comp layer
   // IMPORTANT: if I am at RT and I selected a VM at a layer (even if a dropped it before), I can select
   // only the same old resource at that layer...
-  const auto& selected_vms_by_cl = this->selected_resources.get_selected_vms_by_cl();
+  const auto& selected_vms_by_cl = this->curr_rt_sol_selected_resources->get_selected_vms_by_cl();
   for(size_t cl_idx=0; cl_idx < cls[del_res.first].size(); ++cl_idx)
   {
     if(!already_selected_cls[cl_idx])
@@ -639,7 +639,7 @@ LocalSearch::change_resource()
   // assign partitions of old component to new component
   bool feasible = true;
 
-  const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
+  const auto& compatibility_matrix = system->get_system_data().get_compatibility_matrix();
 
   for(size_t comp_idx=0; comp_idx < best_sol.solution_data.used_resources.size() && feasible; ++comp_idx)
   {
@@ -671,14 +671,14 @@ LocalSearch::change_resource()
 
   // check constraints
   feasible = feasible &&
-    curr_sol.memory_constraints_check(system, local_info) &&
-    curr_sol.performance_assignment_check(system, local_info) &&
-    curr_sol.local_constraints_check(system, local_info) &&
-    curr_sol.global_constraints_check(system, local_info);
+    curr_sol.memory_constraints_check(*system, local_info) &&
+    curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.local_constraints_check(*system, local_info) &&
+    curr_sol.global_constraints_check(*system, local_info);
 
-  if(feasible && (curr_sol.objective_function(system) < best_sol.get_cost()))
+  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
-      curr_sol.set_selected_resources(system);
+      curr_sol.set_selected_resources(*system);
       best_sol = curr_sol;
       ++change_resource_count;
       if(curr_sol.solution_data.n_used_resources[del_res.first][altern_resources[idx]] > 1)
@@ -739,7 +739,7 @@ LocalSearch::find_resource_to_drop()
   const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
   const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
 
-  const auto& dt_selected_edge = this->selected_resources.get_selected_edge();
+  const auto& dt_selected_edge = this->curr_rt_sol_selected_resources->get_selected_edge();
 
   if(dt_selected_edge.size() == 0) // If am at DT I can drop Edge, but at RT no!
   {
@@ -795,13 +795,13 @@ LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
       }
     }
     feasible =
-      curr_sol.memory_constraints_check(system, local_info) &&
-      curr_sol.local_constraints_check(system, local_info) &&
-      curr_sol.global_constraints_check(system, local_info);
+      curr_sol.memory_constraints_check(*system, local_info) &&
+      curr_sol.local_constraints_check(*system, local_info) &&
+      curr_sol.global_constraints_check(*system, local_info);
 
     if(feasible)
     {
-      curr_sol.objective_function(system);
+      curr_sol.objective_function(*system);
       best_sol = curr_sol;
     }
     else

@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,18 +45,10 @@ class EliteResult
     *
     *   \param max_num_sols_ maximum length admissible for the vector
     */
-    EliteResult(size_t max_num_sols_): max_num_sols(max_num_sols_), num_threads(1)
+    explicit EliteResult(size_t max_num_sols_): max_num_sols(max_num_sols_), num_threads(1)
     {
       solutions.reserve(max_num_sols_);
     }
-
-    /** solutions getter */
-    const std::vector<Solution>&
-    get_solutions() const { return solutions; }
-
-    /** Method to get the current number of saved solutions */
-    size_t
-    get_size() const { return solutions.size(); }
 
     /** Print a solution to file.
     *
@@ -72,6 +64,17 @@ class EliteResult
     */
     template<class T>
     void add(T&& solution);
+
+    template<class T>
+    void add_vec(std::vector<T>&& solutions_vec);
+
+    /** solutions getter */
+    const std::vector<Solution>&
+    get_solutions() const { return solutions; }
+
+    /** Method to get the current number of saved solutions */
+    size_t
+    get_size() const { return solutions.size(); }
 
     /** num_threads setter */
     void
@@ -95,18 +98,22 @@ class EliteResult
 };
 
 // TEMPLATE DEFINITIONS
-
 template<class T>
 void
 EliteResult::add(T&& solution)
 {
   solutions.push_back(std::forward<T>(solution));
   std::sort(solutions.begin(), solutions.end());
+  solutions.resize(std::min(solutions.size(), max_num_sols), Solution(nullptr));
+}
 
-  if(solutions.size() > max_num_sols)
-  {
-    solutions.pop_back();
-  }
+template<class T>
+void
+EliteResult::add_vec(std::vector<T>&& solutions_vec)
+{
+  solutions.insert(solutions.end(), solutions_vec.begin(), solutions_vec.end());
+  std::sort(solutions.begin(), solutions.end());
+  solutions.resize(std::min(solutions.size(), max_num_sols), Solution(nullptr));
 }
 
 } //namespace Space4AI

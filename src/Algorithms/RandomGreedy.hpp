@@ -42,8 +42,8 @@ class RandomGreedy
 
     RandomGreedy() = default;
 
-    RandomGreedy(const SelectedResources& selected_resources_)
-    : selected_resources(selected_resources_) {}
+    RandomGreedy(const SelectedResources& curr_rt_sol_sel_res_)
+    : curr_rt_sol_selected_resources(curr_rt_sol_sel_res_) {}
 
     /** Method to generate random greedy solutions
     *
@@ -108,13 +108,10 @@ class RandomGreedy
     std::mt19937_64 rng;
 
     /* Initial seed for the random device */
-    const size_t seed = 121298;
+    inline static constexpr size_t seed = 20122022;
 
-    /** reproducibility flag */
-    bool reproducibility = true;
-
-    /** Previously selected resources (e.g., at design-time) on Edge and VM */
-    SelectedResources selected_resources;
+    /** Current run-time solution selected resources (e.g., at design-time) on Edge and VM */
+    const SelectedResources curr_rt_sol_selected_resources;
 
 
 };
