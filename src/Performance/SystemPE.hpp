@@ -80,17 +80,6 @@ class SystemPE
     friend class Solution;
     friend class LocalSearch;
 
-    // /** Method to evaluate the response time of the all Component objects.
-    // *
-    // *   \param system Object containing all the data structures of the System
-    // *   \param solution_data SolutionData object
-    // */
-    // void
-    // compute_local_perfs(
-    //   const System& system,
-    //   const SolutionData& solution_data
-    // ); // CURRENTLY NOT BEING USED!
-
     /** Method to evaluate the response time of the Component object
     *   identified by the given index.
     *
@@ -117,6 +106,12 @@ class SystemPE
       const System& system,
       const SolutionData& solution_data,
       const LocalInfo& local_info = LocalInfo());
+
+    const std::vector<TimeType>&
+    get_comp_perfs() const {return comp_perfs;};
+
+    const std::vector<TimeType>&
+    get_path_perfs() const {return path_perfs;};
 
 private:
 

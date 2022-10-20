@@ -121,6 +121,9 @@ class Solution
     const std::vector<std::vector<DataType>>&
     get_memory_slack_values() const {return memory_slack_values;}
 
+    const std::vector<std::vector<CostType>>&
+    get_res_costs() const {return res_costs;}
+
     /** time_perfs getter */
     const SystemPE&
     get_time_perfs() const {return time_perfs;}
@@ -224,7 +227,7 @@ class Solution
     */
     bool local_constraints_check(
       const System& system,
-      const LocalInfo& local_info=LocalInfo());
+      const LocalInfo& local_info = LocalInfo());
 
     /** Method to check if GlobalConstraint constraints are satisfied by the Solution.
     *

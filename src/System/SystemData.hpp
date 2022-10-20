@@ -310,8 +310,7 @@ SystemData::initialize_resources(const nl::json& resources_json)
     this->cls[ResIdxFromType(Type)].emplace_back(cl, Type);
     cl_name_to_idx[ResIdxFromType(Type)].emplace(
       cl,
-      cl_name_to_idx[ResIdxFromType(Type)].size()
-    );
+      cl_name_to_idx[ResIdxFromType(Type)].size());
 
     for(const auto& [res_name, res_data] : data.items())
     {
@@ -335,8 +334,7 @@ SystemData::initialize_resources(const nl::json& resources_json)
         res_data.at("cost").template get<double>(),
         res_data.at("memory").template get<double>(),
         res_data.at("number").template get<size_t>(),
-        n_cores
-      );
+        n_cores);
       this->res_name_to_type_and_idx.emplace(
         res_name,
         std::make_pair(Type, res_idx)
@@ -370,8 +368,7 @@ SystemData::initialize_resources<ResourceType::Faas>
     this->cls[ResIdxFromType(ResourceType::Faas)].emplace_back(key, ResourceType::Faas); // only one computational layer for faas!
     cl_name_to_idx[ResIdxFromType(ResourceType::Faas)].emplace(
       key,
-      cl_name_to_idx[ResIdxFromType(ResourceType::Faas)].size()
-    );
+      cl_name_to_idx[ResIdxFromType(ResourceType::Faas)].size());
 
     for(const auto& [res_name, res_data] : data.items())
     {
@@ -397,12 +394,10 @@ SystemData::initialize_resources<ResourceType::Faas>
         res_data.at("cost").template get<double>(),
         res_data.at("memory").template get<double>(),
         transition_cost,
-        res_data.at("idle_time_before_kill").template get<double>()
-      );
+        res_data.at("idle_time_before_kill").template get<double>());
       this->res_name_to_type_and_idx.emplace(
         res_name,
-        std::make_pair(ResourceType::Faas, res_idx)
-      );
+        std::make_pair(ResourceType::Faas, res_idx));
       this->cls[ResIdxFromType(ResourceType::Faas)].back().add_resource(res_idx++);
       this->all_resources.add_resource(std::move(res));
     }

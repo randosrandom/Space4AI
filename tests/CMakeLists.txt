@@ -1,13 +1,16 @@
 add_executable(test_basic main_test.cpp)
 add_executable(test_logger main_test_logger.cpp)
+add_executable(test_dt_localsearch main_test_dt_localsearch.cpp)
 
 target_link_libraries(test_basic PRIVATE ${LIB_NAME})
 target_link_libraries(test_logger PRIVATE ${LIB_NAME})
+target_link_libraries(test_dt_localsearch PRIVATE ${LIB_NAME})
 
 add_test(NAME "TestingSimpleSystemWith5Components" COMMAND test_basic config_tests/config_test1.json)
 add_test(NAME "TestingComplexSystemWith15Components" COMMAND test_basic config_tests/config_test2.json)
 add_test(NAME "TestingDynamicPerfModel" COMMAND test_basic config_tests/config_test3.json)
 add_test(NAME "TestingMultiSystemsRunAndLoggerFileSaving" COMMAND test_logger config_tests/config_test4.json)
+add_test(NAME "TestingDesignTimeLocalSearch" COMMAND test_dt_localsearch config_tests/config_test_dt_localsearch.json)
 
 if(PARALLELIZATION)
 	add_executable(test_parallel main_test_parallel.cpp)

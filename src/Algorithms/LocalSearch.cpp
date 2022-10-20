@@ -34,8 +34,6 @@ LocalSearch::LocalSearch(
   : best_sol(init_sol_), curr_sol(init_sol_),
     system(system_), curr_rt_sol_selected_resources(curr_rt_sol_sel_res_)
 {
-  rng.seed(seed);
-
   const auto& all_resources = system->get_system_data().get_all_resources();
 
   local_info.modified_res.resize(ResIdxFromType(ResourceType::Count));
@@ -50,17 +48,15 @@ LocalSearch::run(size_t max_it, bool reproducibility)
 {
   curr_sol = best_sol;
 
-  // rng.seed(seed);
-
-  // if(reproducibility)
-  // {
-  //   rng.seed(seed);
-  // }
-  // else
-  // {
-  //   std::random_device dev;
-  //   rng.seed(dev());
-  // }
+  if(reproducibility)
+  {
+    rng.seed(seed);
+  }
+  else
+  {
+    std::random_device dev;
+    rng.seed(dev());
+  }
 
   for(size_t it=0; it<max_it; ++it)
   {
