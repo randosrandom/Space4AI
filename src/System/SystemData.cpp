@@ -319,7 +319,7 @@ SystemData::find_order_parts(const nl::json& parts_json) const
     all_parts.emplace(part_name, all_parts.size());
     const std::string next_part = part_data.at("next").get<std::string>();
 
-    if(comp_name_to_idx.count(next_part) == 0) // if next is not the final partition (next is not a component)
+    if(comp_name_to_idx.count(next_part) == 0) // if next_part is not a component
     {
       parts_next.emplace(next_part, part_name);
     }

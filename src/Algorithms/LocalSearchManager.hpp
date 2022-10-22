@@ -37,13 +37,15 @@ public:
       const EliteResult& rg_elite_result_,
       const System& system_,
       bool reproducibility_,
-      size_t max_it_);
+      size_t max_it_,
+      size_t max_num_sols);
 
     LocalSearchManager(
       const EliteResult& rg_elite_result_,
       const System& system_,
       bool reproducibility_,
       size_t max_it_,
+      size_t max_num_sols,
       const SelectedResources& curr_rt_sol_sel_res_);
 
     void

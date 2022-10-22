@@ -46,13 +46,18 @@ main(int argc, char** argv)
     throw std::runtime_error("Can't open " + basic_config_filepath.string() + " file. Make sure that the path is correct, and the format is json");
   }
 
-  std::string output_dir = "OutputFilesDT/";
-  fs::create_directory(output_dir);
+  std::string output_dir_rg = "OutputFilesDT/RG/";
+  fs::create_directories(output_dir_rg);
+
+  std::string output_dir_ls = "OutputFilesDT/LS/";
+  fs::create_directories(output_dir_ls);
 
   Timings::Chrono my_chrono;
 
-  const size_t n_iterations = basic_config.at("Algorithm").at("n_iterations").get<size_t>();
-  const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
+  const size_t rg_n_iterations = basic_config.at("Algorithm").at("RG_n_iterations").get<size_t>();
+  const size_t ls_n_iterations = basic_config.at("Algorithm").at("LS_n_iterations").get<size_t>();
+  const size_t rg_max_num_sols = basic_config.at("Algorithm").at("RG_max_num_sols").get<size_t>();
+  const size_t ls_max_num_sols = basic_config.at("Algorithm").at("LS_max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
 
   Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
@@ -84,32 +89,30 @@ main(int argc, char** argv)
     sp::RandomGreedy rg;
 
     my_chrono.start();
-    const auto elite_result = rg.random_greedy(
-      system, n_iterations, max_num_sols, reproducibility
-    );
-    const double algorithm_run_time = my_chrono.wallTimeNow() * 1e-6;
+    const auto rg_elite_result = rg.random_greedy(
+      system, rg_n_iterations, rg_max_num_sols, reproducibility);
+    const double rg_run_time = my_chrono.wallTimeNow() * 1e-6;
 
     std::string suffix_sol = system_config_file;
     eraseAllSubStr(suffix_sol, "config");
     std::replace(suffix_sol.begin(), suffix_sol.end(), '/', '_');
 
-    const auto& sols = elite_result.get_solutions();
-    for(size_t rk = 0; rk < sols.size(); ++rk)
+    const auto& rg_sols = rg_elite_result.get_solutions();
+    for(size_t rk = 0; rk < rg_sols.size(); ++rk)
     {
       std::string infoSol_output_file, sol_output_file;
 
       if(rk == 0)
       {
-        infoSol_output_file = output_dir + "InfoSol" + suffix_sol;
-        sol_output_file = output_dir + "Sol" + suffix_sol;
+        infoSol_output_file = output_dir_rg + "InfoSol" + suffix_sol;
+        sol_output_file = output_dir_rg + "Sol" + suffix_sol;
       }
       else
       {
-        infoSol_output_file = output_dir + "InfoSol_rk" + std::to_string(rk) + suffix_sol;
-        sol_output_file = output_dir + "Sol_rk" + std::to_string(rk) + suffix_sol;
+        infoSol_output_file = output_dir_rg + "InfoSol_rk" + std::to_string(rk) + suffix_sol;
+        sol_output_file = output_dir_rg + "Sol_rk" + std::to_string(rk) + suffix_sol;
       }
-
-      elite_result.print_solution(system, sol_output_file, rk);
+      rg_sols[rk].print_solution(system, sol_output_file);
 
       nl::json InfoSol;
 
@@ -117,30 +120,73 @@ main(int argc, char** argv)
       InfoSol["System"]["readTime"] = system_read_time;
 
       InfoSol["Algorithm"]["name"] = "Random Greedy";
-      InfoSol["Algorithm"]["time"] = algorithm_run_time;
-      InfoSol["Algorithm"]["n_iterations"] = n_iterations;
-      InfoSol["Algorithm"]["num_threads"] = elite_result.get_num_threads();
+      InfoSol["Algorithm"]["time"] = rg_run_time;
+      InfoSol["Algorithm"]["n_iterations"] = rg_n_iterations;
+      InfoSol["Algorithm"]["num_threads"] = rg_elite_result.get_num_threads();
 
       InfoSol["Rank"] = rk;
-      InfoSol["SolCost"] = sols[rk].get_cost();
+      InfoSol["SolCost"] = rg_sols[rk].get_cost();
 
       std::ofstream o(infoSol_output_file);
       o << std::setw(4) << InfoSol << std::endl;
     }
 
-    if(sols.size() > 0)
+    if(rg_sols.size() > 0)
     {
-      std::cout << "Found feasible solution to: " << system_config_file << " of best cost: " << sols[0].get_cost() << std::endl;
+      std::cout << "Found feasible solution to: " << system_config_file << " of best cost: " << rg_sols[0].get_cost() << std::endl;
     }
     else
     {
       std::cout << "No feasible solution found to: "<< system_config_file << std::endl;
     }
+    std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
+    std::cout << "Random Greedy running time (in seconds): " << rg_run_time << std::endl;
+    std::cout << "Starting Local Search..." << std::endl;
+
+    my_chrono.start();
+    sp::LocalSearchManager ls_man(rg_elite_result, system, reproducibility, ls_n_iterations, ls_max_num_sols);
+    ls_man.run();
+    const double ls_time = my_chrono.wallTimeNow() * 1e-6;
+
+    const auto& ls_sols = ls_man.get_ls_elite_result().get_solutions();
+
+    for(size_t rk = 0; rk < ls_sols.size(); ++rk)
+    {
+      std::string infoSol_output_file, sol_output_file;
+
+      if(rk == 0)
+      {
+        infoSol_output_file = output_dir_ls + "InfoSol" + suffix_sol;
+        sol_output_file = output_dir_ls + "Sol" + suffix_sol;
+      }
+      else
+      {
+        infoSol_output_file = output_dir_ls + "InfoSol_rk" + std::to_string(rk) + suffix_sol;
+        sol_output_file = output_dir_ls + "Sol_rk" + std::to_string(rk) + suffix_sol;
+      }
+
+      ls_sols[rk].print_solution(system, sol_output_file);
+
+      nl::json InfoSol;
+
+      InfoSol["System"]["name"] = system_config_file;
+      InfoSol["System"]["readTime"] = system_read_time;
+
+      InfoSol["Algorithm"]["name"] = "Local Search";
+      InfoSol["Algorithm"]["n_iterations"] = ls_n_iterations;
+
+      InfoSol["Rank"] = rk;
+      InfoSol["SolCost"] = ls_sols[rk].get_cost();
+
+      std::ofstream o(infoSol_output_file);
+      o << std::setw(4) << InfoSol << std::endl;
+    }
+
+    std::cout << "Best LS solution cost: " << ls_sols.front().get_cost() << std::endl;
+    std::cout << "Global LS running time: " << ls_time << std::endl;
 
     std::cout << std::endl;
-    std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
-    std::cout << "Random Greedy running time (in seconds): " << algorithm_run_time << std::endl;
-    std::cout << std::endl;
+
   }
   return 0;
 }

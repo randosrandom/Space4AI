@@ -654,11 +654,11 @@ Solution::check_feasibility(
 
     if(feasible)
     {
-      feasible = this->memory_constraints_check(system);
+      feasible = this->performance_assignment_check(system);
 
       if(feasible)
       {
-        feasible = this->performance_assignment_check(system);
+        feasible = this->memory_constraints_check(system);
 
         if(feasible)
         {
@@ -712,6 +712,8 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
 
         if(!local_info.active || local_info.modified_res[res_type_idx][res_idx])
         {
+          const TimeType time = system.get_system_data().get_time();
+
           if(res_type_idx == ResIdxFromType(ResourceType::Edge))
           {
             const auto res_cost = all_resources.get_resource<ResourceType::Edge>(res_idx).get_cost();
@@ -722,12 +724,11 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
           {
             const auto res_cost = all_resources.get_resource<ResourceType::VM>(res_idx).get_cost();
             this->res_costs[res_type_idx][res_idx] = res_cost;
-            total_cost += solution_data.n_used_resources[res_type_idx][res_idx] * res_cost;
+            total_cost += solution_data.n_used_resources[res_type_idx][res_idx] * res_cost * time;
           }
           else // Faas
           {
             const auto res_cost = all_resources.get_resource<ResourceType::Faas>(res_idx).get_cost();
-            const TimeType time = system.get_system_data().get_time();
             // ATTENTO: LORO USANO COMP_LAMBDA... SECONDO ME E' GIUSTO PART_LAMBDA INVECE
             const auto part_lambda = components[comp_idx].get_partition(part_idx).get_part_lambda();
             const auto warm_time =

@@ -183,8 +183,8 @@ LocalSearch::migration_tweaking(
 
     // CONSTRAINTS
     feasible =
-      curr_sol.memory_constraints_check(*system, local_info) &&
       curr_sol.performance_assignment_check(*system, local_info) &&
+      curr_sol.memory_constraints_check(*system, local_info) &&
       curr_sol.local_constraints_check(*system, local_info) &&
       curr_sol.global_constraints_check(*system, local_info);
   }
@@ -273,8 +273,8 @@ LocalSearch::migrate_faas_to_faas()
   // check constraints
   // CONSTRAINTS
   bool feasible =
-    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.local_constraints_check(*system, local_info) &&
     curr_sol.global_constraints_check(*system, local_info);
 
@@ -384,8 +384,8 @@ LocalSearch::change_deployment()
   running on each resources...
   feasible =
     curr_sol.move_backward_check(comp_idx) &&
-    curr_sol.memory_constraints_check(*system) &&
     curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.local_constraints_check(*system, local_info) &&
     curr_sol.global_constraints_check(*system, local_info);
 
@@ -488,8 +488,8 @@ LocalSearch::drop_resource()
   running on each resources...
   feasible =
     curr_sol.move_backward_check(*system) &&
-    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.local_constraints_check(*system, local_info) &&
     curr_sol.global_constraints_check(*system, local_info);
 
@@ -667,8 +667,8 @@ LocalSearch::change_resource()
 
   // check constraints
   feasible = feasible &&
-    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.performance_assignment_check(*system, local_info) &&
+    curr_sol.memory_constraints_check(*system, local_info) &&
     curr_sol.local_constraints_check(*system, local_info) &&
     curr_sol.global_constraints_check(*system, local_info);
 

@@ -9,10 +9,10 @@ set(PYTHONDIR ${CMAKE_SOURCE_DIR}/extras/Python) # PYTHONDIR needed in Performan
 configure_file(${CMAKE_SOURCE_DIR}/src/Performance/PerformancePredictors.hpp.in ${CMAKE_BINARY_DIR}/src/Performance/PerformancePredictors.hpp @ONLY)
 
 # Parallelization
-configure_file(${CMAKE_SOURCE_DIR}/src/Algorithms/RandomGreedy.cpp.in ${CMAKE_BINARY_DIR}/src/Algorithms/RandomGreedy.cpp)
+configure_file(${CMAKE_SOURCE_DIR}/src/Algorithms/ParallelConfig.hpp.in ${CMAKE_BINARY_DIR}/src/Algorithms/ParallelConfig.hpp)
 
 set(SRCS
-"${CMAKE_BINARY_DIR}/src/Algorithms/RandomGreedy.cpp;\
+"${CMAKE_SOURCE_DIR}/src/Algorithms/RandomGreedy.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Algorithms/LocalSearch.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Algorithms/LocalSearchManager.cpp;\
 ${CMAKE_SOURCE_DIR}/src/Graph/Dag.cpp;\

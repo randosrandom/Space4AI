@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,7 +61,7 @@ class Partition
     {}
 
     /** name getter */
-    std::string
+    const std::string&
     get_name() const { return name; };
 
     /** memory getter */
@@ -77,7 +77,7 @@ class Partition
     get_early_exit_probability() const { return early_exit_probability; };
 
     /** next Partition name getter */
-    std::string
+    const std::string&
     get_next() const { return next; };
 
     /** data_size getter */
@@ -125,7 +125,7 @@ class Deployment
     {}
 
     /** name getter */
-    std::string
+    const std::string&
     get_name() const { return name; };
 
     /** partition_indices getter */
@@ -167,7 +167,7 @@ class Component
     {}
 
     /** name getter */
-    std::string
+    const std::string&
     get_name() const { return name; }
 
     /** deployments vector getter */

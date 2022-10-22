@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -121,15 +121,15 @@ class Resource
     {}
 
     /** name getter */
-    std::string
+    const std::string&
     get_name() const { return name; };
 
     /** description getter */
-    std::string
+    const std::string&
     get_description() const { return description; };
 
     /** cl_name getter */
-    std::string
+    const std::string&
     get_cl_name() const { return cl_name; };
 
     /** cost getter */
@@ -209,15 +209,15 @@ class Resource<ResourceType::Faas>
     {}
 
     /** name getter */
-    std::string
+    const std::string&
     get_name() const { return name; };
 
     /** description getter */
-    std::string
+    const std::string&
     get_description() const { return description; };
 
     /** computational layer name getter */
-    std::string
+    const std::string&
     get_cl_name() const { return cl_name; };
 
     /** cost getter */
@@ -298,7 +298,7 @@ class AllResources
     *	\param res_idx Index of the resource
     * 	\return name of the Resource
     */
-    std::string get_name(ResourceType res_type, size_t res_idx) const;
+    const std::string& get_name(ResourceType res_type, size_t res_idx) const;
 
     /** Method to get the description of a Resource.
     *
@@ -306,7 +306,7 @@ class AllResources
     *	\param res_idx Index of the Resource
     * 	\return description of the Resource
     */
-    std::string get_description(ResourceType res_type, size_t res_idx) const;
+    const std::string& get_description(ResourceType res_type, size_t res_idx) const;
 
     /** Method to get the total number of resources of the type corresponding to
     * 	the type_idx (see ResourceType enum class in TypeTraits.hpp)
@@ -326,7 +326,7 @@ class AllResources
     * 	\param res_idx Index of the Resource
     * 	\return name of the ComputationalLayer including the input Resource
     */
-    std::string get_cl_name(ResourceType res_type, size_t res_idx) const;
+    const std::string& get_cl_name(ResourceType res_type, size_t res_idx) const;
 
     /** Method to get the memory of the input Resource.
     *
@@ -467,7 +467,7 @@ AllResources::get_resource(size_t res_idx) const
 }
 
 inline
-std::string
+const std::string&
 AllResources::get_name(ResourceType res_type, size_t res_idx) const
 {
   switch(res_type)
@@ -485,7 +485,7 @@ AllResources::get_name(ResourceType res_type, size_t res_idx) const
 }
 
 inline
-std::string
+const std::string&
 AllResources::get_description(ResourceType res_type, size_t res_idx) const
 {
   switch(res_type)
@@ -512,7 +512,7 @@ AllResources::get_number_resources(size_t res_type_idx) const
 // I need this necessarily, size at compile time I cannot know the type
 // related to the function SystemPerformanceEvaluator::get_network_delay()
 inline
-std::string
+const std::string&
 AllResources::get_cl_name(ResourceType res_type, size_t res_idx) const
 {
   switch(res_type)

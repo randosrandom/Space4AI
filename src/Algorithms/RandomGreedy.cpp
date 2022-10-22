@@ -23,19 +23,8 @@ Copyright 2021 AI-SPRINT
 * \author Giulia Mazzilli
 */
 
-#cmakedefine PARALLELIZATION
-
-#ifdef PARALLELIZATION
-  #define MY_PRAGMA(OPTIONS) _Pragma(#OPTIONS)
-#else
-  #define MY_PRAGMA(OPTIONS) do {} while(0);
-#endif // PARALLELIZATION
-
 #include "src/Algorithms/RandomGreedy.hpp"
-
-#ifdef PARALLELIZATION
-  #include <omp.h>
-#endif // PARALELLIZATION
+#include "src/Algorithms/ParallelConfig.hpp"
 
 namespace Space4AI
 {

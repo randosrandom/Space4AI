@@ -2,9 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-
-#include "external/chrono/chrono.hpp"
-
 #include "src/s4ai.hpp"
 
 namespace sp = Space4AI;
@@ -32,7 +29,7 @@ main(int argc, char** argv)
     throw std::runtime_error("Can't open " + basic_config_filepath.string() + " file. Make sure that the path is correct, and the format is json");
   }
   const size_t rg_n_iterations = basic_config.at("Algorithm").at("RG_n_iterations").get<size_t>();
-  const size_t ls_n_iterations = basic_config.at("Algorithm").at("RG_n_iterations").get<size_t>();
+  const size_t ls_n_iterations = basic_config.at("Algorithm").at("LS_n_iterations").get<size_t>();
   const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
 
@@ -63,13 +60,12 @@ main(int argc, char** argv)
     }
 
     std::cout << "Found " << sols.size() << " solutions for file: " << system_config_file << " of best cost: " << sols.at(0).get_cost() << std::endl;
-    std::cout << std::endl;
-
     std::cout << "Starting Local Search ..." << std::endl;
 
-    sp::LocalSearchManager ls_manager(rg_elite_result, system, reproducibility, ls_n_iterations);
+    sp::LocalSearchManager ls_manager(rg_elite_result, system, reproducibility, ls_n_iterations, max_num_sols);
     ls_manager.run();
     const auto& ls_vec = ls_manager.get_ls_vec();
+    std::cout << "LS found new best solution of cost: " << ls_manager.get_ls_elite_result().get_solutions().front().get_cost() << std::endl;;
 
     for(size_t i=0; i<ls_vec.size(); ++i)
     {
@@ -148,6 +144,17 @@ main(int argc, char** argv)
         if(std::abs(path_perfs.at(i) - path_perfs_temp.at(i)) > 1e-13)
           throw std::runtime_error("ERROR: LS path perfs do not match with general feasibility!");
       }
+
+      // check y_hat ~ n_used_resources
+      const auto& y_hat = sol.get_y_hat();
+      const auto& n_used_resources = sol.get_n_used_resources();
+
+      for(size_t c=0; c<y_hat.size(); ++c)
+        for(size_t t=0; t<y_hat[c].size()-1; ++t)
+          for(size_t p=0; p<y_hat[c][t].size(); ++p)
+            for(size_t r=0; r<y_hat[c][t][p].size(); ++r)
+              if(y_hat[c][t][p][r]>0 && (y_hat[c][t][p][r] != n_used_resources[t][r]))
+                throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
     }
   }
 

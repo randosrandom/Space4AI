@@ -22,6 +22,7 @@ Copyright 2021 AI-SPRINT
 */
 
 #include "src/Algorithms/LocalSearchManager.hpp"
+#include "src/Algorithms/ParallelConfig.hpp"
 
 namespace Space4AI
 {
@@ -29,8 +30,9 @@ namespace Space4AI
     const EliteResult& rg_elite_result_,
     const System& system_,
     bool reproducibility_,
-    size_t max_it_):
-    LocalSearchManager(rg_elite_result_, system_, reproducibility_, max_it_, SelectedResources())
+    size_t max_it_,
+    size_t max_num_sols):
+    LocalSearchManager(rg_elite_result_, system_, reproducibility_, max_it_, max_num_sols, SelectedResources())
   {}
 
   LocalSearchManager::LocalSearchManager(
@@ -38,11 +40,12 @@ namespace Space4AI
     const System& system_,
     bool reproducibility_,
     size_t max_it_,
+    size_t max_num_sols,
     const SelectedResources& curr_rt_sol_sel_res_):
     rg_elite_result(rg_elite_result_), system(system_),
     reproducibility(reproducibility_), max_it(max_it_),
     curr_rt_sol_selected_resources(curr_rt_sol_sel_res_),
-    ls_elite_result(EliteResult(rg_elite_result.get_size()))
+    ls_elite_result(EliteResult(max_num_sols))
   {}
 
   void
@@ -52,13 +55,33 @@ namespace Space4AI
     const auto& rg_sols = rg_elite_result.get_solutions();
     this->ls_vec.resize(rg_sols.size(), LocalSearch(&system, &curr_rt_sol_selected_resources));
 
-    // MY PRAGMA
+    #ifdef PARALLELIZATION
+      const auto old_num_threads = omp_get_max_threads();
+
+      if(system.get_dynamicPerfModels())
+      {
+        const std::string message =
+          "Using Parallelization with dynamic models is not possible (see GIL ISSUE)"
+          " Overriding number of threads to 1 ...";
+        Logger::Warn(message);
+        std::cout << message << std::endl;
+        omp_set_num_threads(1);
+      }
+    #endif // PARALLELIZATION
+
+    MY_PRAGMA(omp parallel for default(none) shared(system, curr_rt_sol_selected_resources, rg_sols, ls_vec, ls_elite_result, max_it, reproducibility) schedule(dynamic))
     for(size_t i=0; i<rg_sols.size(); ++i)
     {
       LocalSearch ls_temp(rg_sols[i], &system, &curr_rt_sol_selected_resources);
       ls_temp.run(max_it, reproducibility);
       ls_vec[i] = std::move(ls_temp);
+      MY_PRAGMA(omp critical)
       ls_elite_result.add(std::move(ls_vec[i].curr_sol));
     }
+
+    #ifdef PARALLELIZATION
+      ls_elite_result.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
+      omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
+    #endif
   }
 } // namespace Space4AI
