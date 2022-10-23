@@ -62,7 +62,7 @@ System::read_configuration_file(const std::string& system_file)
   {
 //#warning Actually also here you can have only static models, but it depends on the PerfModel
 //At the moment I just set DynamicPerfModels to true
-    this->dynamicPerfModels = true;
+    // this->dynamicPerfModels = true;
     Logger::Info("****** READING PERFORMANCE MODELS... ******");
     this->initialize_performance(configuration_file.at("Performance"));
     Logger::Info("********** DONE! **********");
@@ -117,10 +117,10 @@ System::initialize_performance(const nl::json& performance_json)
     {
       for(const auto& [res, perf_data] : part_data.items())
       {
-        const std::size_t comp_idx = system_data.comp_name_to_idx[comp];
-        const auto res_type_idx = ResIdxFromType(system_data.res_name_to_type_and_idx[res].first);
-        const std::size_t part_idx = system_data.part_name_to_part_idx[comp + part];
-        const auto res_idx = system_data.res_name_to_type_and_idx[res].second;
+        const std::size_t comp_idx = system_data.comp_name_to_idx.at(comp);
+        const auto res_type_idx = ResIdxFromType(system_data.res_name_to_type_and_idx.at(res).first);
+        const std::size_t part_idx = system_data.part_name_to_part_idx.at(comp + part);
+        const auto res_idx = system_data.res_name_to_type_and_idx.at(res).second;
 
         if(system_data.compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
         {
@@ -194,10 +194,10 @@ System::initialize_demand_matrix(const nl::json& demand_matrix_json)
     {
       for(const auto& [res, dem_time] : part_data.items())
       {
-        const std::size_t comp_idx = system_data.comp_name_to_idx[comp];
-        const auto res_type_idx = ResIdxFromType(system_data.res_name_to_type_and_idx[res].first);
-        const std::size_t part_idx = system_data.part_name_to_part_idx[comp + part];
-        const auto res_idx = system_data.res_name_to_type_and_idx[res].second;
+        const std::size_t comp_idx = system_data.comp_name_to_idx.at(comp);
+        const auto res_type_idx = ResIdxFromType(system_data.res_name_to_type_and_idx.at(res).first);
+        const std::size_t part_idx = system_data.part_name_to_part_idx.at(comp + part);
+        const auto res_idx = system_data.res_name_to_type_and_idx.at(res).second;
 
         if(system_data.compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
         {

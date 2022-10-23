@@ -34,6 +34,7 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
+
 namespace nl = nlohmann;
 
 class Solution;
@@ -54,22 +55,9 @@ class System
     *
     *   \param system_file String containing the directory of the .json file
     *                      that describes the System
-    *   \param solution_data
+    *   \paramm config_file_type Identufy the configuration file version
     */
     void read_configuration_file(const std::string& system_file);
-
-    /** Method to read the .json file that describes
-    *   the System and convert it to a nl::json object.
-    *
-    *   \param system_file String containing the directory of the .json file
-    *                      that describes the System
-    *   \param solution_data SolutionData object used for dt_selected_resources.
-    */
-    Solution
-    read_configuration_file(
-      const std::string& system_file,
-      const std::string& dt_solution_file
-    );
 
     /** performance getter */
     const PerformanceType&
@@ -121,7 +109,7 @@ class System
     *
     *   This flag is important, since Parallelization is not possible for dynamic models (see GIL issue).
     */
-    bool dynamicPerfModels;
+    bool dynamicPerfModels = false;
 
 };
 

@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,12 +60,7 @@ create_PE(
   {
     return std::make_unique<QTPE>(model, true);
   }
-  else if(model == "PACSLTK")
-  {
-    return std::make_unique<FaasPacsltkPE>(model, false, perf_json.at("demandWarm").get<TimeType>(), perf_json.at("demandCold").get<TimeType>());
-  }
-
-  if(model == "PACSLTKSTATIC") // now I can decide to use PACSLTKSTATIC even for the new version of json!
+  else if(model == "PACSLTK" || model == "PACSLTKSTATIC") // now I can decide to use PACSLTKSTATIC even for the new version of json!
   {
     return std::make_unique<FaasPacsltkStaticPE>(
         model, false, perf_json.at("demandWarm").get<TimeType>(), perf_json.at("demandCold").get<TimeType>(),

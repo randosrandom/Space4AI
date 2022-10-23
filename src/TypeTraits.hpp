@@ -40,6 +40,13 @@ namespace Space4AI
 {
 class BasePerformanceModel; // forward declaration
 
+/** Enum class to idenity type of system input file */
+enum class ConfigFileType
+{
+  Linear, /**< Linear systems */
+  General /**< General workflows system */
+};
+
 /** Enum class to identify different types of resources */
 enum class ResourceType : size_t
 {
@@ -48,7 +55,7 @@ enum class ResourceType : size_t
   Edge = 0,
   VM = 1,
   Faas = 2,
-  Count = 3, /**< total number of resource types */
+  Count = 3 /**< total number of resource types */
 };
 
 using CostType = double; /**< represents the cost type used */

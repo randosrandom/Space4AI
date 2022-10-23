@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -303,7 +303,7 @@ class FaasPacsltkStaticPE: public FaasPE
       LoadType part_lambda
     ):
       FaasPE(keyword_, allows_colocation_, demandWarm_, demandCold_),
-      demand(Pacsltk::Instance().predict(part_lambda, demandCold, demandWarm, idle_time_before_kill))
+      demand(Pacsltk::Instance().predict(part_lambda, demandWarm, demandCold, idle_time_before_kill))
     {}
 
     /** Abstract method of BasePerformanceModel overridden. */
