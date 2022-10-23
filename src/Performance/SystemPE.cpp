@@ -35,12 +35,10 @@ SystemPE::compute_local_perf(
 {
   const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
   local_parts_perfs[comp_idx].resize(used_resources_comp.size(), 0.0);
-
   const auto& performance_comp = system.get_performance()[comp_idx];
-
   Logger::Debug("Evaluating performance of component" + std::to_string(comp_idx));
 
-  for(size_t i=0; i<used_resources_comp.size(); ++i)
+  for(size_t i = 0; i < used_resources_comp.size(); ++i)
   {
     const auto& [p_idx, r_type_idx, r_idx] = used_resources_comp[i];
 
@@ -48,16 +46,14 @@ SystemPE::compute_local_perf(
       !local_info.active || // Random Greedy
       local_info.modified_res[r_type_idx][r_idx]) // Ls and I am evaluating a modifed res
     {
-      #warning py::scoped_release to make it parallel?
-
+#warning py::scoped_release to make it parallel?
       const TimeType perf_p_idx = performance_comp[r_type_idx][p_idx][r_idx]->predict(
-       comp_idx, p_idx, ResTypeFromIdx(r_type_idx), r_idx,
-       system.get_system_data(), solution_data);
-
-       // this takes into account the compute_utilization.
-       // If utilization > 1, response_time is negative- (get_perf_evaluation return -1)
-       // Check lables of response_time (when is negative, NaN, +inf, max ...)
-       local_parts_perfs[comp_idx][i] = perf_p_idx !=-1 ? perf_p_idx : NaN;
+          comp_idx, p_idx, ResTypeFromIdx(r_type_idx), r_idx,
+          system.get_system_data(), solution_data);
+      // this takes into account the compute_utilization.
+      // If utilization > 1, response_time is negative- (get_perf_evaluation return -1)
+      // Check lables of response_time (when is negative, NaN, +inf, max ...)
+      local_parts_perfs[comp_idx][i] = perf_p_idx != -1 ? perf_p_idx : NaN;
     }
     else
     {
@@ -67,14 +63,13 @@ SystemPE::compute_local_perf(
     // network_delays
     if(used_resources_comp.size() > 1) // I have to compute network delay
     {
-      local_parts_delays[comp_idx].resize(used_resources_comp.size()-1);
-
+      local_parts_delays[comp_idx].resize(used_resources_comp.size() - 1);
       const auto& partitions_comp = system.get_system_data().get_components()[comp_idx].get_partitions();
 
-      for(size_t i=0; i<used_resources_comp.size()-1; ++i)
+      for(size_t i = 0; i < used_resources_comp.size() - 1; ++i)
       {
         const auto [p_idx1, res1_type_idx, res1_idx] = used_resources_comp[i];
-        const auto [p_idx2, res2_type_idx, res2_idx] = used_resources_comp[i+1];
+        const auto [p_idx2, res2_type_idx, res2_idx] = used_resources_comp[i + 1];
 
         if(
           !local_info.active || // Random Greedy
@@ -99,13 +94,14 @@ SystemPE::compute_local_perf(
         }
       }
     }
+
     // logger messages
   }
-  const TimeType parts_total_time = std::accumulate(
-    local_parts_perfs[comp_idx].cbegin(), local_parts_perfs[comp_idx].cend(), 0.0);
-  const TimeType parts_total_delay_time = std::accumulate(
-    local_parts_delays[comp_idx].cbegin(), local_parts_delays[comp_idx].cend(), 0.0);
 
+  const TimeType parts_total_time = std::accumulate(
+      local_parts_perfs[comp_idx].cbegin(), local_parts_perfs[comp_idx].cend(), 0.0);
+  const TimeType parts_total_delay_time = std::accumulate(
+      local_parts_delays[comp_idx].cbegin(), local_parts_delays[comp_idx].cend(), 0.0);
   comp_perfs[comp_idx] = parts_total_time + parts_total_delay_time;
 }
 
@@ -119,18 +115,18 @@ SystemPE::compute_global_perf(
   const auto& global_constraint = system.get_system_data().get_global_constraints()[path_idx];
   path_perfs[path_idx] = 0.0;
   const auto& comp_idxs = global_constraint.get_comp_idxs();
-  for(size_t i=0; i<comp_idxs.size()-1; ++i)
+
+  for(size_t i = 0; i < comp_idxs.size() - 1; ++i)
   {
     path_perfs[path_idx] += comp_perfs[comp_idxs[i]];
-
     //DELAYS
     // get the indices of the current and the next component
     const auto curr_comp_idx = comp_idxs[i];
-    const auto next_comp_idx = comp_idxs[i+1];
+    const auto next_comp_idx = comp_idxs[i + 1];
 
     if(!local_info.active || !local_info.modified_comp.first ||
-        (local_info.modified_comp.second == curr_comp_idx || local_info.modified_comp.second == next_comp_idx)
-      )
+      (local_info.modified_comp.second == curr_comp_idx || local_info.modified_comp.second == next_comp_idx)
+    )
     {
       // used resources
       const auto& used_resources = solution_data.get_used_resources();
@@ -140,7 +136,8 @@ SystemPE::compute_global_perf(
       //resource index of the first partition
       const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
         *(used_resources[next_comp_idx].cbegin());
-        // different resources.
+
+      // different resources.
       if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
       {
         const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
@@ -152,8 +149,10 @@ SystemPE::compute_global_perf(
             system);
       }
     }
+
     path_perfs[path_idx] += comp_delays[curr_comp_idx];
   }
+
   // last component
   path_perfs[path_idx] += comp_perfs[comp_idxs.back()];
 }
@@ -207,6 +206,7 @@ SystemPE::compute_network_delay(
         new_network_delay : network_delay;
     }
   }
+
   return network_delay;
 }
 

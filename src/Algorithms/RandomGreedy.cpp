@@ -63,30 +63,30 @@ RandomGreedy::random_greedy(
     std::cout << message << std::endl;
     omp_set_num_threads(1);
   }
+
 #endif // PARALLELIZATION
 
   MY_PRAGMA(omp parallel for default(none) shared(max_it, num_top_sols, elite, system) schedule(dynamic))
-  for(size_t it = 0; it < max_it; ++it)
-  {
-    Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
-    Solution new_sol(step(system)); // using copy elision
-
-    if(new_sol.get_feasibility())
+    for(size_t it = 0; it < max_it; ++it)
     {
-      new_sol.set_selected_resources(system);
-      MY_PRAGMA(omp critical)
-      elite.add(std::move(new_sol));
-      Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
+      Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
+      Solution new_sol(step(system)); // using copy elision
+
+      if(new_sol.get_feasibility())
+      {
+        new_sol.set_selected_resources(system);
+        MY_PRAGMA(omp critical)
+        elite.add(std::move(new_sol));
+        Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
+      }
     }
-  }
+
   Logger::Info("Finished Random Greedy DT algorithm");
   Logger::Info("Number of top feasible solutions found: " + std::to_string(elite.get_size()));
-
 #ifdef PARALLELIZATION
   elite.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
   omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
 #endif
-
   return elite;
 }
 
@@ -147,11 +147,9 @@ RandomGreedy::create_random_initial_solution(
   const auto& all_resources = system_data.get_all_resources();
   const auto& comp_name_to_idx = system_data.get_comp_name_to_idx();
   const auto& compatibility_matrix = system_data.get_compatibility_matrix();
-
   const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
   const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
-
   Logger::Debug("create_random_initial_solution: Initializing and resizing members ...");
   //declare solution members
   YHatType y_hat;
@@ -191,6 +189,7 @@ RandomGreedy::create_random_initial_solution(
   for(size_t i = 0; i < res_type_idx_count; ++i)
   {
     const size_t n_res = all_resources.get_number_resources(i);
+
     if(i == ResIdxFromType(ResourceType::Faas))
     {
       candidate_resources[i].resize(n_res, true); // select all the faas as candidates
@@ -201,10 +200,8 @@ RandomGreedy::create_random_initial_solution(
     }
   }
 
-
   // Selecting candidate_resources (Edge and VM, Faas already selected all)
   Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
-
   const auto& selected_edge = curr_rt_sol_selected_resources.get_selected_edge();
   const auto& selected_vms_by_cl = curr_rt_sol_selected_resources.get_selected_vms_by_cl();
 
@@ -215,7 +212,7 @@ RandomGreedy::create_random_initial_solution(
   }
   else // randomly select a resource for each cls
   {
-    for(size_t cl_idx=0; cl_idx < cls[edge_type_idx].size(); ++cl_idx)
+    for(size_t cl_idx = 0; cl_idx < cls[edge_type_idx].size(); ++cl_idx)
     {
       //pick a random resource of the cl
       const std::vector<size_t> res_idxs = cls[edge_type_idx][cl_idx].get_res_idxs();
@@ -228,10 +225,11 @@ RandomGreedy::create_random_initial_solution(
         "resource_type: " + std::to_string(edge_type_idx) + " res_idx: " + std::to_string(random_res_idx));
     }
   }
+
   // VM RESOURCES
-  for(size_t cl_idx=0; cl_idx < cls[vm_type_idx].size(); ++cl_idx)
+  for(size_t cl_idx = 0; cl_idx < cls[vm_type_idx].size(); ++cl_idx)
   {
-    if(selected_vms_by_cl.size()>0 && selected_vms_by_cl[cl_idx].first)
+    if(selected_vms_by_cl.size() > 0 && selected_vms_by_cl[cl_idx].first)
     {
       candidate_resources[vm_type_idx][selected_vms_by_cl[cl_idx].second] = true;
     }
@@ -289,6 +287,7 @@ RandomGreedy::create_random_initial_solution(
           }
         }
       }
+
       // OBS: resources_instersection is NEVER EMPTY! Indeed, the computational layers
       // are built such in a way that if a select one random resource from each layer
       // resources_instersection is never empty
@@ -393,7 +392,8 @@ RandomGreedy::reduce_cluster_size(
     {
       Logger::Debug("reduce_cluster_size: The solution is not feasible anymore reducing cluster size of type: " + std::to_string(res_type_idx) + " and idx " + std::to_string(res_idx));
     }
-  }while(feasible && (n_used_resources_new[res_type_idx][res_idx] > 1));
+  }
+  while(feasible && (n_used_resources_new[res_type_idx][res_idx] > 1));
 
   Logger::Debug("reduce_cluster_size: Done reducing cluster size!");
   return old_sol;

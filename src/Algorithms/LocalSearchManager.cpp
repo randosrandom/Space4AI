@@ -26,51 +26,51 @@ Copyright 2021 AI-SPRINT
 
 namespace Space4AI
 {
-  LocalSearchManager::LocalSearchManager(
-    const EliteResult& rg_elite_result_,
-    const System& system_,
-    bool reproducibility_,
-    size_t max_it_,
-    size_t max_num_sols):
-    LocalSearchManager(rg_elite_result_, system_, reproducibility_, max_it_, max_num_sols, SelectedResources())
-  {}
+LocalSearchManager::LocalSearchManager(
+  const EliteResult& rg_elite_result_,
+  const System& system_,
+  bool reproducibility_,
+  size_t max_it_,
+  size_t max_num_sols):
+  LocalSearchManager(rg_elite_result_, system_, reproducibility_, max_it_, max_num_sols, SelectedResources())
+{}
 
-  LocalSearchManager::LocalSearchManager(
-    const EliteResult& rg_elite_result_,
-    const System& system_,
-    bool reproducibility_,
-    size_t max_it_,
-    size_t max_num_sols,
-    const SelectedResources& curr_rt_sol_sel_res_):
-    rg_elite_result(rg_elite_result_), system(system_),
-    reproducibility(reproducibility_), max_it(max_it_),
-    curr_rt_sol_selected_resources(curr_rt_sol_sel_res_),
-    ls_elite_result(EliteResult(max_num_sols))
-  {}
+LocalSearchManager::LocalSearchManager(
+  const EliteResult& rg_elite_result_,
+  const System& system_,
+  bool reproducibility_,
+  size_t max_it_,
+  size_t max_num_sols,
+  const SelectedResources& curr_rt_sol_sel_res_):
+  rg_elite_result(rg_elite_result_), system(system_),
+  reproducibility(reproducibility_), max_it(max_it_),
+  curr_rt_sol_selected_resources(curr_rt_sol_sel_res_),
+  ls_elite_result(EliteResult(max_num_sols))
+{}
 
-  void
-  LocalSearchManager::run()
+void
+LocalSearchManager::run()
+{
+  Logger::Info("Starting LocalSearch...");
+  const auto& rg_sols = rg_elite_result.get_solutions();
+  this->ls_vec.resize(rg_sols.size(), LocalSearch(&system, &curr_rt_sol_selected_resources));
+#ifdef PARALLELIZATION
+  const auto old_num_threads = omp_get_max_threads();
+
+  if(system.get_dynamicPerfModels())
   {
-    Logger::Info("Starting LocalSearch...");
-    const auto& rg_sols = rg_elite_result.get_solutions();
-    this->ls_vec.resize(rg_sols.size(), LocalSearch(&system, &curr_rt_sol_selected_resources));
+    const std::string message =
+      "Using Parallelization with dynamic models is not possible (see GIL ISSUE)"
+      " Overriding number of threads to 1 ...";
+    Logger::Warn(message);
+    std::cout << message << std::endl;
+    omp_set_num_threads(1);
+  }
 
-    #ifdef PARALLELIZATION
-      const auto old_num_threads = omp_get_max_threads();
+#endif // PARALLELIZATION
 
-      if(system.get_dynamicPerfModels())
-      {
-        const std::string message =
-          "Using Parallelization with dynamic models is not possible (see GIL ISSUE)"
-          " Overriding number of threads to 1 ...";
-        Logger::Warn(message);
-        std::cout << message << std::endl;
-        omp_set_num_threads(1);
-      }
-    #endif // PARALLELIZATION
-
-    MY_PRAGMA(omp parallel for default(none) shared(system, curr_rt_sol_selected_resources, rg_sols, ls_vec, ls_elite_result, max_it, reproducibility) schedule(dynamic))
-    for(size_t i=0; i<rg_sols.size(); ++i)
+  MY_PRAGMA(omp parallel for default(none) shared(system, curr_rt_sol_selected_resources, rg_sols, ls_vec, ls_elite_result, max_it, reproducibility) schedule(dynamic))
+    for(size_t i = 0; i < rg_sols.size(); ++i)
     {
       LocalSearch ls_temp(rg_sols[i], &system, &curr_rt_sol_selected_resources);
       ls_temp.run(max_it, reproducibility);
@@ -79,9 +79,9 @@ namespace Space4AI
       ls_elite_result.add(std::move(ls_vec[i].curr_sol));
     }
 
-    #ifdef PARALLELIZATION
-      ls_elite_result.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
-      omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
-    #endif
-  }
+#ifdef PARALLELIZATION
+  ls_elite_result.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
+  omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
+#endif
+}
 } // namespace Space4AI

@@ -41,15 +41,17 @@ Solution::Solution(const System& system):
   // Initialize memory_slack_values
   memory_slack_values.resize(ResIdxFromType(ResourceType::Count));
   res_costs.resize(ResIdxFromType(ResourceType::Count));
+
   for(size_t type_idx = 0; type_idx < ResIdxFromType(ResourceType::Count); ++type_idx)
   {
     memory_slack_values[type_idx].resize(all_resources.get_number_resources(type_idx), 0.0);
     res_costs[type_idx].resize(all_resources.get_number_resources(type_idx), NaN);
   }
+
   time_perfs.local_parts_perfs.resize(comp_size);
   time_perfs.local_parts_delays.resize(comp_size);
   time_perfs.comp_perfs.resize(comp_size, 0.0);
-  time_perfs.comp_delays.resize(comp_size-1, 0.0);
+  time_perfs.comp_delays.resize(comp_size - 1, 0.0);
   time_perfs.path_perfs.resize(paths_size, 0.0);
 }
 
@@ -70,7 +72,6 @@ Solution::read_solution_from_file(
   }
 
   Logger::Info("solution::read_solution_from_file: Reading Design Time Solution...");
-
   const auto& comp_name_to_idx = system.get_system_data().get_comp_name_to_idx();
   const auto& part_name_to_part_idx = system.get_system_data().get_part_name_to_part_idx();
   const auto& res_name_to_type_and_idx = system.get_system_data().get_res_name_to_type_and_idx();
@@ -79,15 +80,11 @@ Solution::read_solution_from_file(
   const auto& all_resources = system.get_system_data().get_all_resources();
   const auto& cls = system.get_system_data().get_cls();
   const auto& cl_name_to_idx = system.get_system_data().get_cl_name_to_idx();
-
   nl::json configuration_file;
   file >> configuration_file;
-
   Logger::Debug("solution::read_solution_from_file: Resizing data structures...");
-
   const std::size_t comp_num = comp_name_to_idx.size();
   const std::size_t res_type_idx_count = ResIdxFromType(ResourceType::Count);
-
   solution_data.y_hat.resize(comp_num);
   solution_data.used_resources.resize(comp_num);
   solution_data.n_used_resources.resize(ResIdxFromType(ResourceType::Count));
@@ -97,6 +94,7 @@ Solution::read_solution_from_file(
   for(std::size_t i = 0; i < comp_num; ++i)
   {
     solution_data.y_hat[i].resize(res_type_idx_count);
+
     // loop on type of resources
     for(std::size_t j = 0; j < res_type_idx_count; ++j)
     {
@@ -110,7 +108,7 @@ Solution::read_solution_from_file(
   }
 
   // resize n_used_resources and dt_selected_resources
-  for(std::size_t j = 0; j < res_type_idx_count-1; ++j)
+  for(std::size_t j = 0; j < res_type_idx_count - 1; ++j)
   {
     solution_data.n_used_resources[j].resize(all_resources.get_number_resources(j));
   }
@@ -119,14 +117,11 @@ Solution::read_solution_from_file(
   selected_resources.selected_edge.resize(solution_data.n_used_resources[ResIdxFromType(ResourceType::Edge)].size());
   selected_resources.selected_vms.resize(solution_data.n_used_resources[ResIdxFromType(ResourceType::VM)].size());
   selected_resources.selected_vms_by_cl.resize(cls[ResIdxFromType(ResourceType::VM)].size());
-
   Logger::Debug("solution::read_solution_from_file: Data structure resized!");
-
   std::size_t comp_idx;
   std::size_t res_type_idx;
   std::size_t part_idx;
   std::size_t res_idx;
-
   Logger::Debug("solution::read_solution_from_file: Starting reading file...");
 
   for(const auto& [comp, comp_data] : configuration_file.at("components").items())
@@ -173,11 +168,11 @@ Solution::read_solution_from_file(
             else // VM
             {
               selected_resources.selected_vms_by_cl[cl_name_to_idx[ResIdxFromType(ResourceType::VM)].at(cl)] =
-                std::pair<bool, size_t>{true, res_idx};
-
+                std::pair<bool, size_t> {true, res_idx};
               selected_resources.selected_vms[res_idx] = true;
             }
           }
+
           solution_data.used_resources[comp_idx].emplace_back(part_idx, res_type_idx, res_idx);
         }
       }
@@ -198,6 +193,7 @@ Solution::read_solution_from_file(
       throw("In *Solution::read_configuration_file(...): path response_time not a number ... At the moment program crash");
     }
   }
+
   total_cost = configuration_file.at("total_cost").get<CostType>();
 }
 
@@ -344,7 +340,6 @@ Solution::set_selected_resources(const System& system)
   const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
   const size_t num_cls_vm = system.get_system_data().get_cls()[vm_type_idx].size();
-
   // Selected EDGE
   selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
   std::copy(
@@ -352,7 +347,6 @@ Solution::set_selected_resources(const System& system)
     solution_data.n_used_resources[edge_type_idx].end(),
     selected_resources.selected_edge.begin()
   );
-
   // Selected VMs
   selected_resources.selected_vms.resize(solution_data.n_used_resources[vm_type_idx].size());
   std::copy(
@@ -360,10 +354,10 @@ Solution::set_selected_resources(const System& system)
     solution_data.n_used_resources[vm_type_idx].end(),
     selected_resources.selected_vms.begin()
   );
-
   selected_resources.selected_vms_by_cl.resize(num_cls_vm);
   const auto& all_resources = system.get_system_data().get_all_resources();
   const auto& cl_name_to_idx_vm = system.get_system_data().get_cl_name_to_idx()[vm_type_idx];
+
   for(size_t res_idx = 0; res_idx < solution_data.n_used_resources[vm_type_idx].size(); ++res_idx)
   {
     if(solution_data.n_used_resources[vm_type_idx][res_idx] > 0)
@@ -381,7 +375,6 @@ Solution::preliminary_constraints_check_assignments(
 ) const
 {
   Logger::Debug("check_feasibility: Checking preliminary constraints assignments ...");
-
   bool feasible = true;
   const std::size_t tot_comp = system.get_system_data().get_components().size();
 
@@ -392,7 +385,6 @@ Solution::preliminary_constraints_check_assignments(
   }
 
   Logger::Debug("check_feasibility: DONE preliminary constraints assignments ...");
-
   return feasible;
 }
 
@@ -400,11 +392,9 @@ bool
 Solution::preliminary_constraints_check_assignments(size_t comp_idx, const System& system) const
 {
   bool feasible = true;
-
   const auto& compatibility_matrix = system.get_system_data().get_compatibility_matrix();
   const auto& all_resources = system.get_system_data().get_all_resources();
   const auto& components = system.get_system_data().get_components();
-
   std::vector<bool> parts_with_res(components[comp_idx].get_partitions().size(), false);
 
   for(auto [part_idx, res_type_idx, res_idx] : solution_data.used_resources[comp_idx])
@@ -416,6 +406,7 @@ Solution::preliminary_constraints_check_assignments(size_t comp_idx, const Syste
     if(!already_inserted && compatibility_matrix[comp_idx][res_type_idx][part_idx][res_idx])
     {
       parts_with_res[part_idx] = true;
+
       // check that the number of resources assigned to each
       // component partition is at most equal to the number of
       // available resources of that type
@@ -434,34 +425,33 @@ Solution::preliminary_constraints_check_assignments(size_t comp_idx, const Syste
   }
 
   return feasible;
-
 }
 
 bool
 Solution::memory_constraints_check(const System& system, const LocalInfo& local_info)
 {
   Logger::Debug("check_feasibility: Checking memory constraints ... ");
-
   bool feasible = true;
   const auto& components = system.get_system_data().get_components();
   const auto& all_resources = system.get_system_data().get_all_resources();
 
-  for(size_t r_type_idx=0; r_type_idx<ResIdxFromType(ResourceType::Count); ++r_type_idx)
+  for(size_t r_type_idx = 0; r_type_idx < ResIdxFromType(ResourceType::Count); ++r_type_idx)
   {
-    for(size_t r_idx=0; r_idx<memory_slack_values[r_type_idx].size(); ++r_idx)
+    for(size_t r_idx = 0; r_idx < memory_slack_values[r_type_idx].size(); ++r_idx)
     {
       if(!local_info.active || local_info.modified_res[r_type_idx][r_idx])
       {
-      memory_slack_values[r_type_idx][r_idx] = (r_type_idx != ResIdxFromType(ResourceType::Faas)) ?
-        solution_data.n_used_resources[r_type_idx][r_idx] *
-        all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx)
-        :
-        all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx);
+        memory_slack_values[r_type_idx][r_idx] = (r_type_idx != ResIdxFromType(ResourceType::Faas)) ?
+          solution_data.n_used_resources[r_type_idx][r_idx] *
+          all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx)
+          :
+          all_resources.get_memory(ResTypeFromIdx(r_type_idx), r_idx);
       }
     }
   }
+
   // check memory occupations
-  for(size_t comp_idx = 0; comp_idx<components.size() && feasible; ++comp_idx)
+  for(size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
   {
     const auto& partitions = components[comp_idx].get_partitions();
 
@@ -479,8 +469,8 @@ Solution::memory_constraints_check(const System& system, const LocalInfo& local_
       }
     }
   }
-  Logger::Debug("check_feasibility: DONE memory constraints ... ");
 
+  Logger::Debug("check_feasibility: DONE memory constraints ... ");
   return feasible;
 }
 
@@ -488,7 +478,6 @@ bool
 Solution::move_backward_check(const System& system) const
 {
   Logger::Debug("check_feasibility: Checking move backward ... ");
-
   bool feasible = true;
   const auto& components = system.get_system_data().get_components();
 
@@ -496,6 +485,7 @@ Solution::move_backward_check(const System& system) const
   {
     feasible = feasible && move_backward_check(comp_idx);
   }
+
   Logger::Debug("check_feasibility: DONE move backward ... ");
   return feasible;
 }
@@ -504,11 +494,9 @@ bool
 Solution::move_backward_check(size_t comp_idx) const
 {
   bool feasible = true;
-
   const auto edge_idx = ResIdxFromType(ResourceType::Edge);
   const auto vm_idx = ResIdxFromType(ResourceType::VM);
   const auto faas_idx = ResIdxFromType(ResourceType::Faas);
-
   auto it = solution_data.used_resources[comp_idx].cbegin(); // iterator to find minimum partition running on vm or faas
   auto r_it = solution_data.used_resources[comp_idx].crbegin(); // iterator to find maximum partition running on edge
   auto max_idx_part_on_edge = std::numeric_limits<size_t>::min();
@@ -528,15 +516,18 @@ Solution::move_backward_check(size_t comp_idx) const
       not_found_edge = false;
       max_idx_part_on_edge = std::get<0>(*r_it);
     }
+
     if(not_found_cloud_faas && (std::get<1>(*it) == vm_idx || std::get<1>(*it) == faas_idx))
     {
       not_found_cloud_faas = false;
       min_idx_part_on_cloud_faas = std::get<0>(*it);
     }
+
     feasible = (max_idx_part_on_edge <= min_idx_part_on_cloud_faas);
     it++;
     r_it++;
   }
+
   return feasible;
 }
 
@@ -546,7 +537,6 @@ Solution::performance_assignment_check(
   const LocalInfo& local_info)
 {
   Logger::Debug("check_feasibility: Checking performance assignments ... ");
-
   const std::vector<size_t> res_type_to_check = {ResIdxFromType(ResourceType::Edge), ResIdxFromType(ResourceType::VM)};
   const auto& components = system.get_system_data().get_components();
   const auto& performance = system.get_performance();
@@ -581,6 +571,7 @@ Solution::performance_assignment_check(
             }
           }
         }
+
         if(count_part == 0)
         {
           solution_data.n_used_resources[res_type_idx][res_idx] = 0;
@@ -590,7 +581,6 @@ Solution::performance_assignment_check(
   }
 
   Logger::Debug("check_feasibility: DONE performance assignments ... ");
-
   return true;
 }
 
@@ -598,9 +588,7 @@ bool
 Solution::local_constraints_check(const System& system, const LocalInfo& local_info)
 {
   Logger::Debug("check_feasibility: Checking local constraints ...");
-
   bool feasible = true;
-
   const auto& local_constraints = system.get_system_data().get_local_constraints();
 
   for(size_t i = 0; i < local_constraints.size() && feasible; ++i)
@@ -614,7 +602,6 @@ Solution::local_constraints_check(const System& system, const LocalInfo& local_i
   }
 
   Logger::Debug("check_feasibility: DONE Checking local constraints ...");
-
   return feasible;
 }
 
@@ -622,7 +609,6 @@ bool
 Solution::global_constraints_check(const System& system, const LocalInfo& local_info)
 {
   Logger::Debug("check_feasibility: Checking global constraints ...");
-
   bool feasible = true;
   const auto& global_constraints = system.get_system_data().get_global_constraints();
 
@@ -635,8 +621,8 @@ Solution::global_constraints_check(const System& system, const LocalInfo& local_
       feasible = false;
     }
   }
-  Logger::Debug("check_feasibility: DONE global constraints ...");
 
+  Logger::Debug("check_feasibility: DONE global constraints ...");
   return feasible;
 }
 
@@ -648,6 +634,7 @@ Solution::check_feasibility(
   Logger::Debug("check_feasibility: Starting feasibility check of the solution ...");
   bool feasible = false;
   feasible = this->preliminary_constraints_check_assignments(system);
+
   if(feasible)
   {
     feasible = this->move_backward_check(system);
@@ -692,7 +679,6 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
   Logger::Debug("objective_function: Computing objective function ... ");
   this->total_cost = 0.0;
   std::vector<std::vector<bool>> res_cost_alredy_computed(ResIdxFromType(ResourceType::Count));
-
   const auto& all_resources = system.get_system_data().get_all_resources();
   const auto& components = system.get_system_data().get_components();
   const auto& performance = system.get_performance();
@@ -735,7 +721,6 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
               static_cast<FaasPE*>(
                 performance[comp_idx][res_type_idx][part_idx][res_idx].get()
               )->get_demandWarm();
-
             this->res_costs[res_type_idx][res_idx] = res_cost * warm_time * part_lambda * time;
             total_cost += this->res_costs[res_type_idx][res_idx];
           }

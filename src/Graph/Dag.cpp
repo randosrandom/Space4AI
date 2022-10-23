@@ -53,7 +53,7 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
       for(size_t i = 0; i < value.at("next").size(); ++i)
       {
         this->dag_matrix[comp_name_to_idx.at(value.at("next")[i].get<std::string>())]
-                        [comp_name_to_idx.at(key)]
+        [comp_name_to_idx.at(key)]
           = value.at("transition_probability")[i].get<double>();
       }
     }
@@ -88,7 +88,7 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
       for(size_t i = 0; i < dag_dict.at(name).at("next").size(); ++i)
       {
         dag_matrix[comp_name_to_idx.at(dag_dict.at(name).at("next")[i].get<std::string>())]
-                  [idx]
+        [idx]
           = dag_dict.at(name).at("transition_probability")[i].get<double>();
       }
     }
@@ -108,6 +108,7 @@ DAG::find_graph_order() const
   {
     find_next_root(permutation_for_order, index_already_permuted);
   }
+
   return permutation_for_order;
 }
 
@@ -124,15 +125,22 @@ DAG::find_next_root(
     if(!index_already_permuted[i])
     {
       bool next = true;
-      for(size_t j=0; j<dag_matrix[i].size() && next; ++j)
+
+      for(size_t j = 0; j < dag_matrix[i].size() && next; ++j)
       {
         if(!index_already_permuted[j] && dag_matrix[i][j] != 0)
+        {
           next = false;
+        }
       }
+
       if(next)
+      {
         new_added_indexes.push_back(i);
+      }
     }
   }
+
   for(size_t i : new_added_indexes)
   {
     permutation_for_order.push_back(i);

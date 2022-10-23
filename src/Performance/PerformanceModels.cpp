@@ -51,6 +51,7 @@ QTPE::predict(
       /
       (1 - utilization);
   }
+
   return response_time;
 }
 
