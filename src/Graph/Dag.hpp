@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -99,6 +99,11 @@ class DAG
     *           alphabetical ordering)
     */
     std::vector<size_t> find_graph_order() const;
+
+    void
+    find_next_root(
+      std::vector<size_t>& permutation_for_order,
+      std::vector<bool>& index_already_permuted) const;
 
   private:
 

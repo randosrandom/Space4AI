@@ -1,4 +1,4 @@
-/*  
+/*
 Copyright 2021 AI-SPRINT
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,8 +52,8 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
     {
       for(size_t i = 0; i < value.at("next").size(); ++i)
       {
-        this->dag_matrix  [ comp_name_to_idx.at(value.at("next")[i].get<std::string>())   ]
-        [ comp_name_to_idx.at(key)                                     ]
+        this->dag_matrix[comp_name_to_idx.at(value.at("next")[i].get<std::string>())]
+                        [comp_name_to_idx.at(key)]
           = value.at("transition_probability")[i].get<double>();
       }
     }
@@ -87,8 +87,8 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
     {
       for(size_t i = 0; i < dag_dict.at(name).at("next").size(); ++i)
       {
-        dag_matrix  [ comp_name_to_idx.at(dag_dict.at(name).at("next")[i].get<std::string>())  ]
-        [ idx                                                                       ]
+        dag_matrix[comp_name_to_idx.at(dag_dict.at(name).at("next")[i].get<std::string>())]
+                  [idx]
           = dag_dict.at(name).at("transition_probability")[i].get<double>();
       }
     }
@@ -96,48 +96,48 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
 }
 
 std::vector<size_t>
-DAG::find_graph_order() const // Think about the recursive version!
+DAG::find_graph_order() const
 {
   const size_t num_nodes = comp_name_to_idx.size();
   std::vector<size_t> permutation_for_order;
   permutation_for_order.reserve(num_nodes);
   std::vector<bool> index_already_permuted(num_nodes, false);
-  // find origin of graph
-  auto zero_vec = DagMatrixType::value_type(num_nodes, 0.);
 
-  for(std::size_t i = 0; i < num_nodes; ++i)
-  {
-    if(dag_matrix[i] == zero_vec) // no nodes enters in node i => i root node
-    {
-      permutation_for_order.push_back(i);
-    }
-  }
-
-  index_already_permuted[permutation_for_order.back()] = true;
-  std::vector<size_t> old_added_indexes = {permutation_for_order.back()};
-
-  // start reordering
+  // should be wise to add check to avoid infinite while loop
   while(permutation_for_order.size() < num_nodes)
   {
-    std::vector<size_t> new_added_indexes;
-
-    for(size_t root_idx : old_added_indexes)
-    {
-      for(std::size_t i = 0; i < num_nodes; i++)
-      {
-        if(!index_already_permuted[i] && input_edges(i)[root_idx] > 0)
-        {
-          index_already_permuted[i] = true;
-          permutation_for_order.push_back(i);
-          new_added_indexes.push_back(i);
-        }
-      }
-    }
-
-    old_added_indexes = new_added_indexes;
+    find_next_root(permutation_for_order, index_already_permuted);
   }
-
   return permutation_for_order;
+}
+
+void
+DAG::find_next_root(
+  std::vector<size_t>& permutation_for_order,
+  std::vector<bool>& index_already_permuted) const
+{
+  std::vector<size_t> new_added_indexes;
+  new_added_indexes.reserve(index_already_permuted.size());
+
+  for(std::size_t i = 0; i < index_already_permuted.size(); ++i)
+  {
+    if(!index_already_permuted[i])
+    {
+      bool next = true;
+      for(size_t j=0; j<dag_matrix[i].size() && next; ++j)
+      {
+        if(!index_already_permuted[j] && dag_matrix[i][j] != 0)
+          next = false;
+      }
+      if(next)
+        new_added_indexes.push_back(i);
+    }
+  }
+  for(size_t i : new_added_indexes)
+  {
+    permutation_for_order.push_back(i);
+    index_already_permuted[i] = true;
+  }
 }
 
 const DagMatrixType::value_type&
