@@ -7,9 +7,9 @@
 
   "Algorithm" : {
     "RG_n_iterations" : 5000,
-	"LS_n_iterations" : 5000,
+    "LS_n_iterations" : 5000,
     "RG_max_num_sols" : 10,
-	"LS_max_num_sols" : 1,
+    "LS_max_num_sols" : 1,
     "reproducibility" : true
   },
 

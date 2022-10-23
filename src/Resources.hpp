@@ -392,7 +392,7 @@ AllResources::add_resource(T&& resource)
   if constexpr(
     std::is_same_v<T, Resource<ResourceType::Edge>> // passed by lvalue
     ||
-    std::is_same_v < T, Resource<ResourceType::Edge>&& >) // passed by rvalue
+    std::is_same_v<T, Resource<ResourceType::Edge>&&>) // passed by rvalue
   {
     edge_resources.emplace_back(std::forward<T>(resource));
     number_resources[ResIdxFromType(ResourceType::Edge)]++;
@@ -400,7 +400,7 @@ AllResources::add_resource(T&& resource)
   else if constexpr(
     std::is_same_v<T, Resource<ResourceType::VM>>
     ||
-    std::is_same_v < T, Resource<ResourceType::VM>&& >)
+    std::is_same_v<T, Resource<ResourceType::VM>&&>)
   {
     vm_resources.emplace_back(std::forward<T>(resource));
     number_resources[ResIdxFromType(ResourceType::VM)]++;
@@ -408,7 +408,7 @@ AllResources::add_resource(T&& resource)
   else if constexpr(
     std::is_same_v<T, Resource<ResourceType::Faas>>
     ||
-    std::is_same_v < T, Resource<ResourceType::Faas>&& >)
+    std::is_same_v<T, Resource<ResourceType::Faas>&&>)
   {
     faas_resources.emplace_back(std::forward<T>(resource));
     number_resources[ResIdxFromType(ResourceType::Faas)]++;
@@ -422,7 +422,7 @@ AllResources::add_resource(T&& resource)
 
 template<ResourceType T>
 const std::vector<Resource<T>>&
-  AllResources::get_resources() const
+AllResources::get_resources() const
 {
   if constexpr(T == ResourceType::Edge)
   {
