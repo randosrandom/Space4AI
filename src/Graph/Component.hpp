@@ -35,6 +35,7 @@ Copyright 2021 AI-SPRINT
 namespace Space4AI
 {
 /** Class to represent a Partition of a Component. */
+template <class Mem>
 class Partition
 {
   public:
@@ -48,25 +49,40 @@ class Partition
      *  \param next_ Name of the subsequent Partition
      *  \param data_size_ Amount of data transferred to the subsequent Partition
      */
+    template<typename T=Mem>
     Partition(
       const std::string& name_,
-      DataType memory_,
       LoadType part_lambda_,
       ProbType early_exit_probability_,
       const std::string& next_,
       DataType data_size_
     ):
-      name(name_), memory(memory_), part_lambda(part_lambda_),
+      name(name_), part_lambda(part_lambda_),
       early_exit_probability(early_exit_probability_), next(next_), data_size(data_size_)
-    {}
+    {
+      if constexpr(std::is_same_v<T, std::vector<std::vector<DataType>>>)
+        mem.resize(ResIdxFromType(ResourceType::Count));
+    }
+
+    template<typename T=Mem, std::enable_if_t<std::is_same_v<T, DataType>, bool> = false>
+    void set_memory(DataType memory_) {memory = memory_;}
+
+    template<typename T=Mem, std::enable_if_t<std::is_same_v<T, std::vector<std::vector<DataType>>>, bool> = false>
+    void set_memory(DataType memory_, size_t res_type_idx, size_t res_idx)
+    {
+      memory[res_type_idx].resize(std::max(memory[res_type_idx].size(), res_idx+1));
+      memory[res_type_idx][res_idx] = memory_;
+    }
+
+    template<typename T=Mem, std::enable_if_t<std::is_same_v<T, DataType>, bool> = false>
+    DataType get_memory() const {return memory;}
+
+    template<typename T=Mem, std::enable_if_t<std::is_same_v<T, std::vector<std::vector<DataType>>>, bool> = false>
+    DataType get_memory(size_t res_type_idx, size_t res_idx) const {return memory[res_type].at(res_idx);}
 
     /** name getter */
     const std::string&
     get_name() const { return name; };
-
-    /** memory getter */
-    DataType
-    get_memory() const { return memory; };
 
     /** part_lambda getter */
     LoadType
@@ -90,7 +106,7 @@ class Partition
     const std::string name;
 
     /** Memory requirement of the Partition */
-    const DataType memory;
+    Mem memory;
 
     /** Load factor of the Partition */
     const LoadType part_lambda;
@@ -143,6 +159,7 @@ class Deployment
 };
 
 /** Class to represent the components, namely DAG nodes. */
+template<class Mem>
 class Component
 {
   public:
@@ -178,7 +195,7 @@ class Component
     }
 
     /** partitions vector getter */
-    const std::vector<Partition>&
+    const std::vector<Partition<Mem>>&
     get_partitions() const { return partitions; }
 
     /** Single partition getter
@@ -202,11 +219,10 @@ class Component
     const std::vector<Deployment> deployments;
 
     /** Vector of Partition objects */
-    const std::vector<Partition> partitions;
+    const std::vector<Partition<Mem>> partitions;
 
     /** Load factor of the Component */
     const LoadType comp_lambda;
-
 };
 
 } //namespace Space4AI
