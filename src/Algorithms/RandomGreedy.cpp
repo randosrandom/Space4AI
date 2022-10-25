@@ -74,7 +74,7 @@ RandomGreedy::random_greedy(
 
       if(new_sol.get_feasibility())
       {
-        new_sol.set_selected_resources(system);
+        new_sol.set_selected_resources(system, curr_rt_sol_selected_resources);
         MY_PRAGMA(omp critical)
         elite.add(std::move(new_sol));
         Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");

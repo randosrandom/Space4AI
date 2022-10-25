@@ -30,7 +30,7 @@ namespace Space4AI
 {
 
 void
-SystemData::read_json(const nl::json& configuration_file)
+SystemData::read_json(const nl::json& configuration_file, LoadType lambda_)
 {
   if(configuration_file.contains("DirectedAcyclicGraph") && configuration_file.contains("Components"))
   {
@@ -46,7 +46,12 @@ SystemData::read_json(const nl::json& configuration_file)
     throw std::invalid_argument("Cannot find DirectedAcyclicGraph or Components in json");
   }
 
-  if(configuration_file.contains("Lambda"))
+  if(!std::isnan(lambda_))
+  {
+    this->lambda = lambda_;
+
+  }
+  else if(configuration_file.contains("Lambda"))
   {
     Logger::Info("Reading lambda...");
     this->lambda = configuration_file.at("Lambda").get<LoadType>();

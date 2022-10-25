@@ -57,7 +57,7 @@ class System
     *                      that describes the System
     *   \paramm config_file_type Identufy the configuration file version
     */
-    void read_configuration_file(const std::string& system_file);
+    void read_configuration_file(const std::string& system_file, LoadType lambda_ = NaN);
 
     /** performance getter */
     const PerformanceType&

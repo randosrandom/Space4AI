@@ -152,7 +152,7 @@ class Solution
     set_n_used_resources(T&& n_u_r) {solution_data.n_used_resources = std::forward<T>(n_u_r);}
 
     void
-    set_selected_resources(const System& system);
+    set_selected_resources(const System& system, const SelectedResources& old_sel_res = SelectedResources());
 
     /** "<" operator definition:
     *   the solutions will be ordered by cost, meaning that a Solution with a smaller

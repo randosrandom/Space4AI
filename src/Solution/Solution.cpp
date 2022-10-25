@@ -335,18 +335,25 @@ Solution::print_solution(const System& system, const std::string& path) const
 }
 
 void
-Solution::set_selected_resources(const System& system)
+Solution::set_selected_resources(const System& system, const SelectedResources& old_sel_res)
 {
   const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
   const size_t num_cls_vm = system.get_system_data().get_cls()[vm_type_idx].size();
   // Selected EDGE
   selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
-  std::copy(
-    solution_data.n_used_resources[edge_type_idx].begin(),
-    solution_data.n_used_resources[edge_type_idx].end(),
-    selected_resources.selected_edge.begin()
-  );
+  if(old_sel_res.selected_edge.size() > 0)
+  {
+    selected_resources.selected_edge = old_sel_res.selected_edge;
+  }
+  else
+  {
+    selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
+    std::copy(
+      solution_data.n_used_resources[edge_type_idx].begin(),
+      solution_data.n_used_resources[edge_type_idx].end(),
+      selected_resources.selected_edge.begin());
+  }
   // Selected VMs
   selected_resources.selected_vms.resize(solution_data.n_used_resources[vm_type_idx].size());
   std::copy(
@@ -354,7 +361,9 @@ Solution::set_selected_resources(const System& system)
     solution_data.n_used_resources[vm_type_idx].end(),
     selected_resources.selected_vms.begin()
   );
-  selected_resources.selected_vms_by_cl.resize(num_cls_vm);
+
+  selected_resources.selected_vms_by_cl.assign(num_cls_vm, std::make_pair(false, 0));
+
   const auto& all_resources = system.get_system_data().get_all_resources();
   const auto& cl_name_to_idx_vm = system.get_system_data().get_cl_name_to_idx()[vm_type_idx];
 
@@ -463,6 +472,8 @@ Solution::memory_constraints_check(const System& system, const LocalInfo& local_
 
         if(memory_slack_values[r_type_idx][r_idx] < 0)
         {
+          const auto message = "Resource of type and idx: " + std::to_string(r_type_idx) + " " + std::to_string(r_idx) + " does not satisfy memory";
+          Logger::Debug(message);
           feasible = false;
           break;
         }
@@ -601,7 +612,7 @@ Solution::local_constraints_check(const System& system, const LocalInfo& local_i
     }
   }
 
-  Logger::Debug("check_feasibility: DONE Checking local constraints ...");
+  Logger::Warn("check_feasibility: DONE Checking local constraints ...");
   return feasible;
 }
 

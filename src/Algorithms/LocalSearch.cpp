@@ -64,7 +64,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
     migrate_faas_to_vm();
     migrate_faas_to_faas();
     change_deployment();
-    drop_resource();
+    //drop_resource();
     change_resource();
   }
 }
@@ -96,7 +96,7 @@ LocalSearch::migrate_vm_to_edge()
           comp_idx, p_idx, i, r_type_idx, r_idx, edge_type_idx, selected_edge))
       {
         ++vm_to_edge_count;
-        curr_sol.set_selected_resources(*system); // VM can be switched off
+        curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources); // VM can be switched off
       }
 
       interrupt = true;
@@ -181,11 +181,7 @@ LocalSearch::migration_tweaking(
       curr_sol.global_constraints_check(*system, local_info);
   }
 
-# warning Inefficiency here: Should manage cost by single resource. However, for the resources \
-whith colocation, I should keep track of the number of partitions running on the resource. \
-Maybe change n_used_resources, adding a std::pair where the second element is the number of partition running.
-
-  if(feasible && (curr_sol.objective_function(*system)) < best_sol.get_cost())
+  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
     best_sol = curr_sol;
   }
@@ -268,7 +264,7 @@ LocalSearch::migrate_faas_to_faas()
     curr_sol.local_constraints_check(*system, local_info) &&
     curr_sol.global_constraints_check(*system, local_info);
 
-  if(feasible && curr_sol.objective_function(*system) < best_sol.get_cost())
+  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
     best_sol = curr_sol;
     ++faas_to_faas_count;
@@ -486,7 +482,7 @@ running on each resources...
 
   if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
-    curr_sol.set_selected_resources(*system);
+    curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources);
     best_sol = curr_sol;
     ++drop_resource_count;
   }
@@ -663,7 +659,7 @@ LocalSearch::change_resource()
 
   if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
-    curr_sol.set_selected_resources(*system);
+    curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources);
     best_sol = curr_sol;
     ++change_resource_count;
 
@@ -765,11 +761,13 @@ LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
   local_info.active = true;
   local_info.modified_res[res_type_idx][res_idx] = true;
   local_info.modified_comp = std::make_pair(false, 0);
-  local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
-  local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
+
 
   do
   {
+    local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
+    local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
+
     curr_sol.solution_data.n_used_resources[res_type_idx][res_idx]--;
 
     for(size_t comp_idx = 0; comp_idx < curr_sol.solution_data.used_resources.size(); ++comp_idx)
@@ -778,7 +776,7 @@ LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
       {
         if(res_type_idx == r_type_idx && res_idx == r_idx)
         {
-          curr_sol.solution_data.y_hat[comp_idx][r_type_idx][p_idx][r_idx]--;
+          curr_sol.solution_data.y_hat[comp_idx][r_type_idx][p_idx][r_idx] = curr_sol.solution_data.n_used_resources[res_type_idx][res_idx];
         }
       }
     }

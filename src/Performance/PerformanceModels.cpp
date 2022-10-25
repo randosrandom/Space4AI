@@ -40,7 +40,7 @@ QTPE::predict(
 
   if(utilization > 1) // This is en error! utilization cannot be bigger than -1;
   {
-    Logger::Warn("QTPE::predict(): Utilization > 1"); // if needed add which components are the problem.
+    Logger::Warn("QTPE::predict(): Utilization > 1 of res type and idx" + std::to_string(ResIdxFromType(res_type)) + " " + std::to_string(res_idx)); // if needed add which components are the problem.
     //throw std::runtime_error("QTPE::predict(): Utilization > 1");
     response_time = -1.;  // manage error in the caller function
   }

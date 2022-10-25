@@ -29,7 +29,7 @@ Copyright 2021 AI-SPRINT
 namespace Space4AI
 {
 void
-System::read_configuration_file(const std::string& system_file)
+System::read_configuration_file(const std::string& system_file, LoadType lambda_)
 {
   std::ifstream file(system_file);
   nl::json configuration_file;
@@ -47,7 +47,7 @@ System::read_configuration_file(const std::string& system_file)
   }
 
   Logger::Info("****** SYSTEM DATA ... ******");
-  this->system_data.read_json(configuration_file);
+  this->system_data.read_json(configuration_file, lambda_);
   Logger::Info("********** DONE! **********");
 
   if(configuration_file.contains("DemandMatrix"))

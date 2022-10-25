@@ -148,6 +148,7 @@ main(int argc, char** argv)
       // check y_hat ~ n_used_resources
       const auto& y_hat = sol.get_y_hat();
       const auto& n_used_resources = sol.get_n_used_resources();
+      const auto& used_resources = sol.get_used_resources();
 
       for(size_t c=0; c<y_hat.size(); ++c)
         for(size_t t=0; t<y_hat[c].size()-1; ++t)
@@ -155,6 +156,16 @@ main(int argc, char** argv)
             for(size_t r=0; r<y_hat[c][t][p].size(); ++r)
               if(y_hat[c][t][p][r]>0 && (y_hat[c][t][p][r] != n_used_resources[t][r]))
                 throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
+
+      for(size_t c=0; c<used_resources.size(); ++c)
+      {
+        for(size_t uu=0; uu<used_resources[c].size(); ++uu)
+        {
+          const auto [p, rt, ri] = used_resources[c][uu];
+          if(rt < 2 && (y_hat[c][rt][p][ri] != n_used_resources[rt][ri]))
+            throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
+        }
+      }
     }
   }
 

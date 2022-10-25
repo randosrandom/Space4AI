@@ -2,6 +2,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
+import json
 
 from dl_utilities import dl_cumsum
 from bimodal import BimodalFun
@@ -13,10 +14,10 @@ average = True
 
 # External parameters
 times_seed = 500000
-max_n_variations = 10
-min_workload = 0.0001
-max_workload = 0.0003
-total_episode_length = 500
+max_n_variations = 30
+min_workload = 0.1
+max_workload = 1.2
+total_episode_length = 300
 avg_interval = round(total_episode_length / max_n_variations)
 
 np.random.seed(times_seed)
@@ -115,9 +116,10 @@ np.random.seed(67676767)
 events3 = np.random.exponential(avg_interval, max_n_variations)
 
 bimodal_params_3 = copy.deepcopy(bimodal_params_1)
+bimodal_params_3["peaks"] = [0.2* bimodal_params_2["tmax"], 0.8* bimodal_params_2["tmax"]]
 bimodal_params_3["seed"] = 20202020
-bimodal_params_3["a"] = 25/(bimodal_params_3["tmax"] - bimodal_params_3["tmin"])**2
-bimodal_params_3["b"] = 100/(bimodal_params_3["tmax"] - bimodal_params_3["tmin"])**2
+bimodal_params_3["a"] = 50/(bimodal_params_3["tmax"] - bimodal_params_3["tmin"])**2
+bimodal_params_3["b"] = 50/(bimodal_params_3["tmax"] - bimodal_params_3["tmin"])**2
 
 
 # Sum cumulatively to get the event times (and not their distances)
@@ -152,49 +154,54 @@ plt.legend()
 #plt.show(block = False)
 plt.savefig("g_3.png")
 
-
-np.random.seed(886655)
-events4 = events2
-
-bimodal_params_4 = copy.deepcopy(bimodal_params_1)
-bimodal_params_4["seed"] = 98
-bimodal_params_4["a"] = 10/(bimodal_params_4["tmax"] - bimodal_params_4["tmin"])**2
-bimodal_params_4["b"] = 70/(bimodal_params_4["tmax"] - bimodal_params_4["tmin"])**2
-bimodal_params_4["alpha"] = 4
+# save numpy array yo json
+json_str = json.dumps({"lambda": w_3_2.tolist()})
+with open("lambda.json", 'w') as f:
+    f.write(json_str)
 
 
-# Sum cumulatively to get the event times (and not their distances)
-cumulative_events4 = dl_cumsum(events4)
-cumulative_events4 = np.append([bimodal_params_4["tmin"]], cumulative_events4)
-cumulative_events4 = np.append(cumulative_events4, total_episode_length)
-
-# Generate a bimodal curve
-curve_4 = BimodalFun(bimodal_params_4)
-
-# Extract the lambda values from the bimodal curve
-if simple:
-  w_4_1 = curve_4.eval(cumulative_events4)
-if average:
-  w_4_2 = curve_4.eval(cumulative_events4, True)
-
-# Graph
-g_4 = plt.figure()
-ax = plt.gca()
-ax.set_xlim([bimodal_params_4["tmin"], bimodal_params_4["tmax"]])
-plt.title("Peaks random, times deterministic")
-plt.xlabel("Time")
-plt.ylabel("Lambda")
-plt.plot(x, curve_4.eval(x), 'b', label = "Original curve")
-if simple:
-  plt.hlines(w_4_1[1:], cumulative_events4[:-1], cumulative_events4[1:], 'r',
-    label = "Simple sampling")
-if average:
-  plt.hlines(w_4_2[1:], cumulative_events4[:-1], cumulative_events4[1:], 'g',
-    label = "Average sampling")
-plt.legend()
-#plt.show(block = False)
-plt.savefig("g_4.png")
-
-# plt.pause(0.001) # Pause for interval seconds.
-# input("Hit [enter] to end.")
-# plt.close('all')
+# np.random.seed(886655)
+# events4 = events2
+#
+# bimodal_params_4 = copy.deepcopy(bimodal_params_1)
+# bimodal_params_4["seed"] = 98
+# bimodal_params_4["a"] = 10/(bimodal_params_4["tmax"] - bimodal_params_4["tmin"])**2
+# bimodal_params_4["b"] = 70/(bimodal_params_4["tmax"] - bimodal_params_4["tmin"])**2
+# bimodal_params_4["alpha"] = 4
+#
+#
+# # Sum cumulatively to get the event times (and not their distances)
+# cumulative_events4 = dl_cumsum(events4)
+# cumulative_events4 = np.append([bimodal_params_4["tmin"]], cumulative_events4)
+# cumulative_events4 = np.append(cumulative_events4, total_episode_length)
+#
+# # Generate a bimodal curve
+# curve_4 = BimodalFun(bimodal_params_4)
+#
+# # Extract the lambda values from the bimodal curve
+# if simple:
+#   w_4_1 = curve_4.eval(cumulative_events4)
+# if average:
+#   w_4_2 = curve_4.eval(cumulative_events4, True)
+#
+# # Graph
+# g_4 = plt.figure()
+# ax = plt.gca()
+# ax.set_xlim([bimodal_params_4["tmin"], bimodal_params_4["tmax"]])
+# plt.title("Peaks random, times deterministic")
+# plt.xlabel("Time")
+# plt.ylabel("Lambda")
+# plt.plot(x, curve_4.eval(x), 'b', label = "Original curve")
+# if simple:
+#   plt.hlines(w_4_1[1:], cumulative_events4[:-1], cumulative_events4[1:], 'r',
+#     label = "Simple sampling")
+# if average:
+#   plt.hlines(w_4_2[1:], cumulative_events4[:-1], cumulative_events4[1:], 'g',
+#     label = "Average sampling")
+# plt.legend()
+# #plt.show(block = False)
+# plt.savefig("g_4.png")
+#
+# # plt.pause(0.001) # Pause for interval seconds.
+# # input("Hit [enter] to end.")
+# # plt.close('all')
