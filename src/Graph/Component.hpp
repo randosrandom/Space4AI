@@ -50,15 +50,30 @@ class Partition
      */
     Partition(
       const std::string& name_,
-      DataType memory_,
       LoadType part_lambda_,
       ProbType early_exit_probability_,
       const std::string& next_,
       DataType data_size_
     ):
-      name(name_), memory(memory_), part_lambda(part_lambda_),
+      name(name_), part_lambda(part_lambda_),
       early_exit_probability(early_exit_probability_), next(next_), data_size(data_size_)
-    {}
+    {
+      memory.resize(ResIdxFromType(ResourceType::Count));
+    }
+
+    void
+    init_memory(size_t num_edge, size_t num_vms, size_t num_faas)
+    {
+      memory[ResIdxFromType(ResourceType::Edge)].resize(num_edge, NaN);
+      memory[ResIdxFromType(ResourceType::VM)].resize(num_vms, NaN);
+      memory[ResIdxFromType(ResourceType::Faas)].resize(num_faas, NaN);
+    }
+
+    void
+    set_memory(DataType mem_val_, size_t res_type_idx, size_t res_idx)
+    {
+      memory[res_type_idx][res_idx] = mem_val;
+    }
 
     /** name getter */
     const std::string&
@@ -66,7 +81,7 @@ class Partition
 
     /** memory getter */
     DataType
-    get_memory() const { return memory; };
+    get_memory(size_t res_type_idx, size_t res_idx) const { return memory[res_type_idx][res_idx]; };
 
     /** part_lambda getter */
     LoadType
@@ -90,7 +105,7 @@ class Partition
     const std::string name;
 
     /** Memory requirement of the Partition */
-    const DataType memory;
+    std::vector<std::vector<DataType>> memory;
 
     /** Load factor of the Partition */
     const LoadType part_lambda;

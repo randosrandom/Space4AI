@@ -230,7 +230,7 @@ SystemData::initialize_components(const nl::json& components_json)
       Logger::Debug("** Initializing first node...");
       lambda_input_comp = this->lambda;
     }
-    else // note the first node
+    else // not the first node
     {
       Logger::Debug("** Initializing other node...");
       LoadType sum = 0.;
