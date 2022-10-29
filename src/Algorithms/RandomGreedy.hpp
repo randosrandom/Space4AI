@@ -42,8 +42,8 @@ class RandomGreedy
 
     RandomGreedy() = default;
 
-    RandomGreedy(const SelectedResources& curr_rt_sol_sel_res_)
-    : curr_rt_sol_selected_resources(curr_rt_sol_sel_res_) {}
+    RandomGreedy(const SelectedResources& fixed_edge_and_curr_rt_vms_)
+    : fixed_edge_and_curr_rt_vms(fixed_edge_and_curr_rt_vms_) {}
 
     /** Method to generate random greedy solutions
     *
@@ -111,7 +111,7 @@ class RandomGreedy
     inline static constexpr size_t seed = 20122022;
 
     /** Current run-time solution selected resources (e.g., at design-time) on Edge and VM */
-    const SelectedResources curr_rt_sol_selected_resources;
+    const SelectedResources fixed_edge_and_curr_rt_vms;
 
 
 };

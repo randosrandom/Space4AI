@@ -63,11 +63,14 @@ class SolutionData
 
     /** used_resources getter */
     const UsedResourcesOrderedType&
-    get_used_resources() const { return used_resources; }
+    get_used_resources() const {return used_resources;}
+
+    const std::pair<size_t, size_t>&
+    get_first_cloud() const {return first_cloud; }
 
     /** n_used_resources getter */
     const UsedResourcesNumberType&
-    get_n_used_resources() const { return n_used_resources; }
+    get_n_used_resources() const {return n_used_resources;}
 
     /** default destructor */
     ~SolutionData() = default;
@@ -95,6 +98,8 @@ class SolutionData
     *   keep the order for each insert (See report for details)
     */
     UsedResourcesOrderedType used_resources;
+
+    std::pair<size_t, size_t> first_cloud;
 
     /** For each [Resource Type, Resource idx] save the number of instances of
     *   such Resource deployed in the System.

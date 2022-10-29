@@ -338,25 +338,18 @@ Solution::print_solution(const System& system, const std::string& path) const
 }
 
 void
-Solution::set_selected_resources(const System& system, const SelectedResources& old_sel_res)
+Solution::set_selected_resources(const System& system)
 {
   const size_t edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
   const size_t num_cls_vm = system.get_system_data().get_cls()[vm_type_idx].size();
   // Selected EDGE
   selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
-  if(old_sel_res.selected_edge.size() > 0)
-  {
-    selected_resources.selected_edge = old_sel_res.selected_edge;
-  }
-  else
-  {
-    selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
-    std::copy(
-      solution_data.n_used_resources[edge_type_idx].begin(),
-      solution_data.n_used_resources[edge_type_idx].end(),
-      selected_resources.selected_edge.begin());
-  }
+  std::copy(
+    solution_data.n_used_resources[edge_type_idx].begin(),
+    solution_data.n_used_resources[edge_type_idx].end(),
+    selected_resources.selected_edge.begin());
+
   // Selected VMs
   selected_resources.selected_vms.resize(solution_data.n_used_resources[vm_type_idx].size());
   std::copy(
@@ -489,59 +482,37 @@ Solution::memory_constraints_check(const System& system, const LocalInfo& local_
 }
 
 bool
-Solution::move_backward_check(const System& system) const
+Solution::move_backward_check(const System& system)
 {
   Logger::Debug("check_feasibility: Checking move backward ... ");
   bool feasible = true;
-  const auto& components = system.get_system_data().get_components();
 
-  for(std::size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
+  std::pair<size_t, size_t> last_edge = std::make_pair(solution_data.used_resources.size() , 0);
+  std::pair<size_t, size_t> first_cloud = std::make_pair(solution_data.used_resources.size(), 0);
+
+  const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
+
+  for(size_t comp_idx = 0; comp_idx < solution_data.used_resources.size() && feasible; ++comp_idx)
   {
-    feasible = feasible && move_backward_check(comp_idx);
+    for(size_t j=0; j<solution_data.used_resources[comp_idx].size(); ++j)
+    {
+      const auto [p_idx, res_type_idx, res_idx] = solution_data.used_resources[comp_idx][j];
+
+      if(res_type_idx == edge_type_idx)
+      {
+        last_edge = std::make_pair(comp_idx, j);
+      }
+      else if(first_cloud.first == solution_data.used_resources.size())
+      {
+        first_cloud = std::make_pair(comp_idx, j);
+      }
+    }
   }
-
-  Logger::Debug("check_feasibility: DONE move backward ... ");
-  return feasible;
-}
-
-bool
-Solution::move_backward_check(size_t comp_idx) const
-{
-  bool feasible = true;
-  const auto edge_idx = ResIdxFromType(ResourceType::Edge);
-  const auto vm_idx = ResIdxFromType(ResourceType::VM);
-  const auto faas_idx = ResIdxFromType(ResourceType::Faas);
-  auto it = solution_data.used_resources[comp_idx].cbegin(); // iterator to find minimum partition running on vm or faas
-  auto r_it = solution_data.used_resources[comp_idx].crbegin(); // iterator to find maximum partition running on edge
-  auto max_idx_part_on_edge = std::numeric_limits<size_t>::min();
-  auto min_idx_part_on_cloud_faas = std::numeric_limits<size_t>::max();
-  bool not_found_edge = true;
-  bool not_found_cloud_faas = true;
-
-  while(
-    feasible &&
-    (not_found_edge || not_found_cloud_faas) &&
-    it != solution_data.used_resources[comp_idx].cend() &&
-    r_it != solution_data.used_resources[comp_idx].crend() &&
-    *r_it >= *it)
+  solution_data.first_cloud = first_cloud;
+  if(last_edge > first_cloud)
   {
-    if(not_found_edge && std::get<1>(*r_it) == edge_idx)
-    {
-      not_found_edge = false;
-      max_idx_part_on_edge = std::get<0>(*r_it);
-    }
-
-    if(not_found_cloud_faas && (std::get<1>(*it) == vm_idx || std::get<1>(*it) == faas_idx))
-    {
-      not_found_cloud_faas = false;
-      min_idx_part_on_cloud_faas = std::get<0>(*it);
-    }
-
-    feasible = (max_idx_part_on_edge <= min_idx_part_on_cloud_faas);
-    it++;
-    r_it++;
+    feasible = false;
   }
-
   return feasible;
 }
 

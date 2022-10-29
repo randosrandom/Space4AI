@@ -29,10 +29,10 @@ namespace Space4AI
 
 LocalSearch::LocalSearch(
   const Solution& init_sol_,
-  System const* const system_,
-  SelectedResources const* const curr_rt_sol_sel_res_)
+  System const * const system_,
+  SelectedResources const* const fixed_edge_and_curr_rt_vms_)
   : best_sol(init_sol_), curr_sol(init_sol_),
-    system(system_), curr_rt_sol_selected_resources(curr_rt_sol_sel_res_)
+    system(system_), fixed_edge_and_curr_rt_vms(fixed_edge_and_curr_rt_vms_)
 {
   const auto& all_resources = system->get_system_data().get_all_resources();
   local_info.modified_res.resize(ResIdxFromType(ResourceType::Count));
@@ -60,47 +60,36 @@ LocalSearch::run(size_t max_it, bool reproducibility)
 
   for(size_t it = 0; it < max_it; ++it)
   {
-    migrate_vm_to_edge();
     migrate_faas_to_vm();
+    migrate_cloud_to_edge();
     migrate_faas_to_faas();
-    change_deployment();
+    // change_deployment();
     drop_resource();
     change_resource();
   }
 }
 
 void
-LocalSearch::migrate_vm_to_edge()
+LocalSearch::migrate_cloud_to_edge()
 {
-  // Choose a random component
-  const auto& components = system->get_system_data().get_components();
-  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size() - 1);
-  const size_t comp_idx = dist(rng);
+  const auto& first_cloud = best_sol.solution_data.get_first_cloud();
+  const size_t comp_idx = first_cloud.first;
+  if(comp_idx == best_sol.get_used_resources().size()) // no cloud in usage
+  {
+    return;
+  }
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
+  const auto [p_idx, r_type_idx, r_idx] = used_resources_comp[first_cloud.second];
   const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
-  bool interrupt{false};
 
-  // migrate FIRST (and only first) VM to Edge
-  for(size_t i = 0; i < used_resources_comp.size() && !interrupt; ++i)
+  // Migrate first Cloud to Edge
+  if(migration_tweaking(
+      comp_idx, p_idx, first_cloud.second, r_type_idx, r_idx, edge_type_idx, selected_edge))
   {
-    const auto [p_idx, r_type_idx, r_idx] = used_resources_comp[i];
-
-    if(r_type_idx == ResIdxFromType(ResourceType::Faas)) // If I find a Faas, I can't migrate subsequent vm to edge
-    {
-      interrupt = true;
-    }
-    else if(r_type_idx == ResIdxFromType(ResourceType::VM))
-    {
-      if(migration_tweaking(
-          comp_idx, p_idx, i, r_type_idx, r_idx, edge_type_idx, selected_edge))
-      {
-        ++vm_to_edge_count;
-        curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources); // VM can be switched off
-      }
-
-      interrupt = true;
-    }
+    ++cloud_to_edge_count;
+    if(r_type_idx == ResIdxFromType(ResourceType::VM))
+      curr_sol.set_selected_resources(*system); // VM can be switched off
   }
 }
 
@@ -109,7 +98,10 @@ LocalSearch::migrate_faas_to_vm()
 {
   // Choose a random component
   const auto& components = system->get_system_data().get_components();
-  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size() - 1);
+  const auto& first_cloud = best_sol.solution_data.get_first_cloud();
+  if(first_cloud.first == components.size())
+    return;
+  std::uniform_int_distribution<decltype(rng)::result_type> dist(first_cloud.first, components.size() - 1);
   const size_t comp_idx = dist(rng);
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
@@ -175,6 +167,7 @@ LocalSearch::migration_tweaking(
     local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
     // CONSTRAINTS
     feasible =
+      curr_sol.move_backward_check(*system) &&
       curr_sol.performance_assignment_check(*system, local_info) &&
       curr_sol.memory_constraints_check(*system, local_info) &&
       curr_sol.local_constraints_check(*system, local_info) &&
@@ -198,7 +191,10 @@ LocalSearch::migrate_faas_to_faas()
 {
   // Choose a random component
   const auto& components = system->get_system_data().get_components();
-  std::uniform_int_distribution<decltype(rng)::result_type> dist(0, components.size() - 1);
+  const auto& first_cloud = best_sol.solution_data.get_first_cloud();
+  if(first_cloud.first == components.size())
+    return;
+  std::uniform_int_distribution<decltype(rng)::result_type> dist(first_cloud.first, components.size() - 1);
   const size_t comp_idx = dist(rng);
   local_info.reset();
   local_info.active = true;
@@ -370,7 +366,7 @@ LocalSearch::change_deployment()
   if(diff_cost < -1e-12)
   {
     const bool feasible =
-      curr_sol.move_backward_check(comp_idx) &&
+      curr_sol.move_backward_check(*system) &&
       curr_sol.performance_assignment_check(*system, local_info) &&
       curr_sol.memory_constraints_check(*system, local_info) &&
       curr_sol.local_constraints_check(*system, local_info) &&
@@ -488,7 +484,7 @@ LocalSearch::drop_resource()
 
     if(feasible)
     {
-      curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources);
+      curr_sol.set_selected_resources(*system);
       best_sol = curr_sol;
       ++drop_resource_count;
     }
@@ -546,6 +542,31 @@ LocalSearch::change_resource()
         altern_resources.push_back(i);
       }
     }
+    // add additional devices in other comp layers (ACTUALY YOU CAN ADD THIS PART IN THE FOR ABOVE...)
+    const auto& fixed_edge = fixed_edge_and_curr_rt_vms->get_selected_edge();
+    if(fixed_edge.size()>0) // RT
+    {
+      for(size_t i=0; i<fixed_edge.size(); ++i)
+      {
+        if(!selected_edge[i] && i != del_res.second && fixed_edge[i])
+          altern_resources.push_back(i);
+      }
+    }
+    else // DT
+    {
+      for(size_t cl_idx = 0; cl_idx < cls[del_res.first].size(); ++cl_idx)
+      {
+        if(!already_selected_cls[cl_idx])
+        {
+          //pick a random resource of the cl
+          const std::vector<size_t> res_idxs = cls[del_res.first][cl_idx].get_res_idxs();
+          const size_t n_res = res_idxs.size();
+          std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
+          const size_t random_res_idx = res_idxs[dist(rng)];
+          altern_resources.push_back(random_res_idx);
+        }
+      }
+    }
   }
   else // VM
   {
@@ -560,12 +581,34 @@ LocalSearch::change_resource()
         altern_resources.push_back(i);
       }
     }
+    // add candidate_resources by comp layer
+    // IMPORTANT: if I am at RT and I selected a VM at a layer (even if a dropped it before), I can select
+    // only the same old resource at that layer...
+    const auto& selected_vms_by_cl = this->fixed_edge_and_curr_rt_vms->get_selected_vms_by_cl();
+    for(size_t cl_idx = 0; cl_idx < cls[del_res.first].size(); ++cl_idx)
+    {
+      if(!already_selected_cls[cl_idx])
+      {
+        if(selected_vms_by_cl.size() > 0 && selected_vms_by_cl[cl_idx].first)
+        {
+          altern_resources.push_back(selected_vms_by_cl[cl_idx].second);
+        }
+        else
+        {
+          //pick a random resource of the cl
+          const std::vector<size_t> res_idxs = cls[del_res.first][cl_idx].get_res_idxs();
+          const size_t n_res = res_idxs.size();
+          std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
+          const size_t random_res_idx = res_idxs[dist(rng)];
+          altern_resources.push_back(random_res_idx);
+        }
+      }
+    }
   }
-
-  // populate candidate_resources by comp layer
+  // add candidate_resources by comp layer
   // IMPORTANT: if I am at RT and I selected a VM at a layer (even if a dropped it before), I can select
   // only the same old resource at that layer...
-  const auto& selected_vms_by_cl = this->curr_rt_sol_selected_resources->get_selected_vms_by_cl();
+  const auto& selected_vms_by_cl = this->fixed_edge_and_curr_rt_vms->get_selected_vms_by_cl();
 
   for(size_t cl_idx = 0; cl_idx < cls[del_res.first].size(); ++cl_idx)
   {
@@ -670,7 +713,7 @@ LocalSearch::change_resource()
 
   if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
-    curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources);
+    curr_sol.set_selected_resources(*system);
     best_sol = curr_sol;
     ++change_resource_count;
 

@@ -152,7 +152,7 @@ class Solution
     set_n_used_resources(T&& n_u_r) {solution_data.n_used_resources = std::forward<T>(n_u_r);}
 
     void
-    set_selected_resources(const System& system, const SelectedResources& old_sel_res = SelectedResources());
+    set_selected_resources(const System& system);
 
     /** "<" operator definition:
     *   the solutions will be ordered by cost, meaning that a Solution with a smaller
@@ -204,10 +204,7 @@ class Solution
     *   \return True if the constraint is satisfied
     */
     bool
-    move_backward_check(const System& system) const;
-
-    bool
-    move_backward_check(size_t comp_idx) const;
+    move_backward_check(const System& system);
 
     /** Method to verify if resources that don't allow colocation are overloaded
     *   (namely more than one Partition is running on the Resource).

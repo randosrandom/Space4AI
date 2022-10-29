@@ -130,8 +130,7 @@ SystemPE::compute_global_perf(
     const auto next_comp_idx = comp_idxs[i + 1];
 
     if(!local_info.active || !local_info.modified_comp.first ||
-      (local_info.modified_comp.second == curr_comp_idx || local_info.modified_comp.second == next_comp_idx)
-    )
+      (local_info.modified_comp.second == curr_comp_idx || local_info.modified_comp.second == next_comp_idx))
     {
       // used resources
       const auto& used_resources = solution_data.get_used_resources();

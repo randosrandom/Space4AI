@@ -1,12 +1,11 @@
 {
   "ConfigFiles" : [
-    "config/GeneralWorkflows/15-components/system_description1.json",
-    "config/GeneralWorkflows/15-components/system_description2.json"
+    "config/GeneralWorkflows/5-components/system_description2.json"
   ],
 
   "Algorithm" : {
-    "RG_n_iterations" : 25000,
-    "LS_n_iterations" : 5000,
+    "RG_n_iterations" : 5000,
+    "LS_n_iterations" : 1000,
     "RG_max_num_sols" : 10,
     "LS_max_num_sols" : 1,
     "reproducibility" : true

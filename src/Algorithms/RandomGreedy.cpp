@@ -60,7 +60,7 @@ RandomGreedy::random_greedy(
 
       if(new_sol.get_feasibility())
       {
-        new_sol.set_selected_resources(system, curr_rt_sol_selected_resources);
+        new_sol.set_selected_resources(system);
         MY_PRAGMA(omp critical)
         elite.add(std::move(new_sol));
         Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
@@ -187,8 +187,8 @@ RandomGreedy::create_random_initial_solution(
 
   // Selecting candidate_resources (Edge and VM, Faas already selected all)
   Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
-  const auto& selected_edge = curr_rt_sol_selected_resources.get_selected_edge();
-  const auto& selected_vms_by_cl = curr_rt_sol_selected_resources.get_selected_vms_by_cl();
+  const auto& selected_edge = fixed_edge_and_curr_rt_vms.get_selected_edge();
+  const auto& selected_vms_by_cl = fixed_edge_and_curr_rt_vms.get_selected_vms_by_cl();
 
   // EDGE RESOURCES
   if(selected_edge.size() > 0)  // If I provided old selected resources

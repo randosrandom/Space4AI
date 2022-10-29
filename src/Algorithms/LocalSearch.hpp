@@ -44,14 +44,14 @@ public:
 
   LocalSearch(
     System const * const system_,
-    SelectedResources const * const curr_rt_sol_sel_res_):
+    SelectedResources const * const fixed_edge_and_curr_rt_vms_):
   best_sol(Solution(nullptr)), curr_sol(Solution(nullptr)),
-  system(system_), curr_rt_sol_selected_resources(curr_rt_sol_sel_res_) {};
+  system(system_), fixed_edge_and_curr_rt_vms(fixed_edge_and_curr_rt_vms_) {};
 
   LocalSearch(
     const Solution& init_sol_,
     System const * const system_,
-    SelectedResources const * const selected_resources_);
+    SelectedResources const * const fixed_edge_and_curr_rt_vms_);
 
   void
   run(size_t max_it, bool reproducibility);
@@ -62,7 +62,7 @@ public:
 protected:
 
   void
-  migrate_vm_to_edge();
+  migrate_cloud_to_edge();
 
   void
   migrate_faas_to_vm();
@@ -113,7 +113,7 @@ protected:
   System const * system;
 
   /** Curr run-time sol selcted resources */
-  SelectedResources const * curr_rt_sol_selected_resources;
+  SelectedResources const * fixed_edge_and_curr_rt_vms;
 
   /** local info to track modifications od Local Search */
   LocalInfo local_info;
@@ -125,7 +125,7 @@ protected:
 
   // counter of feasible neighborhoods
   /** counter of VM to Edge migrations */
-  size_t vm_to_edge_count = 0;
+  size_t cloud_to_edge_count = 0;
   /** counter of Faas to VM migrations */
   size_t faas_to_vm_count = 0;
   /** counter of mifration faas to faas */
