@@ -216,9 +216,11 @@ Solution::to_json(const System& system) const
     //get partitions
     const auto& partitions = components[i].get_partitions();
 
-    for(const auto& tuple : solution_data.used_resources[i])
+    for(size_t j=0; j<solution_data.used_resources[i].size(); ++j)
     {
       //get idxs
+      const auto& tuple = solution_data.used_resources[i][j];
+
       const auto& part_idx = std::get<0>(tuple);
       const auto& res_type_idx = std::get<1>(tuple);
       const auto& res_idx = std::get<2>(tuple);
@@ -269,8 +271,9 @@ Solution::to_json(const System& system) const
         //populate jcomponents
         jcomponents[comp_name][part_name][cl_name][res_name] = jresource;
       }
-    }
 
+      jcomponents[comp_name][part_name]["response_time"] = time_perfs.local_parts_perfs[i][j];
+    }
     //get response time of the component i
     jcomponents[comp_name]["response_time"] = time_perfs.comp_perfs[i];
     jcomponents[comp_name]["response_time_threshold"] = local_constraints[i].get_max_res_time();
@@ -468,7 +471,7 @@ Solution::memory_constraints_check(const System& system, const LocalInfo& local_
     {
       if(!local_info.active || local_info.modified_res[r_type_idx][r_idx])
       {
-        memory_slack_values[r_type_idx][r_idx] -= partitions[p_idx].get_memory();
+        memory_slack_values[r_type_idx][r_idx] -= partitions[p_idx].get_memory(r_type_idx, r_idx);
 
         if(memory_slack_values[r_type_idx][r_idx] < 0)
         {

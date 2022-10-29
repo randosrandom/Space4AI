@@ -67,10 +67,6 @@ class System
     const SystemData&
     get_system_data() const {return system_data; };
 
-    /** dynamicPerfModels getter */
-    bool
-    get_dynamicPerfModels() const {return dynamicPerfModels; }
-
   private:
 
     /** Method to populate the performance evaluators.
@@ -99,17 +95,6 @@ class System
     *   Indexed by: [comp_idx][res_type_idx][part_idx][res_idx]
     */
     PerformanceType performance;
-
-    /** Flag indicating type of Performance Models read (only needed for ResourceType::Faas since
-    *   ResourceType::Edge and ResourceType::VM default to queue theory).
-    *
-    *   False: Performace Models are all static, so a demand_matrix has been built.
-    *   True:  There is at least one dynamic Performance Model, pybind11 must be called during
-    *          the construction of the Solution to evaluate response times.
-    *
-    *   This flag is important, since Parallelization is not possible for dynamic models (see GIL issue).
-    */
-    bool dynamicPerfModels = false;
 
 };
 

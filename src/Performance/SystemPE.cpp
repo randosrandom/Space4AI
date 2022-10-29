@@ -75,7 +75,7 @@ SystemPE::compute_local_perf(
           !local_info.active || // Random Greedy
           local_info.modified_res[res1_type_idx][res1_idx] || local_info.modified_res[res2_type_idx][res2_idx])
         {
-          const auto data_size = partitions_comp[p_idx1].get_data_size();
+          const auto data_size = partitions_comp[p_idx1].get_next_data_sizes().at(p_idx2);
 
           // I have to compute the network delay only if the two resources running
           // the two partitions are different!
@@ -97,12 +97,17 @@ SystemPE::compute_local_perf(
 
     // logger messages
   }
+  const auto& comp_partitions = system.get_system_data().get_component(comp_idx).get_partitions();
+  TimeType parts_total_time = local_parts_perfs[comp_idx][0]; // time of first partition
+  ProbType transition_probability = 1 - comp_partitions[std::get<0>(used_resources_comp.front())].get_early_exit_probability();
+  for(size_t i=1; i<local_parts_perfs[comp_idx].size(); ++i) // local_parts_delays[comp_idx].size() = local_parts_perfs[comp_idx].size()-1
+  {
+    parts_total_time += transition_probability * (local_parts_perfs[comp_idx][i] + local_parts_delays[comp_idx][i-1]);
+    const auto p_idx = std::get<0>(used_resources_comp[i]);
+    transition_probability *= (1 - comp_partitions[p_idx].get_early_exit_probability());
+  }
+  comp_perfs[comp_idx] = parts_total_time;
 
-  const TimeType parts_total_time = std::accumulate(
-      local_parts_perfs[comp_idx].cbegin(), local_parts_perfs[comp_idx].cend(), 0.0);
-  const TimeType parts_total_delay_time = std::accumulate(
-      local_parts_delays[comp_idx].cbegin(), local_parts_delays[comp_idx].cend(), 0.0);
-  comp_perfs[comp_idx] = parts_total_time + parts_total_delay_time;
 }
 
 void
@@ -141,12 +146,11 @@ SystemPE::compute_global_perf(
       if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
       {
         const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
-        const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_data_size();
+        const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_next_data_sizes().at(next_comp_idx);
         comp_delays[curr_comp_idx] = compute_network_delay(
             ResTypeFromIdx(res1_type_idx), res1_idx,
             ResTypeFromIdx(res2_type_idx), res2_idx,
-            data_size,
-            system);
+            data_size, system);
       }
     }
 

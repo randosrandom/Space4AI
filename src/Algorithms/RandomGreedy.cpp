@@ -51,20 +51,6 @@ RandomGreedy::random_greedy(
 
   EliteResult elite(num_top_sols);
   Logger::Info("Elite container initialized with " + std::to_string(num_top_sols) + " spaces");
-#ifdef PARALLELIZATION
-  const auto old_num_threads = omp_get_max_threads();
-
-  if(system.get_dynamicPerfModels())
-  {
-    const std::string message =
-      "Using Parallelization with dynamic models is not possible (see GIL ISSUE)"
-      " Overriding number of threads to 1 ...";
-    Logger::Warn(message);
-    std::cout << message << std::endl;
-    omp_set_num_threads(1);
-  }
-
-#endif // PARALLELIZATION
 
   MY_PRAGMA(omp parallel for default(none) shared(max_it, num_top_sols, elite, system) schedule(dynamic))
     for(size_t it = 0; it < max_it; ++it)
@@ -85,7 +71,6 @@ RandomGreedy::random_greedy(
   Logger::Info("Number of top feasible solutions found: " + std::to_string(elite.get_size()));
 #ifdef PARALLELIZATION
   elite.set_num_threads(omp_get_max_threads()); // set the current number of used threads;
-  omp_set_num_threads(old_num_threads); // restore number of threads in case it was overridden due to the GIL issue
 #endif
   return elite;
 }

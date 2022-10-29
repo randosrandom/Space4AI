@@ -41,3 +41,4 @@ doc/html
 doc/latex
 doc/xml
 *.orig
+*.png

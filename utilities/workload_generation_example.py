@@ -14,9 +14,9 @@ average = True
 
 # External parameters
 times_seed = 500000
-max_n_variations = 30
-min_workload = 0.1
-max_workload = 1.2
+max_n_variations = 12 # samples
+min_workload = 0.1 # HAMTA
+max_workload = 3   #
 total_episode_length = 300
 avg_interval = round(total_episode_length / max_n_variations)
 

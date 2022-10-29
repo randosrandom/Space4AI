@@ -53,8 +53,7 @@ std::unique_ptr<BasePerformanceModel>
 create_PE(
   const std::string& model, const nl::json& perf_json,
   const SystemData& system_data,
-  size_t comp_idx, size_t part_idx, size_t res_idx
-)
+  size_t comp_idx, size_t part_idx, size_t res_idx)
 {
   if(model == "QTedge" || model == "QTcloud")
   {
@@ -68,7 +67,6 @@ create_PE(
         system_data.get_component(comp_idx).get_partition(part_idx).get_part_lambda()
       );
   }
-
   Logger::Error("In *PerformanceFactory::create_PE(...)* unknown model name passed");
   throw std::invalid_argument("In *PerformanceFactory::create_PE(...)* unknown model name passed");
 }

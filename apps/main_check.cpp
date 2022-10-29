@@ -43,7 +43,7 @@ main(int argc, char** argv)
   {
     std::cout << std::endl;
     for(size_t j=0; j<dag_matrix.size(); ++j)
-      std::cout << std::fixed << std::setprecision(1) << dag_matrix[i][j] << " ";
+      std::cout << std::fixed << std::setprecision(3) << dag_matrix[i][j] << " ";
   }
 
   std::cout << "\nIndex to Comp name" << std::endl;

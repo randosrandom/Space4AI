@@ -75,18 +75,6 @@ SystemData::read_json(const nl::json& configuration_file, LoadType lambda_)
     throw std::invalid_argument("Cannot find Time in json");
   }
 
-  if(configuration_file.contains("Components"))
-  {
-    Logger::Info("Reading components...");
-    this->initialize_components(configuration_file.at("Components"));
-    Logger::Info("Done!");
-  }
-  else
-  {
-    Logger::Error("Cannot find Components json file");
-    throw std::invalid_argument("Cannot find Components json");
-  }
-
   Logger::Info("Resizing cls...");
   this->cls.resize(ResIdxFromType(ResourceType::Count));
   this->cl_name_to_idx.resize(ResIdxFromType(ResourceType::Count));
@@ -133,6 +121,19 @@ SystemData::read_json(const nl::json& configuration_file, LoadType lambda_)
   {
     Logger::Error("No resource provided in json file");
     throw std::logic_error("No resource provided in json file");
+  }
+
+  // read components after the resources so I can resize memory field of partitions without pain...
+  if(configuration_file.contains("Components"))
+  {
+    Logger::Info("Reading components...");
+    this->initialize_components(configuration_file.at("Components"));
+    Logger::Info("Done!");
+  }
+  else
+  {
+    Logger::Error("Cannot find Components json file");
+    throw std::invalid_argument("Cannot find Components json");
   }
 
   if(configuration_file.contains("CompatibilityMatrix"))
@@ -187,6 +188,10 @@ SystemData::read_json(const nl::json& configuration_file, LoadType lambda_)
 void
 SystemData::initialize_components(const nl::json& components_json)
 {
+  const size_t num_edge = all_resources.get_number_resources(ResIdxFromType(ResourceType::Edge));
+  const size_t num_vms = all_resources.get_number_resources(ResIdxFromType(ResourceType::VM));
+  const size_t num_faas = all_resources.get_number_resources(ResIdxFromType(ResourceType::Faas));
+
   std::string debug_message;
 
   // traverse components in order
@@ -216,34 +221,33 @@ SystemData::initialize_components(const nl::json& components_json)
       }
     }
 
-    LoadType lambda_input_comp = std::numeric_limits<LoadType>::quiet_NaN(); // lambda^i in the paper (formula (1))
+    LoadType comp_lambda = std::numeric_limits<LoadType>::quiet_NaN(); // lambda^i in the paper (formula (1))
 
     if(input_comps.size() == 0) // first node
     {
       if(comp_idx != 0)
       {
-        debug_message = "Something went work in ordering: in initialize_components first component does not have '0' index";
-        Logger::Error(debug_message);
-        throw std::runtime_error("Something went work in ordering: in initialize_components first component does not have '0' index");
+        debug_message = "Multiple entry nodes";
+        Logger::Warn(debug_message);
       }
 
-      Logger::Debug("** Initializing first node...");
-      lambda_input_comp = this->lambda;
+      Logger::Debug("** Initializing entry nodes...");
+      comp_lambda = this->lambda;
     }
     else // not the first node
     {
-      Logger::Debug("** Initializing other node...");
+      Logger::Debug("** Initializing subsequent nodes...");
       LoadType sum = 0.;
 
-      // compute the load factor (lambda_comp) of the component comp
+      // compute the load factor (comp_lambda) of the component comp
       for(const auto& i : input_comps)
       {
-        ProbType prob = input_edges[i];
-        LoadType ll = (this->components)[i].get_comp_lambda();
+        const ProbType prob = input_edges[i];
+        const  LoadType ll = (this->components)[i].get_comp_lambda();
         sum += prob * ll;
       }
 
-      lambda_input_comp = sum;
+      comp_lambda = sum;
     }
 
     // loop over deployments
@@ -266,34 +270,49 @@ SystemData::initialize_components(const nl::json& components_json)
       std::map<size_t, std::string> ordered_parts = find_order_parts(parts);
 
       // loop on ordered partitions
+      ProbType early_exit_probability = 0.0;
       for(const auto& [idx, part] : ordered_parts)
       {
         const auto& data = parts.at(part);
         debug_message =  "****** Initializing partition " + part + " of component " + comp;
         Logger::Debug(debug_message);
 
-        if(part_lambda > -1)
+        if(part_lambda > 0)
         {
-          ProbType prob = data.at("early_exit_probability").get<ProbType>();
-          part_lambda *= (1 - prob);
+          part_lambda *= (1 - early_exit_probability);
         }
         else
         {
-          part_lambda = lambda_input_comp;
+          part_lambda = comp_lambda;
         }
 
+        early_exit_probability = data.at("early_exit_probability").get<ProbType>(); // early exit probability for the next partition
+
         part_idx.emplace_back(partitions.size());
+        std::unordered_map<size_t, DataType> next_data_sizes;
+        if(idx == ordered_parts.size()-1) // last partition
+        {
+          for(size_t i=0; i<data.at("next").size(); ++i)
+          {
+            const auto comp_next_name = data.at("next")[i].get<std::string>();
+            const auto data_size_next = data.at("data_size")[i].get<DataType>();
+            next_data_sizes.emplace(comp_name_to_idx.at(comp_next_name), data_size_next);
+          }
+        }
+        else
+        {
+          const auto part_next_name = data.at("next")[0].get<std::string>();
+          const auto data_size_next = data.at("data_size")[0].get<DataType>();
+          next_data_sizes.emplace(part_idx.back()+1, data_size_next);
+        }
         partitions.emplace_back(
           static_cast<std::string>(part),
-          data.at("memory").get<double>(),
           part_lambda,
-          data.at("early_exit_probability").get<double>(),
-          data.at("next").get<std::string>(),
-          data.at("data_size").get<double>()
-        );
-        part_name_to_part_idx.emplace(
-          comp + part, part_idx.back()
-        );
+          early_exit_probability,
+          std::move(next_data_sizes),
+          num_edge, num_vms, num_faas);
+
+        part_name_to_part_idx.emplace(comp + part, part_idx.back());
         Logger::Debug("****** Done!");
       }
 
@@ -305,7 +324,7 @@ SystemData::initialize_components(const nl::json& components_json)
       comp,
       std::move(deployments),
       std::move(partitions),
-      this->lambda
+      comp_lambda
     );
     Logger::Debug("** Done!");
   } // end loop on components
@@ -322,15 +341,18 @@ SystemData::find_order_parts(const nl::json& parts_json) const
   for(const auto& [part_name, part_data] : parts_json.items())
   {
     all_parts.emplace(part_name, all_parts.size());
-    const std::string next_part = part_data.at("next").get<std::string>();
+    const auto next_parts_json = part_data.at("next").get<std::vector<std::string>>();
 
-    if(comp_name_to_idx.count(next_part) == 0) // if next_part is not a component
+    if(next_parts_json.size() == 0) // last partition of last component
+      continue;
+
+    if(comp_name_to_idx.count(next_parts_json.at(0)) == 0) // if next_part is not a component
     {
-      parts_next.emplace(next_part, part_name);
+      parts_next.emplace(next_parts_json.at(0), part_name);
     }
   }
 
-  // find root
+  // find root name (but index is assigned while reading in order)
   std::string root_part;
 
   for(const auto& [part_name, part_idx] : all_parts)
@@ -351,7 +373,8 @@ SystemData::find_order_parts(const nl::json& parts_json) const
     }
 
     idx_to_part_name.emplace(i, root_part);
-    root_part = parts_json.at(root_part).at("next").get<std::string>();
+    if(parts_json.at(root_part).at("next").size()) // =0 for last partition of last component
+      root_part = parts_json.at(root_part).at("next")[0].get<std::string>();
   }
 
   return idx_to_part_name;
@@ -393,13 +416,19 @@ SystemData::initialize_compatibility_matrix(const nl::json& comp_matrix_json)
 
     for(const auto& [part, part_data] : comp_data.items())
     {
-      for(const auto& res : part_data)
+      const auto p_idx = part_name_to_part_idx.at(comp + part);
+      auto& partition_p_idx = components[idx].get_partition(p_idx);
+
+      for(const auto& res_and_mem : part_data)
       {
+        const auto res = res_and_mem.at("resource");
+        const auto memory = res_and_mem.at("memory");
         //select compatible resources
         const auto& res_info = res_name_to_type_and_idx[res.get<std::string>()];
-        comp_temp_matrix [ResIdxFromType(res_info.first)]
-        [part_name_to_part_idx.at(comp + part)]
-        [res_info.second] = 1;
+        comp_temp_matrix[ResIdxFromType(res_info.first)]
+                        [p_idx]
+                        [res_info.second] = 1;
+        partition_p_idx.set_memory(memory.get<DataType>(), ResIdxFromType(res_info.first), res_info.second); // set memory
       }
     }
 

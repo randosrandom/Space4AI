@@ -52,18 +52,13 @@ class Partition
       const std::string& name_,
       LoadType part_lambda_,
       ProbType early_exit_probability_,
-      const std::string& next_,
-      DataType data_size_
+      const std::unordered_map<size_t, DataType>&& next_data_sizes,
+      size_t num_edge, size_t num_vms, size_t num_faas
     ):
-      name(name_), part_lambda(part_lambda_),
-      early_exit_probability(early_exit_probability_), next(next_), data_size(data_size_)
+      name(name_), part_lambda(part_lambda_), early_exit_probability(early_exit_probability_),
+      next_data_sizes(next_data_sizes)
     {
       memory.resize(ResIdxFromType(ResourceType::Count));
-    }
-
-    void
-    init_memory(size_t num_edge, size_t num_vms, size_t num_faas)
-    {
       memory[ResIdxFromType(ResourceType::Edge)].resize(num_edge, NaN);
       memory[ResIdxFromType(ResourceType::VM)].resize(num_vms, NaN);
       memory[ResIdxFromType(ResourceType::Faas)].resize(num_faas, NaN);
@@ -72,7 +67,7 @@ class Partition
     void
     set_memory(DataType mem_val_, size_t res_type_idx, size_t res_idx)
     {
-      memory[res_type_idx][res_idx] = mem_val;
+      memory[res_type_idx][res_idx] = mem_val_;
     }
 
     /** name getter */
@@ -91,13 +86,8 @@ class Partition
     ProbType
     get_early_exit_probability() const { return early_exit_probability; };
 
-    /** next Partition name getter */
-    const std::string&
-    get_next() const { return next; };
-
-    /** data_size getter */
-    DataType
-    get_data_size() const { return data_size; }
+    const std::unordered_map<size_t, DataType>&
+    get_next_data_sizes() const {return next_data_sizes;}
 
   private:
 
@@ -113,12 +103,12 @@ class Partition
     /** Early stopping probability of the NN */
     const ProbType early_exit_probability;
 
-    /** Name of the subsequent Partition */
-    const std::string next;
+    /** true if partition is the last in its deployment */
+    // bool last_part_in_depl;
 
-    /** Amount of data transferred to the subsequent Partition */
-    const DataType data_size;
-
+    /** map form next index, to the ransferred data size. If the partition is the last
+    *   in its deployment, next index are related to components, other to the next parition */
+    const std::unordered_map<size_t, DataType> next_data_sizes;
 };
 
 /** Class to represent a candidate Deployment for a Component. */
@@ -160,6 +150,8 @@ class Deployment
 /** Class to represent the components, namely DAG nodes. */
 class Component
 {
+  friend class SystemData;
+
   public:
 
     /** Component class constructor (move semantic used)
@@ -187,10 +179,7 @@ class Component
 
     /** deployments vector getter */
     const std::vector<Deployment>&
-    get_deployments() const
-    {
-      return deployments;
-    }
+    get_deployments() const {return deployments;}
 
     /** partitions vector getter */
     const std::vector<Partition>&
@@ -210,6 +199,11 @@ class Component
 
   private:
 
+    Partition&
+    get_partition(size_t idx) {return partitions[idx];}
+
+  private:
+
     /** Name of the component */
     const std::string name;
 
@@ -217,7 +211,7 @@ class Component
     const std::vector<Deployment> deployments;
 
     /** Vector of Partition objects */
-    const std::vector<Partition> partitions;
+    std::vector<Partition> partitions;
 
     /** Load factor of the Component */
     const LoadType comp_lambda;

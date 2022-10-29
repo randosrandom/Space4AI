@@ -64,7 +64,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
     migrate_faas_to_vm();
     migrate_faas_to_faas();
     change_deployment();
-    //drop_resource();
+    drop_resource();
     change_resource();
   }
 }
@@ -365,21 +365,26 @@ LocalSearch::change_deployment()
     local_info.modified_res[random_resource.first][random_resource.second] = true;
   }
 
-  // check constraints
-  bool feasible = true;
-#warning performance_assignment_check is not efficient. Better to save the number of partitions \
-running on each resources...
-  feasible =
-    curr_sol.move_backward_check(comp_idx) &&
-    curr_sol.performance_assignment_check(*system, local_info) &&
-    curr_sol.memory_constraints_check(*system, local_info) &&
-    curr_sol.local_constraints_check(*system, local_info) &&
-    curr_sol.global_constraints_check(*system, local_info);
+  const CostType diff_cost = curr_sol.objective_function(*system) - best_sol.get_cost();
 
-  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
+  if(diff_cost < -1e-12)
   {
-    best_sol = curr_sol;
-    ++change_deployment_count;
+    const bool feasible =
+      curr_sol.move_backward_check(comp_idx) &&
+      curr_sol.performance_assignment_check(*system, local_info) &&
+      curr_sol.memory_constraints_check(*system, local_info) &&
+      curr_sol.local_constraints_check(*system, local_info) &&
+      curr_sol.global_constraints_check(*system, local_info);
+
+    if(feasible)
+    {
+      best_sol = curr_sol;
+      ++change_deployment_count;
+    }
+    else
+    {
+      curr_sol = best_sol;
+    }
   }
   else
   {
@@ -470,21 +475,27 @@ LocalSearch::drop_resource()
   }
 
   // check_constraints
-  bool feasible = true;
-#warning performance_assignment_check is not efficient. Better to save the number of partitions \
-running on each resources...
-  feasible =
-    curr_sol.move_backward_check(*system) &&
-    curr_sol.performance_assignment_check(*system, local_info) &&
-    curr_sol.memory_constraints_check(*system, local_info) &&
-    curr_sol.local_constraints_check(*system, local_info) &&
-    curr_sol.global_constraints_check(*system, local_info);
+  const CostType diff_cost = curr_sol.objective_function(*system) - best_sol.get_cost();
 
-  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
+  if(diff_cost < -1e-12)
   {
-    curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources);
-    best_sol = curr_sol;
-    ++drop_resource_count;
+    const bool feasible =
+      curr_sol.move_backward_check(*system) &&
+      curr_sol.performance_assignment_check(*system, local_info) &&
+      curr_sol.memory_constraints_check(*system, local_info) &&
+      curr_sol.local_constraints_check(*system, local_info) &&
+      curr_sol.global_constraints_check(*system, local_info);
+
+    if(feasible)
+    {
+      curr_sol.set_selected_resources(*system, *curr_rt_sol_selected_resources);
+      best_sol = curr_sol;
+      ++drop_resource_count;
+    }
+    else
+    {
+      curr_sol = best_sol;
+    }
   }
   else
   {
@@ -720,19 +731,16 @@ LocalSearch::find_resource_to_drop()
   const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
   const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
   const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
-  const auto& dt_selected_edge = this->curr_rt_sol_selected_resources->get_selected_edge();
 
-  if(dt_selected_edge.size() == 0) // If am at DT I can drop Edge, but at RT no!
+  // EDGE
+  for(size_t i = 0; i < selected_edge.size(); ++i)
   {
-    for(size_t i = 0; i < selected_edge.size(); ++i)
+    if(selected_edge[i])
     {
-      if(selected_edge[i])
-      {
-        active_res.emplace_back(edge_type_idx, i);
-      }
+      active_res.emplace_back(edge_type_idx, i);
     }
   }
-
+  // VMS
   for(size_t i = 0; i < selected_vms.size(); ++i) // I can drop VM both at DT and RT, but I have to take care of not choosing a different vm on the same layer of the dropped one
   {
     if(selected_vms[i])
