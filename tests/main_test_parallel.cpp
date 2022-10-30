@@ -45,23 +45,19 @@ main(int argc, char** argv)
     sp::RandomGreedy rg;
     const auto elite_result = rg.random_greedy(
       system,
-      basic_config.at("Algorithm").at("n_iterations").get<size_t>(),
-      basic_config.at("Algorithm").at("max_num_sols").get<size_t>(),
+      basic_config.at("Algorithm").at("RG_n_iterations").get<size_t>(),
+      basic_config.at("Algorithm").at("RG_max_num_sols").get<size_t>(),
       true
     );
 
-    if(system.get_dynamicPerfModels() && elite_result.get_num_threads() > 1)
-    {
-        std::cout << "Threads with dynamic: " << elite_result.get_num_threads() << std::endl;
-        return EXIT_FAILURE;
-    }
-    if(!system.get_dynamicPerfModels() && elite_result.get_num_threads() < 2)
-    {
-        std::cout << "Threads with static: " << elite_result.get_num_threads() << std::endl;
-        return EXIT_FAILURE;
-    }
+    const auto ls_n_iterations = basic_config.at("Algorithm").at("LS_n_iterations").get<size_t>();
+    const auto ls_max_num_sols = basic_config.at("Algorithm").at("LS_max_num_sols").get<size_t>();
+    sp::LocalSearchManager ls_manager(elite_result, system, true, ls_n_iterations, ls_max_num_sols);
+    ls_manager.run();
 
-    std::cout << std::endl;
+    if(!ls_manager.get_ls_elite_result().get_solutions().at(0).get_feasibility())
+      return EXIT_FAILURE;
+
   }
 
 	return EXIT_SUCCESS;

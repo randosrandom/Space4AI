@@ -1,17 +1,18 @@
 {
-
   "ConfigFiles" : [
-    "config_tests/SystemConfigs/Random_Greedy_Pacsltk.json",
-    "config_tests/SystemConfigs/system_description1_5c.json"
+    "config_tests/SystemConfigs/system_description1_5c.json",
+    "config_tests/SystemConfigs/system_description1_15c.json"
   ],
 
   "Algorithm" : {
-    "n_iterations" : 2000,
-    "max_num_sols" : 1
+    "RG_n_iterations" : 2000,
+    "LS_n_iterations" : 1000,
+    "RG_max_num_sols" : 10,
+    "LS_max_num_sols" : 1
   },
 
   "Logger" : {
-    "priority" : 0,
+    "priority" : 5,
     "terminal_stream" : false,
     "file_stream" : false
   }
