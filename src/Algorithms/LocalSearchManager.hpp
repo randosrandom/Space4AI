@@ -46,7 +46,7 @@ public:
       bool reproducibility_,
       size_t max_it_,
       size_t max_num_sols,
-      const SelectedResources& curr_rt_sol_sel_res_);
+      const SelectedResources& fixed_edge_and_curr_rt_vms_);
 
     void
     run();
@@ -70,7 +70,7 @@ public:
     size_t max_it;
 
     /** contains the selected_resources in the previous solution, empty if working at design time */
-    const SelectedResources curr_rt_sol_selected_resources;
+    const SelectedResources fixed_edge_and_curr_rt_vms;
 
     /** EliteResult after the Local Search */
     EliteResult ls_elite_result;

@@ -51,7 +51,6 @@ Solution::Solution(const System& system):
   time_perfs.local_parts_perfs.resize(comp_size);
   time_perfs.local_parts_delays.resize(comp_size);
   time_perfs.comp_perfs.resize(comp_size, 0.0);
-  time_perfs.comp_delays.resize(comp_size - 1, 0.0);
   time_perfs.path_perfs.resize(paths_size, 0.0);
 }
 
@@ -124,7 +123,7 @@ Solution::read_solution_from_file(
   std::size_t res_idx;
   Logger::Debug("solution::read_solution_from_file: Starting reading file...");
 
-  for(const auto& [comp, comp_data] : configuration_file.at("components").items())
+  for(const auto& [comp, comp_data] : configuration_file.at("Components").items())
   {
     comp_idx = comp_name_to_idx.at(comp);
 
@@ -137,14 +136,14 @@ Solution::read_solution_from_file(
       }
 
       if(part == "response_time_threshold")
-      {
         continue;
-      }
 
       // part_data has truly partition_data at this point
-
       for(const auto& [cl, cl_data] : part_data.items())
       {
+        if(cl == "response_time")
+          continue;
+
         for(const auto& [res, res_data] : cl_data.items())
         {
           res_type_idx = ResIdxFromType(res_name_to_type_and_idx.at(res).first);
@@ -179,7 +178,7 @@ Solution::read_solution_from_file(
     }
   }
 
-  for(const auto& [path, path_data] : configuration_file.at("global_constraints").items())
+  for(const auto& [path, path_data] : configuration_file.at("Global_constraints").items())
   {
     const std::size_t path_idx = gc_name_to_idx.at(path);
 
@@ -194,7 +193,7 @@ Solution::read_solution_from_file(
     }
   }
 
-  total_cost = configuration_file.at("total_cost").get<CostType>();
+  total_cost = configuration_file.at("Total_cost").get<CostType>();
 }
 
 nl::json
@@ -232,10 +231,10 @@ Solution::to_json(const System& system) const
       const auto& res_name = all_resources.get_name(ResTypeFromIdx(res_type_idx), res_idx);
       //get resource description
       const auto& res_description = all_resources.get_description(ResTypeFromIdx(res_type_idx), res_idx);
-      //get resource cost
-      const auto& res_cost = all_resources.get_cost(ResTypeFromIdx(res_type_idx), res_idx) * solution_data.y_hat[i][res_type_idx][part_idx][res_idx];
       //get resource memory
       const auto& res_memory = all_resources.get_memory(ResTypeFromIdx(res_type_idx), res_idx);
+      //resource cost (faas is a little bit complicated)
+      const auto& res_cost = res_costs[res_type_idx][res_idx];
 
       if(res_type_idx == ResIdxFromType(ResourceType::Faas))
       {
@@ -279,7 +278,7 @@ Solution::to_json(const System& system) const
     jcomponents[comp_name]["response_time_threshold"] = local_constraints[i].get_max_res_time();
   }
 
-  jsolution["components"] = jcomponents;
+  jsolution["Components"] = jcomponents;
   //Global constraints
   const auto& global_constraints = system_data.get_global_constraints();
   nl::json jgc;
@@ -311,9 +310,9 @@ Solution::to_json(const System& system) const
     jgc[path_name]["path_response_time_threshold"] = global_constraints[k].get_max_res_time();
   }
 
-  jsolution["global_constraints"] = jgc;
+  jsolution["Global_constraints"] = jgc;
   //total cost
-  jsolution["total_cost"] = total_cost;
+  jsolution["Total_cost"] = total_cost;
   return jsolution;
 }
 
@@ -556,7 +555,6 @@ Solution::performance_assignment_check(
             }
           }
         }
-
         if(count_part == 0)
         {
           solution_data.n_used_resources[res_type_idx][res_idx] = 0;

@@ -16,10 +16,9 @@ if(PARALLELIZATION)
 	set_property(TEST "TestingParallelCompatibility" PROPERTY ENVIRONMENT OMP_NUM_THREADS=2)
 endif()
 
-add_test(NAME "TestingSimpleSystemWith5Components" COMMAND test_basic config_tests/config_test1.json)
-add_test(NAME "TestingComplexSystemWith15Components" COMMAND test_basic config_tests/config_test2.json)
-add_test(NAME "TestingDynamicPerfModel" COMMAND test_basic config_tests/config_test3.json)
-add_test(NAME "TestingMultiSystemsRunAndLoggerFileSaving" COMMAND test_logger config_tests/config_test4.json)
+add_test(NAME "TestingSimpleSystemWith5Components" COMMAND test_basic config_tests/config_test5c.json)
+add_test(NAME "TestingComplexSystemWith15Components" COMMAND test_basic config_tests/config_test15c.json)
+add_test(NAME "TestingMultiSystemsRunAndLoggerFileSaving" COMMAND test_logger config_tests/config_test_logger.json)
 add_test(NAME "TestingDesignTimeLocalSearch" COMMAND test_dt_localsearch config_tests/config_test_dt_localsearch.json)
 add_test(NAME "TestingRunTimeRandomGreedyAndLocalSearch" COMMAND test_rt_localsearch config_tests/config_test_rt_localsearch.json)
 

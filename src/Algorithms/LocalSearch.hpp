@@ -62,7 +62,7 @@ public:
 protected:
 
   void
-  migrate_cloud_to_edge();
+  migrate_first_cloud_to_edge();
 
   void
   migrate_faas_to_vm();
@@ -125,7 +125,7 @@ protected:
 
   // counter of feasible neighborhoods
   /** counter of VM to Edge migrations */
-  size_t cloud_to_edge_count = 0;
+  size_t first_cloud_to_edge_count = 0;
   /** counter of Faas to VM migrations */
   size_t faas_to_vm_count = 0;
   /** counter of mifration faas to faas */

@@ -61,7 +61,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
   for(size_t it = 0; it < max_it; ++it)
   {
     migrate_faas_to_vm();
-    migrate_cloud_to_edge();
+    migrate_first_cloud_to_edge();
     migrate_faas_to_faas();
     change_deployment();
     drop_resource();
@@ -70,7 +70,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
 }
 
 void
-LocalSearch::migrate_cloud_to_edge()
+LocalSearch::migrate_first_cloud_to_edge()
 {
   const auto& first_cloud = best_sol.solution_data.get_first_cloud();
   const size_t comp_idx = first_cloud.first;
@@ -87,9 +87,7 @@ LocalSearch::migrate_cloud_to_edge()
   if(migration_tweaking(
       comp_idx, p_idx, first_cloud.second, r_type_idx, r_idx, edge_type_idx, selected_edge))
   {
-    ++cloud_to_edge_count;
-    if(r_type_idx == ResIdxFromType(ResourceType::VM))
-      curr_sol.set_selected_resources(*system); // VM can be switched off
+    ++first_cloud_to_edge_count;
   }
 }
 
@@ -175,13 +173,14 @@ LocalSearch::migration_tweaking(
 
   if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
+    if(res_type_idx_old == ResIdxFromType(ResourceType::VM)) // Vm canbe switched off if a VM was deployed for just one partition
+      curr_sol.set_selected_resources(*system);
     best_sol = curr_sol;
   }
   else
   {
     curr_sol = best_sol; // reset solution
   }
-
   return feasible;
 }
 
@@ -539,7 +538,7 @@ LocalSearch::change_resource()
     }
     // add additional devices in other comp layers (ACTUALY YOU CAN ADD THIS PART IN THE FOR ABOVE...)
     const auto& fixed_edge = fixed_edge_and_curr_rt_vms->get_selected_edge();
-    if(fixed_edge.size()>0) // RT
+    if(fixed_edge.size() > 0) // RT
     {
       for(size_t i=0; i<fixed_edge.size(); ++i)
       {
@@ -597,30 +596,6 @@ LocalSearch::change_resource()
           const size_t random_res_idx = res_idxs[dist(rng)];
           altern_resources.push_back(random_res_idx);
         }
-      }
-    }
-  }
-  // add candidate_resources by comp layer
-  // IMPORTANT: if I am at RT and I selected a VM at a layer (even if a dropped it before), I can select
-  // only the same old resource at that layer...
-  const auto& selected_vms_by_cl = this->fixed_edge_and_curr_rt_vms->get_selected_vms_by_cl();
-
-  for(size_t cl_idx = 0; cl_idx < cls[del_res.first].size(); ++cl_idx)
-  {
-    if(!already_selected_cls[cl_idx])
-    {
-      if(selected_vms_by_cl.size() > 0 && selected_vms_by_cl[cl_idx].first)
-      {
-        altern_resources.push_back(selected_vms_by_cl[cl_idx].second);
-      }
-      else
-      {
-        //pick a random resource of the cl
-        const std::vector<size_t> res_idxs = cls[del_res.first][cl_idx].get_res_idxs();
-        const size_t n_res = res_idxs.size();
-        std::uniform_int_distribution<decltype(rng)::result_type> dist(0, n_res - 1);
-        const size_t random_res_idx = res_idxs[dist(rng)];
-        altern_resources.push_back(random_res_idx);
       }
     }
   }
@@ -698,7 +673,6 @@ LocalSearch::change_resource()
       }
     }
   }
-
   // check constraints
   feasible = feasible &&
     curr_sol.performance_assignment_check(*system, local_info) &&

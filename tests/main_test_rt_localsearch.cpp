@@ -34,6 +34,9 @@ main(int argc, char** argv)
   const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
 
+  Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
+  Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
+
   if(basic_config.at("ConfigFiles").size() != basic_config.at("DTSolutions").size())
   {
     throw std::length_error(
@@ -66,7 +69,7 @@ main(int argc, char** argv)
     {
       const auto& selected_resources_ = sol_.get_selected_resources();
 
-      if(curr_sel_res.get_selected_edge() != selected_resources_.get_selected_edge())
+      if(curr_sel_res.get_selected_edge() < selected_resources_.get_selected_edge())
         throw std::logic_error("ERROR: RT-RG selected different Edge resources wrt the given solution");
 
       const auto& selected_vms_by_cl_ = selected_resources_.get_selected_vms_by_cl();
@@ -91,7 +94,7 @@ main(int argc, char** argv)
       const auto& sol_ = ls.get_best_sol();
       const auto& selected_resources_ = sol_.get_selected_resources();
 
-      if(curr_sel_res.get_selected_edge() != selected_resources_.get_selected_edge())
+      if(curr_sel_res.get_selected_edge() < selected_resources_.get_selected_edge())
         throw std::logic_error("ERROR: RT-LS selected different Edge resources wrt the given solution");
 
       const auto& selected_vms_by_cl_ = selected_resources_.get_selected_vms_by_cl();

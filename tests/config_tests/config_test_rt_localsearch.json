@@ -1,20 +1,22 @@
 {
   "ConfigFiles" : [
     "config_tests/SystemConfigs/system_description1_5c.json",
+    "config_tests/SystemConfigs/system_description1_7c.json",
     "config_tests/SystemConfigs/system_description1_10c.json",
     "config_tests/SystemConfigs/system_description1_15c.json"
   ],
 
   "DTSolutions" : [ 
     "config_tests/DTSolutions/Sol_system_description1_5c.json",
+    "config_tests/DTSolutions/Sol_system_description1_7c.json",
     "config_tests/DTSolutions/Sol_system_description1_10c.json",
-	"config_tests/DTSolutions/Sol_system_description1_15c.json"
+    "config_tests/DTSolutions/Sol_system_description1_15c.json"
   ],
 
   "Algorithm" : {
     "RG_n_iterations" : 5000,
-    "LS_n_iterations" : 5000,
-    "max_num_sols" : 10,
+    "LS_n_iterations" : 1000,
+    "max_num_sols" : 1,
     "reproducibility" : true
   },
 

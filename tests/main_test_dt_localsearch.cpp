@@ -76,15 +76,36 @@ main(int argc, char** argv)
 
       const auto& sol = ls_vec.at(i).get_best_sol();
       sp::Solution sol_temp = sol;
-      sol_temp.set_selected_resources(system);
       bool feasibility = sol_temp.check_feasibility(system);
+      sol_temp.set_selected_resources(system);
       if(!feasibility)
       {
         throw std::runtime_error("ERROR: LS returning non-feasible solutions!");
       }
 
-      // check if selected_resources are the same
+      // check y_hat ~ n_used_resources in sol
+      const auto& y_hat = sol.get_y_hat();
+      const auto& n_used_resources = sol.get_n_used_resources();
+      const auto& used_resources = sol.get_used_resources();
 
+      for(size_t c=0; c<y_hat.size(); ++c)
+        for(size_t t=0; t<y_hat[c].size()-1; ++t)
+          for(size_t p=0; p<y_hat[c][t].size(); ++p)
+            for(size_t r=0; r<y_hat[c][t][p].size(); ++r)
+              if(y_hat[c][t][p][r]>0 && (y_hat[c][t][p][r] != n_used_resources[t][r]))
+                throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
+
+      for(size_t c=0; c<used_resources.size(); ++c)
+      {
+        for(size_t uu=0; uu<used_resources[c].size(); ++uu)
+        {
+          const auto [p, rt, ri] = used_resources[c][uu];
+          if(rt < 2 && (y_hat[c][rt][p][ri] != n_used_resources[rt][ri]))
+            throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
+        }
+      }
+
+      // check if selected_resources are the same
       const auto& selected_edge_temp = sol_temp.get_selected_resources().get_selected_edge();
       const auto& selected_edge = sol.get_selected_resources().get_selected_edge();
 
@@ -100,6 +121,7 @@ main(int argc, char** argv)
         throw std::runtime_error("ERROR: selected_vms given by LS does not match real selected vms");
       if(selected_vms_by_cl_temp != selected_vms_by_cl)
         throw std::runtime_error("ERROR: selected_vms_by_cl given by LS does not match real selected vms by cl");
+
 
       // check mamory memory_slack_values
       const auto& mem_s_v_temp = sol_temp.get_memory_slack_values();
@@ -133,7 +155,9 @@ main(int argc, char** argv)
       for(size_t i=0; i<std::max(comp_perfs.size(), comp_perfs_temp.size()); ++i)
       {
         if(std::abs(comp_perfs.at(i) - comp_perfs_temp.at(i)) > 1e-13)
+        {
           throw std::runtime_error("ERROR: LS comp perfs do not match with general feasibility!");
+        }
       }
 
       const auto& path_perfs_temp = sol_temp.get_time_perfs().get_path_perfs();
@@ -141,31 +165,15 @@ main(int argc, char** argv)
 
       for(size_t i=0; i<std::max(path_perfs.size(), path_perfs_temp.size()); ++i)
       {
-        if(std::abs(path_perfs.at(i) - path_perfs_temp.at(i)) > 1e-13)
-          throw std::runtime_error("ERROR: LS path perfs do not match with general feasibility!");
-      }
-
-      // check y_hat ~ n_used_resources
-      const auto& y_hat = sol.get_y_hat();
-      const auto& n_used_resources = sol.get_n_used_resources();
-      const auto& used_resources = sol.get_used_resources();
-
-      for(size_t c=0; c<y_hat.size(); ++c)
-        for(size_t t=0; t<y_hat[c].size()-1; ++t)
-          for(size_t p=0; p<y_hat[c][t].size(); ++p)
-            for(size_t r=0; r<y_hat[c][t][p].size(); ++r)
-              if(y_hat[c][t][p][r]>0 && (y_hat[c][t][p][r] != n_used_resources[t][r]))
-                throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
-
-      for(size_t c=0; c<used_resources.size(); ++c)
-      {
-        for(size_t uu=0; uu<used_resources[c].size(); ++uu)
+        if(std::abs(path_perfs.at(i) - path_perfs_temp.at(i)) > 1e-12)
         {
-          const auto [p, rt, ri] = used_resources[c][uu];
-          if(rt < 2 && (y_hat[c][rt][p][ri] != n_used_resources[rt][ri]))
-            throw std::logic_error("ERROR: y_hat and n_used_resources not compatible after LS");
+          std::cout << i << " " << std::abs(path_perfs.at(i) - path_perfs_temp.at(i)) << std::endl;
+          sol_temp.print_solution(system, "debug_temp.json");
+          sol.print_solution(system, "debug.json");
+          throw std::runtime_error("ERROR: LS path perfs do not match with general feasibility!");
         }
       }
+
     }
   }
 

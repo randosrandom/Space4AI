@@ -1,8 +1,7 @@
 {
-
   "ConfigFiles" : [
-    "config_tests/SystemConfigs/Random_Greedy_Pacsltk.json",
-    "config_tests/SystemConfigs/system_description1_5c.json"
+    "config_tests/SystemConfigs/system_description1_5c.json",
+    "config_tests/SystemConfigs/system_description1_15c.json"
   ],
 
   "Algorithm" : {
