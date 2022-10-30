@@ -47,7 +47,6 @@ namespace Space4AI
       active = false;
       for(auto& vec : modified_res)
         vec.assign(vec.size(), false);
-      modified_comp = std::make_pair(false, 0);
       old_local_parts_perfs_ptr = nullptr;
       old_local_parts_delays_ptr = nullptr;
     }
@@ -60,9 +59,6 @@ namespace Space4AI
     /** For each resource type and resource, true if that device has been modified
     * by the local search */
     std::vector<std::vector<bool>> modified_res;
-
-    /** Index of the modified component */
-    std::pair<bool, size_t> modified_comp;
 
     /** pointer to the original local_parts_perfs */
     std::vector<std::vector<TimeType>> const * old_local_parts_perfs_ptr = nullptr;
@@ -142,9 +138,6 @@ private:
 
     /** Component (local) performance */
     std::vector<TimeType> comp_perfs;
-
-    /** Delays between components */
-    std::vector<TimeType> comp_delays;
 
     /** Global paths performance */
     std::vector<TimeType> path_perfs;

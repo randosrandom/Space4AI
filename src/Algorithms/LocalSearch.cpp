@@ -63,7 +63,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
     migrate_faas_to_vm();
     migrate_cloud_to_edge();
     migrate_faas_to_faas();
-    // change_deployment();
+    change_deployment();
     drop_resource();
     change_resource();
   }
@@ -162,7 +162,6 @@ LocalSearch::migration_tweaking(
     local_info.active = true;
     local_info.modified_res[res_type_idx_old][res_idx_old] = true;
     local_info.modified_res[res_type_idx_new][random_resource] = true;
-    local_info.modified_comp = std::make_pair(true, comp_idx);
     local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
     local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
     // CONSTRAINTS
@@ -198,7 +197,6 @@ LocalSearch::migrate_faas_to_faas()
   const size_t comp_idx = dist(rng);
   local_info.reset();
   local_info.active = true;
-  local_info.modified_comp = std::make_pair(true, comp_idx);
   local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
@@ -281,7 +279,6 @@ LocalSearch::change_deployment()
   const auto& used_resources_comp_old = best_sol.get_used_resources()[comp_idx];
   local_info.reset();
   local_info.active = true;
-  local_info.modified_comp = std::make_pair(true, comp_idx);
   local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
   // Choose random deployment
@@ -397,7 +394,6 @@ LocalSearch::drop_resource()
   const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
   local_info.reset();
   local_info.active = true;
-  local_info.modified_comp = std::make_pair(false, 0);
   local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
   const auto del_res = find_resource_to_drop();
@@ -510,7 +506,6 @@ LocalSearch::change_resource()
   const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
   local_info.reset();
   local_info.active = true;
-  local_info.modified_comp = std::make_pair(false, 0);
   local_info.old_local_parts_perfs_ptr = &(best_sol.time_perfs.local_parts_perfs);
   local_info.old_local_parts_delays_ptr = &(best_sol.time_perfs.local_parts_delays);
   const auto del_res = find_resource_to_drop();
@@ -811,8 +806,6 @@ LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
   local_info.reset();
   local_info.active = true;
   local_info.modified_res[res_type_idx][res_idx] = true;
-  local_info.modified_comp = std::make_pair(false, 0);
-
 
   do
   {

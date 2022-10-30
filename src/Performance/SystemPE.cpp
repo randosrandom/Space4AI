@@ -94,7 +94,6 @@ SystemPE::compute_local_perf(
         }
       }
     }
-
     // logger messages
   }
   const auto& comp_partitions = system.get_system_data().get_component(comp_idx).get_partitions();
@@ -129,33 +128,26 @@ SystemPE::compute_global_perf(
     const auto curr_comp_idx = comp_idxs[i];
     const auto next_comp_idx = comp_idxs[i + 1];
 
-    if(!local_info.active || !local_info.modified_comp.first ||
-      (local_info.modified_comp.second == curr_comp_idx || local_info.modified_comp.second == next_comp_idx))
+    // used resources
+    const auto& used_resources = solution_data.get_used_resources();
+    // resource index of the last partition
+    const auto [curr_comp_last_part_idx, res1_type_idx, res1_idx] =
+      *(used_resources[curr_comp_idx].crbegin());
+    //resource index of the first partition
+    const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
+      *(used_resources[next_comp_idx].cbegin());
+
+    // different resources.
+    if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
     {
-      // used resources
-      const auto& used_resources = solution_data.get_used_resources();
-      // resource index of the last partition
-      const auto [curr_comp_last_part_idx, res1_type_idx, res1_idx] =
-        *(used_resources[curr_comp_idx].crbegin());
-      //resource index of the first partition
-      const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
-        *(used_resources[next_comp_idx].cbegin());
-
-      // different resources.
-      if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
-      {
-        const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
-        const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_next_data_sizes().at(next_comp_idx);
-        comp_delays[curr_comp_idx] = compute_network_delay(
-            ResTypeFromIdx(res1_type_idx), res1_idx,
-            ResTypeFromIdx(res2_type_idx), res2_idx,
-            data_size, system);
-      }
+      const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
+      const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_next_data_sizes().at(next_comp_idx);
+      path_perfs[path_idx] += compute_network_delay(
+          ResTypeFromIdx(res1_type_idx), res1_idx,
+          ResTypeFromIdx(res2_type_idx), res2_idx,
+          data_size, system);
     }
-
-    path_perfs[path_idx] += comp_delays[curr_comp_idx];
   }
-
   // last component
   path_perfs[path_idx] += comp_perfs[comp_idxs.back()];
 }
