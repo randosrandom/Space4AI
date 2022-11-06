@@ -187,13 +187,15 @@ RandomGreedy::create_random_initial_solution(
 
   // Selecting candidate_resources (Edge and VM, Faas already selected all)
   Logger::Debug("create_random_initial_solution: Selecting candidate resources for Edge and VM...");
+  // Getting the initial deployment edge and curr runtime selected vms
   const auto& selected_edge = fixed_edge_and_curr_rt_vms.get_selected_edge();
   const auto& selected_vms_by_cl = fixed_edge_and_curr_rt_vms.get_selected_vms_by_cl();
 
   // EDGE RESOURCES
   if(selected_edge.size() > 0)  // If I provided old selected resources
   {
-    candidate_resources[edge_type_idx] = selected_edge;
+    std::copy(
+      selected_edge.begin(), selected_edge.end(), candidate_resources[edge_type_idx].begin());
   }
   else // randomly select a resource for each cls
   {
@@ -298,7 +300,7 @@ RandomGreedy::create_random_initial_solution(
   {
     for(auto [part_idx, res_type_idx, res_idx] : used_resources[comp_idx])
     {
-      if(res_type_idx == ResIdxFromType(ResourceType::Edge) || res_type_idx == ResIdxFromType(ResourceType::VM))
+      if(res_type_idx == edge_type_idx || res_type_idx == vm_type_idx)
       {
         Logger::Trace("create_random_initial_solution: resource of type: " + std::to_string(res_type_idx) + " resource index: " + std::to_string(res_idx));
 
@@ -311,7 +313,12 @@ RandomGreedy::create_random_initial_solution(
         else
         {
           already_updated_cluster_size[res_type_idx][res_idx] = true;
-          const size_t number_avail = all_resources.get_number_avail(ResTypeFromIdx(res_type_idx), res_idx);
+          size_t number_avail;
+          if(res_type_idx == edge_type_idx && selected_edge.size() > 0) // if we are at RT, number avail coincide with the selected resources at edge at initial deployment
+            number_avail = selected_edge[res_idx];
+          else
+            number_avail = all_resources.get_number_avail(ResTypeFromIdx(res_type_idx), res_idx);
+
           std::uniform_int_distribution<decltype(rng)::result_type> dist(1, number_avail);
           const size_t random_number = dist(rng);
           y_hat[comp_idx][res_type_idx][part_idx][res_idx] = random_number;

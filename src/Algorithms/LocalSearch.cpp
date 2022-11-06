@@ -67,6 +67,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
     drop_resource();
     change_resource();
   }
+  best_sol.set_selected_resources(*system);
 }
 
 void
@@ -80,8 +81,8 @@ LocalSearch::migrate_first_cloud_to_edge()
   }
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
   const auto [p_idx, r_type_idx, r_idx] = used_resources_comp[first_cloud.second];
-  const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
+  const auto& selected_edge = best_sol.solution_data.get_n_used_resources()[edge_type_idx];
 
   // Migrate first Cloud to Edge
   if(migration_tweaking(
@@ -103,7 +104,7 @@ LocalSearch::migrate_faas_to_vm()
   const size_t comp_idx = dist(rng);
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
-  const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
+  const auto& selected_vms = best_sol.solution_data.get_n_used_resources()[vm_type_idx];
 
   // migrating ALL (I repeat, ALL) possible FaaS executed on comp_idx!
   for(size_t i = 0; i < used_resources_comp.size(); ++i)
@@ -129,7 +130,7 @@ LocalSearch::migration_tweaking(
   size_t res_type_idx_old,
   size_t res_idx_old,
   size_t res_type_idx_new,
-  const std::vector<bool>& selected_devices)
+  const std::vector<size_t>& selected_devices)
 {
   bool feasible{false};
   const auto compatibility_matrix = system->get_system_data().get_compatibility_matrix();
@@ -138,7 +139,7 @@ LocalSearch::migration_tweaking(
 
   for(size_t j = 0; j < selected_devices.size(); ++j)
   {
-    if(selected_devices[j] && compatibility_matrix[comp_idx][res_type_idx_new][part_idx][j])
+    if(selected_devices[j] > 0 && compatibility_matrix[comp_idx][res_type_idx_new][part_idx][j])
     {
       resources_instersection.push_back(j);
     }
@@ -171,10 +172,8 @@ LocalSearch::migration_tweaking(
       curr_sol.global_constraints_check(*system, local_info);
   }
 
-  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
+  if(feasible)
   {
-    if(res_type_idx_old == ResIdxFromType(ResourceType::VM)) // Vm canbe switched off if a VM was deployed for just one partition
-      curr_sol.set_selected_resources(*system);
     best_sol = curr_sol;
   }
   else
@@ -301,7 +300,6 @@ LocalSearch::change_deployment()
   const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
   const size_t res_type_idx_count = ResIdxFromType(ResourceType::Count);
   const auto& compatibility_matrix = system->get_system_data().get_compatibility_matrix();
-  const auto& all_resources = system->get_system_data().get_all_resources();
 
   // clear current solution comp_idx used_resources
   for(auto [p_idx, r_type_idx, r_idx] : used_resources_comp_old)
@@ -316,19 +314,21 @@ LocalSearch::change_deployment()
 
   for(size_t i = 0; i < res_type_idx_count; ++i)
   {
-    if(i == edge_type_idx)
+    if(i == edge_type_idx || i == vm_type_idx)
     {
-      candidate_resources[i] = best_sol.selected_resources.get_selected_edge();
+      const auto& n_used_res = best_sol.solution_data.get_n_used_resources()[i];
+      candidate_resources[i].resize(n_used_res.size(), false);
+      for(size_t j=0; j<n_used_res.size(); ++j)
+      {
+        if(n_used_res[j]>0)
+        {
+          candidate_resources[i][j] = true;
+        }
+      }
     }
-
-    if(i == vm_type_idx)
+    else // Faas
     {
-      candidate_resources[i] = best_sol.selected_resources.get_selected_vms();
-    }
-
-    if(i == faas_type_idx)
-    {
-      const size_t n_res = all_resources.get_number_resources(i);
+      const size_t n_res = system->get_system_data().get_all_resources().get_number_resources(i);
       candidate_resources[i].resize(n_res, true); // select all the faas as candidates
     }
   }
@@ -408,17 +408,19 @@ LocalSearch::drop_resource()
 
   for(size_t i = 0; i < res_type_idx_count; ++i)
   {
-    if(i == edge_type_idx)
+    if(i == edge_type_idx || i == vm_type_idx)
     {
-      candidate_resources[i] = best_sol.selected_resources.get_selected_edge();
+      const auto& n_used_res = best_sol.solution_data.get_n_used_resources()[i];
+      candidate_resources[i].resize(n_used_res.size(), false);
+      for(size_t j=0; j<n_used_res.size(); ++j)
+      {
+        if(n_used_res[j]>0)
+        {
+          candidate_resources[i][j] = true;
+        }
+      }
     }
-
-    if(i == vm_type_idx)
-    {
-      candidate_resources[i] = best_sol.selected_resources.get_selected_vms();
-    }
-
-    if(i == faas_type_idx)
+    else // Faas
     {
       const size_t n_res = system->get_system_data().get_all_resources().get_number_resources(i);
       candidate_resources[i].resize(n_res, true); // select all the faas as candidates
@@ -479,7 +481,6 @@ LocalSearch::drop_resource()
 
     if(feasible)
     {
-      curr_sol.set_selected_resources(*system);
       best_sol = curr_sol;
       ++drop_resource_count;
     }
@@ -525,11 +526,11 @@ LocalSearch::change_resource()
 
   if(del_res.first == edge_type_idx)
   {
-    const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
+    const auto& selected_edge = best_sol.solution_data.get_n_used_resources()[edge_type_idx];
 
     for(size_t i = 0; i < selected_edge.size(); ++i)
     {
-      if(selected_edge[i] && i != del_res.second) // I add as alternative_Resources all the current selected devices but the one to change!
+      if(selected_edge[i] > 0 && i != del_res.second) // I add as alternative_Resources all the current selected devices but the one to change!
       {
         const auto cl_name = all_resources.get_cl_name(ResTypeFromIdx(edge_type_idx), i);
         already_selected_cls[cl_name_to_idx[edge_type_idx].at(cl_name)] = true;
@@ -542,7 +543,7 @@ LocalSearch::change_resource()
     {
       for(size_t i=0; i<fixed_edge.size(); ++i)
       {
-        if(!selected_edge[i] && i != del_res.second && fixed_edge[i])
+        if(selected_edge[i]==0 && i != del_res.second && fixed_edge[i] > 0)
           altern_resources.push_back(i);
       }
     }
@@ -564,11 +565,11 @@ LocalSearch::change_resource()
   }
   else // VM
   {
-    const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
+    const auto& selected_vms = best_sol.solution_data.get_n_used_resources()[vm_type_idx];
 
     for(size_t i = 0; i < selected_vms.size(); ++i)
     {
-      if(selected_vms[i] && i != del_res.second)
+      if(selected_vms[i] > 0 && i != del_res.second)
       {
         const auto cl_name = all_resources.get_cl_name(ResTypeFromIdx(vm_type_idx), i);
         already_selected_cls[cl_name_to_idx[vm_type_idx].at(cl_name)] = true;
@@ -682,7 +683,6 @@ LocalSearch::change_resource()
 
   if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
   {
-    curr_sol.set_selected_resources(*system);
     best_sol = curr_sol;
     ++change_resource_count;
 
@@ -741,13 +741,13 @@ LocalSearch::find_resource_to_drop()
   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
   const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
   const auto res_type_idx_count = ResIdxFromType(ResourceType::Count);
-  const auto& selected_edge = best_sol.selected_resources.get_selected_edge();
-  const auto& selected_vms = best_sol.selected_resources.get_selected_vms();
+  const auto& selected_edge = best_sol.solution_data.get_n_used_resources()[edge_type_idx];
+  const auto& selected_vms = best_sol.solution_data.get_n_used_resources()[vm_type_idx];
 
   // EDGE
   for(size_t i = 0; i < selected_edge.size(); ++i)
   {
-    if(selected_edge[i])
+    if(selected_edge[i] > 0)
     {
       active_res.emplace_back(edge_type_idx, i);
     }
@@ -755,7 +755,7 @@ LocalSearch::find_resource_to_drop()
   // VMS
   for(size_t i = 0; i < selected_vms.size(); ++i) // I can drop VM both at DT and RT, but I have to take care of not choosing a different vm on the same layer of the dropped one
   {
-    if(selected_vms[i])
+    if(selected_vms[i] > 0)
     {
       active_res.emplace_back(vm_type_idx, i);
     }

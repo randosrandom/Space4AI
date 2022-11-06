@@ -1,16 +1,23 @@
 {
   "ConfigFiles" : [
-    "config/GeneralWorkflows/5-components/system_description1.json",
-    "config/GeneralWorkflows/10-components/system_description1.json",
-    "config/GeneralWorkflows/15-components/system_description1.json",
-    "config/GeneralWorkflows/7-components/system_description1.json"
-
+    "config/GeneralWorkflows/Light/5-components/system_description1.json",
+    "config/GeneralWorkflows/Light/5-components/system_description2.json",
+    "config/GeneralWorkflows/Light/5-components/system_description3.json",
+    "config/GeneralWorkflows/Light/5-components/system_description4.json",
+    "config/GeneralWorkflows/Light/5-components/system_description5.json",
+    "config/GeneralWorkflows/Light/5-components/system_description6.json",
+    "config/GeneralWorkflows/Light/5-components/system_description7.json",
+    "config/GeneralWorkflows/Light/5-components/system_description8.json",
+    "config/GeneralWorkflows/Light/5-components/system_description9.json",
+    "config/GeneralWorkflows/Light/5-components/system_description10.json"
   ],
 
+  "Lambda" : 0.01,
+
   "Algorithm" : {
-    "RG_n_iterations" : 1000,
-    "LS_n_iterations" : 0,
-    "RG_max_num_sols" : 1,
+    "RG_n_iterations" : 3500,
+    "LS_n_iterations" : 120,
+    "RG_max_num_sols" : 10,
     "LS_max_num_sols" : 1,
     "reproducibility" : true
   },

@@ -60,6 +60,8 @@ main(int argc, char** argv)
   const size_t ls_max_num_sols = basic_config.at("Algorithm").at("LS_max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
 
+  const sp::LoadType lambda = basic_config.at("Lambda").get<sp::LoadType>();
+
   Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
   const bool enable_file_output = basic_config.at("Logger").at("file_stream").get<bool>();
@@ -83,7 +85,7 @@ main(int argc, char** argv)
       Logger::EnableFileOutput(true, filename_);
     }
 
-    system.read_configuration_file(system_config_file);
+    system.read_configuration_file(system_config_file, lambda);
     const double system_read_time = my_chrono.wallTimeNow() * 1e-6;
 
     sp::RandomGreedy rg;
@@ -131,6 +133,8 @@ main(int argc, char** argv)
       o << std::setw(4) << InfoSol << std::endl;
     }
 
+    std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
+    std::cout << "Random Greedy running time (in seconds): " << rg_run_time << std::endl;
     if(rg_sols.size() > 0)
     {
       std::cout << "Found feasible solution to: " << system_config_file << " of best cost: " << rg_sols[0].get_cost() << std::endl;
@@ -138,9 +142,10 @@ main(int argc, char** argv)
     else
     {
       std::cout << "No feasible solution found to: "<< system_config_file << std::endl;
+      std::cout << std::endl;
+      continue;
     }
-    std::cout << "System Reading time (in seconds): " << system_read_time << std::endl;
-    std::cout << "Random Greedy running time (in seconds): " << rg_run_time << std::endl;
+
     std::cout << "Starting Local Search..." << std::endl;
 
     my_chrono.start();

@@ -87,7 +87,7 @@ protected:
     size_t res_type_idx_old,
     size_t res_idx_old,
     size_t res_type_idx_new,
-    const std::vector<bool>& selected_devices);
+    const std::vector<size_t>& selected_devices);
 
   std::pair<size_t, size_t>
   sample_random_resource(

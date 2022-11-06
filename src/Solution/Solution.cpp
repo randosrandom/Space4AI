@@ -162,13 +162,13 @@ Solution::read_solution_from_file(
 
             if(res_type_idx ==  ResIdxFromType(ResourceType::Edge))
             {
-              selected_resources.selected_edge[res_idx] = true;
+              selected_resources.selected_edge[res_idx] = number;
             }
             else // VM
             {
               selected_resources.selected_vms_by_cl[cl_name_to_idx[ResIdxFromType(ResourceType::VM)].at(cl)] =
                 std::pair<bool, size_t> {true, res_idx};
-              selected_resources.selected_vms[res_idx] = true;
+              selected_resources.selected_vms[res_idx] = number;
             }
           }
 
@@ -343,19 +343,10 @@ Solution::set_selected_resources(const System& system)
   const size_t vm_type_idx = ResIdxFromType(ResourceType::VM);
   const size_t num_cls_vm = system.get_system_data().get_cls()[vm_type_idx].size();
   // Selected EDGE
-  selected_resources.selected_edge.resize(solution_data.n_used_resources[edge_type_idx].size());
-  std::copy(
-    solution_data.n_used_resources[edge_type_idx].begin(),
-    solution_data.n_used_resources[edge_type_idx].end(),
-    selected_resources.selected_edge.begin());
+  selected_resources.selected_edge = solution_data.get_n_used_resources()[edge_type_idx];
 
   // Selected VMs
-  selected_resources.selected_vms.resize(solution_data.n_used_resources[vm_type_idx].size());
-  std::copy(
-    solution_data.n_used_resources[vm_type_idx].begin(),
-    solution_data.n_used_resources[vm_type_idx].end(),
-    selected_resources.selected_vms.begin()
-  );
+  selected_resources.selected_vms = solution_data.get_n_used_resources()[vm_type_idx];
 
   selected_resources.selected_vms_by_cl.assign(num_cls_vm, std::make_pair(false, 0));
 

@@ -39,11 +39,11 @@ class SelectedResources
 public:
 
   /** selected_edge getter */
-  const std::vector<bool>&
+  const std::vector<size_t>&
   get_selected_edge() const { return selected_edge; }
 
   /** selected_vms getter */
-  const std::vector<bool>&
+  const std::vector<size_t>&
   get_selected_vms() const { return selected_vms; }
 
   /** selected_vms_vy_cl getter */
@@ -54,19 +54,19 @@ private:
 
   /** Store the selected edge resources in the solution.
   *
-  *   selected[i] = true, if edge device with index i has been selected in the
-  *   solution.
+  *   selected[i] = num, if edge device with index i has been selected in the
+  *   solution with cluster size = num:
   *
   */
-  std::vector<bool> selected_edge;
-  
+  std::vector<size_t> selected_edge;
+
   /** Store the selected vms resources in the solution.
   *
-  *   selected[i] = true, if the vm device with index i has been selected in the
-  *   solution.
+  *   selected[i] = num, if the vm device with index i has been selected in the
+  *   solution with cluster size = num;
   *
   */
-  std::vector<bool> selected_vms;
+  std::vector<size_t> selected_vms;
 
   /** Store the selected VMs by computational layer */
   SelectedVMType selected_vms_by_cl;
