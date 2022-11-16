@@ -536,25 +536,25 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.1401629920652585,
                 "memory": 327680,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.944950076000925,
                 "memory": 327680,
                 "n_cores": 1
             },
             "EN3": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.485529660174183,
                 "memory": 327680,
                 "n_cores": 1
             },
             "EN4": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.383912156474861,
                 "memory": 327680,
                 "n_cores": 1
@@ -562,25 +562,25 @@
         },
         "computationallayer3": {
             "EN5": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.928623006731274,
                 "memory": 327680,
                 "n_cores": 1
             },
             "EN6": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.4607256167451,
                 "memory": 327680,
                 "n_cores": 1
             },
             "EN7": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.0164950751345785,
                 "memory": 327680,
                 "n_cores": 1
             },
             "EN8": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.417136623308428,
                 "memory": 327680,
                 "n_cores": 1
@@ -2447,31 +2447,31 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.109336067585239
+                    "demand": 0.1109336067585239
                 }
             },
             "h2": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.3527734538352767
+                    "demand": 0.03527734538352767
                 }
             },
             "h3": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.3646007384416349
+                    "demand": 0.03646007384416349
                 }
             },
             "h4": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.3504416425390712
+                    "demand": 0.03504416425390712
                 }
             },
             "h5": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.33065075861773185
+                    "demand": 0.033065075861773185
                 }
             }
         },
@@ -4073,16 +4073,16 @@
     "Lambda": 0.1,
     "LocalConstraints": {
         "c10": {
-            "local_res_time": 9.946746873770039
+            "local_res_time": 99.46746873770039
         },
         "c8": {
-            "local_res_time": 9.07926123950282
+            "local_res_time": 90.7926123950282
         },
         "c6": {
-            "local_res_time": 8.027321923404433
+            "local_res_time": 80.27321923404432
         },
         "c3": {
-            "local_res_time": 9.533580829688436
+            "local_res_time": 95.33580829688435
         }
     },
     "GlobalConstraints": {
@@ -4093,7 +4093,7 @@
                 "c6",
                 "c9"
             ],
-            "global_res_time": 19.30545835463697
+            "global_res_time": 193.05458354636968
         },
         "p2": {
             "components": [
@@ -4102,14 +4102,14 @@
                 "c3",
                 "c5"
             ],
-            "global_res_time": 15.053391120827674
+            "global_res_time": 150.53391120827675
         },
         "p3": {
             "components": [
                 "c4",
                 "c5"
             ],
-            "global_res_time": 15.005910327722313
+            "global_res_time": 150.05910327722313
         },
         "p4": {
             "components": [
@@ -4120,7 +4120,7 @@
                 "c6",
                 "c7"
             ],
-            "global_res_time": 19.61055041954061
+            "global_res_time": 196.10550419540607
         }
     },
     "NetworkTechnology": {

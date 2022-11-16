@@ -215,13 +215,13 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.500288629889935,
                 "memory": 163840,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.977722177812989,
                 "memory": 163840,
                 "n_cores": 1
@@ -436,19 +436,19 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.9033701664788674
+                    "demand": 0.19033701664788674
                 }
             },
             "h2": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.027925052082956
+                    "demand": 0.1027925052082956
                 }
             },
             "h3": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.0356268598864282
+                    "demand": 0.10356268598864282
                 }
             }
         },
@@ -602,13 +602,13 @@
     "Lambda": 0.1,
     "LocalConstraints": {
         "c2": {
-            "local_res_time": 13.822962851202492
+            "local_res_time": 138.22962851202493
         },
         "c4": {
-            "local_res_time": 10.079106214232782
+            "local_res_time": 100.79106214232782
         },
         "c1": {
-            "local_res_time": 13.45448458758462
+            "local_res_time": 134.5448458758462
         }
     },
     "GlobalConstraints": {
@@ -617,14 +617,14 @@
                 "c1",
                 "c2"
             ],
-            "global_res_time": 32.08712557000694
+            "global_res_time": 320.8712557000694
         },
         "p2": {
             "components": [
                 "c2",
                 "c3"
             ],
-            "global_res_time": 31.964672550484558
+            "global_res_time": 319.64672550484556
         },
         "p3": {
             "components": [
@@ -632,7 +632,7 @@
                 "c4",
                 "c5"
             ],
-            "global_res_time": 38.845368033197246
+            "global_res_time": 388.45368033197246
         }
     },
     "NetworkTechnology": {

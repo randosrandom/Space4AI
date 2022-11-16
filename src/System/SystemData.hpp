@@ -81,6 +81,9 @@ class SystemData
     TimeType
     get_time() const {return time;}
 
+    double
+    get_energy_cost_pct() const {return energy_cost_pct;};
+
     /** components getter */
     const std::vector<Component>&
     get_components() const { return components; }
@@ -214,6 +217,9 @@ class SystemData
 
     /** Object to keep track of the execution time */
     TimeType time;
+
+    /** Energy cost pct for Edge */
+    double energy_cost_pct;
 
     /** Vector storing all the components in a ordered way */
     std::vector<Component> components;

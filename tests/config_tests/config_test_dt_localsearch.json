@@ -8,14 +8,14 @@
 
   "Algorithm" : {
     "RG_n_iterations" : 1000,
-    "LS_n_iterations" : 1000,
+    "LS_n_iterations" : 10,
     "max_num_sols" : 10,
     "reproducibility" : true
   },
 
   "Logger" : {
-    "priority" : 5,
-    "terminal_stream" : false,
+    "priority" : 1,
+    "terminal_stream" : true,
     "file_stream" : false
   }
 }

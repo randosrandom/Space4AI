@@ -33,6 +33,10 @@ main(int argc, char** argv)
   const size_t ls_n_iterations = basic_config.at("Algorithm").at("LS_n_iterations").get<size_t>();
   const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
+  const auto lambda = basic_json.at("Lambda").get<sp::LoadType>();
+  
+  #warning you should pass it in the json
+  const double energy_cost_pct = 0.2;
 
   Logger::SetPriority(static_cast<LogPriority>(basic_config.at("Logger").at("priority").get<int>()));
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
@@ -51,7 +55,7 @@ main(int argc, char** argv)
     sp::System system;
     const std::string system_config_file = basic_config.at("ConfigFiles")[i].get<std::string>();
     const std::string solution_config_file = basic_config.at("DTSolutions")[i].get<std::string>();
-    system.read_configuration_file(system_config_file);
+    system.read_configuration_file(system_config_file, lambda, energy_cost_pct);
 
     sp::Solution current_sol(system);
     current_sol.read_solution_from_file(solution_config_file, system);
@@ -70,7 +74,7 @@ main(int argc, char** argv)
       const auto& selected_resources_ = sol_.get_selected_resources();
 
       if(curr_sel_res.get_selected_edge() < selected_resources_.get_selected_edge())
-        throw std::logic_error("ERROR: RT-RG selected different Edge resources wrt the given solution");
+        throw std::logic_error("ERROR: RT-RG selected unavailable Edge resources wrt the given solution");
 
       const auto& selected_vms_by_cl_ = selected_resources_.get_selected_vms_by_cl();
       const auto& curr_sel_vms_by_cl = curr_sel_res.get_selected_vms_by_cl();

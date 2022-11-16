@@ -360,19 +360,19 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.899876277065279,
                 "memory": 229376,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.986119187089492,
                 "memory": 229376,
                 "n_cores": 1
             },
             "EN3": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.081201017647288,
                 "memory": 229376,
                 "n_cores": 1
@@ -1235,25 +1235,25 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.356531723558055
+                    "demand": 0.1356531723558055
                 }
             },
             "h2": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5462443326677189
+                    "demand": 0.05462443326677189
                 }
             },
             "h3": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5353493160769407
+                    "demand": 0.05353493160769407
                 }
             },
             "h4": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.505866841756051
+                    "demand": 0.0505866841756051
                 }
             }
         },
@@ -1993,13 +1993,13 @@
     "Lambda": 0.1,
     "LocalConstraints": {
         "c7": {
-            "local_res_time": 7.942439564314703
+            "local_res_time": 79.42439564314702
         },
         "c5": {
-            "local_res_time": 9.415707514271386
+            "local_res_time": 94.15707514271386
         },
         "c4": {
-            "local_res_time": 8.46272311036222
+            "local_res_time": 84.6272311036222
         }
     },
     "GlobalConstraints": {
@@ -2009,7 +2009,7 @@
                 "c6",
                 "c7"
             ],
-            "global_res_time": 16.238664508811773
+            "global_res_time": 162.38664508811775
         },
         "p2": {
             "components": [
@@ -2018,7 +2018,7 @@
                 "c6",
                 "c7"
             ],
-            "global_res_time": 19.605667906141854
+            "global_res_time": 196.05667906141855
         },
         "p3": {
             "components": [
@@ -2027,7 +2027,7 @@
                 "c6",
                 "c7"
             ],
-            "global_res_time": 17.329038501231377
+            "global_res_time": 173.29038501231378
         }
     },
     "NetworkTechnology": {

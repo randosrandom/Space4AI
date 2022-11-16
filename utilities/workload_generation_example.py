@@ -14,10 +14,10 @@ average = True
 
 # External parameters
 times_seed = 500000
-max_n_variations = 12 # samples
-min_workload = 0.1 # HAMTA
-max_workload = 3   #
-total_episode_length = 300
+max_n_variations = 600 # samples
+min_workload = 0.1
+max_workload = 1.8
+total_episode_length = 600
 avg_interval = round(total_episode_length / max_n_variations)
 
 np.random.seed(times_seed)
@@ -147,15 +147,52 @@ plt.plot(x, curve_3.eval(x), 'b', label = "Original curve")
 if simple:
   plt.hlines(w_3_1[1:], cumulative_events3[:-1], cumulative_events3[1:], 'r',
     label = "Simple sampling")
-if average:
-  plt.hlines(w_3_2[1:], cumulative_events3[:-1], cumulative_events3[1:], 'g',
-    label = "Average sampling")
+# if average:
+#   plt.hlines(w_3_2[1:], cumulative_events3[:-1], cumulative_events3[1:], 'g',
+#     label = "Average sampling")
 plt.legend()
 #plt.show(block = False)
 plt.savefig("g_3.png")
 
+# get maximum workload (.95 percentile)
+max_lam = np.percentile(w_3_1, 95)
+
+#1 hour scenario: reconfiguration each 5 min => 12 total reconfig
+total_reconfig1 = 12
+win_len1 = np.int32(max_n_variations / total_reconfig1)
+temp1 = np.reshape(w_3_1[1:-1], (-1, win_len1))
+means1 = np.mean(temp1, axis=1)
+means1 = np.insert(means1, 0, max_lam)
+fig1, ax1 = plt.subplots(figsize=(8, 6), layout = 'constrained')
+x1 = np.arange(0, 61, 5)
+ax1.set_xticks(x1)
+ax1.set_xlabel("Time [min]")
+ax1.set_ylabel("Worload [requests/sec]")
+ax1.set_title("Lambda profile 1 hour scenario")
+ax1.plot(x1[1:], means1[1:], 'bx-')
+ax1.plot(x1[0], means1[0], 'ro')
+plt.savefig("hour1.png")
+
+
+#2 hour scenario: reconfiguration each 5 min => 24 total reconfig
+total_reconfig2 = 24
+win_len2 = np.int32(max_n_variations / total_reconfig2)
+temp2 = np.reshape(w_3_1[1:-1], (-1, win_len2))
+means2 = np.mean(temp2, axis=1)
+means2 = np.insert(means2, 0, max_lam)
+fig2, ax2 = plt.subplots(figsize=(16, 6), layout = 'constrained')
+x2 = np.arange(0, 121, 5)
+ax2.set_xticks(x2)
+ax2.set_xlabel("Time [min]")
+ax2.set_ylabel("Worload [requests/sec]")
+ax2.set_title("Lambda profile 2 hours scenario")
+ax2.plot(x2[1:], means2[1:], 'bx-')
+ax2.plot(x2[0], means2[0], 'ro')
+plt.savefig("hour2.png")
+
+
 # save numpy array yo json
-json_str = json.dumps({"lambda": w_3_2.tolist()})
+json_str = json.dumps({"lambda": w_3_1.tolist()})
 with open("lambda.json", 'w') as f:
     f.write(json_str)
 

@@ -657,6 +657,9 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
   const auto& components = system.get_system_data().get_components();
   const auto& performance = system.get_performance();
 
+  const TimeType time = system.get_system_data().get_time();
+  const double energy_cost_pct = system.get_system_data().get_energy_cost_pct();
+
   for(size_t i = 0; i < res_cost_alredy_computed.size(); ++i)
   {
     res_cost_alredy_computed[i].resize(all_resources.get_number_resources(i));
@@ -672,12 +675,10 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
 
         if(!local_info.active || local_info.modified_res[res_type_idx][res_idx])
         {
-          const TimeType time = system.get_system_data().get_time();
-
           if(res_type_idx == ResIdxFromType(ResourceType::Edge))
           {
             const auto res_cost = all_resources.get_resource<ResourceType::Edge>(res_idx).get_cost();
-            this->res_costs[res_type_idx][res_idx] = solution_data.n_used_resources[res_type_idx][res_idx] * res_cost;
+            this->res_costs[res_type_idx][res_idx] = solution_data.n_used_resources[res_type_idx][res_idx] * res_cost * time * energy_cost_pct;
             total_cost += this->res_costs[res_type_idx][res_idx];
           }
           else if(res_type_idx == ResIdxFromType(ResourceType::VM))

@@ -87,10 +87,7 @@ SystemData::read_json(const nl::json& configuration_file, LoadType lambda_, doub
     this->initialize_resources<ResourceType::Edge>(configuration_file.at("EdgeResources"));
     Logger::Info("Done!");
     at_least_one_resource_type = true;
-    if(energy_cost_pct_ != 1.0)
-    {
-      all_resources.set_energy_cost_pct(energy_cost_pct_);      
-    }
+    energy_cost_pct = energy_cost_pct_;
   }
   else
   {
