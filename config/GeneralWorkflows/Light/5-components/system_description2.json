@@ -279,13 +279,13 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.517466342859655,
                 "memory": 163840,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.618350571941543,
                 "memory": 163840,
                 "n_cores": 1
@@ -592,43 +592,43 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.8508505040045016
+                    "demand": 0.18508505040045016
                 }
             },
             "h2": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5140727442958679
+                    "demand": 0.05140727442958679
                 }
             },
             "h3": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5342895145128816
+                    "demand": 0.05342895145128816
                 }
             },
             "h4": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.562405226572189
+                    "demand": 0.0562405226572189
                 }
             },
             "h5": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5378632386684246
+                    "demand": 0.05378632386684246
                 }
             },
             "h6": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.0055161080725241
+                    "demand": 0.10055161080725241
                 }
             },
             "h7": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.9994763397874744
+                    "demand": 0.09994763397874744
                 }
             }
         },

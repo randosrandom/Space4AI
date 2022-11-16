@@ -272,13 +272,13 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.591923413759357,
                 "memory": 163840,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.767872959122372,
                 "memory": 163840,
                 "n_cores": 1
@@ -789,7 +789,7 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.6599649472074978
+                    "demand": 0.16599649472074978
                 }
             }
         },

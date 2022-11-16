@@ -308,19 +308,19 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 6.127539597660825,
                 "memory": 229376,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.682082311618766,
                 "memory": 229376,
                 "n_cores": 1
             },
             "EN3": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.385267488413834,
                 "memory": 229376,
                 "n_cores": 1
@@ -911,19 +911,19 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.482445803660727
+                    "demand": 0.1482445803660727
                 }
             },
             "h2": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.8165016047581499
+                    "demand": 0.08165016047581499
                 }
             },
             "h3": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.8210560905604567
+                    "demand": 0.08210560905604567
                 }
             }
         },

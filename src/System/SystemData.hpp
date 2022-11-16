@@ -67,7 +67,7 @@ class SystemData
     *
     *   \param configuration_file nl::json object extracted from .json system_file
     */
-    void read_json(const nl::json& configuration_file, LoadType lambda_ = NaN);
+    void read_json(const nl::json& configuration_file, LoadType lambda_ = NaN, double energy_cost_pct_ = 1.0);
 
     /** DAG getter */
     const DAG&

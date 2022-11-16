@@ -174,6 +174,7 @@ LocalSearch::migration_tweaking(
 
   if(feasible)
   {
+    curr_sol.objective_function(*system, local_info);
     best_sol = curr_sol;
   }
   else
@@ -204,9 +205,11 @@ LocalSearch::migrate_faas_to_faas()
   const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
   const size_t n_res = system->get_system_data().get_all_resources().get_number_resources(faas_type_idx);
   std::vector<bool> candidate_resources(n_res);
+
+  const auto& performance = system->get_performance();
+  const auto& time = system->get_system_data().get_time();
   // Try to change Faas one by one
   bool changed_flag = false;
-
   for(size_t i = 0; i < used_resources_comp.size() && !changed_flag; ++i)
   {
     const auto [part_idx, res_type_idx, res_idx] = used_resources_comp[i];
@@ -224,11 +227,18 @@ LocalSearch::migrate_faas_to_faas()
         }
       }
 
-      const CostType old_res_cost = all_resources.get_cost(ResourceType::Faas, res_idx);
+      const CostType old_res_cost = best_sol.get_res_costs()[faas_type_idx][res_idx];
 
       for(size_t new_res_idx : resources_instersection)
       {
-        if(all_resources.get_cost(ResourceType::Faas, new_res_idx) < old_res_cost)
+        const auto gb_cost = all_resources.get_resource<ResourceType::Faas>(new_res_idx).get_cost();
+        const auto part_lambda = components[comp_idx].get_partition(part_idx).get_part_lambda();
+        const auto warm_time =
+          static_cast<FaasPE*>(
+            performance[comp_idx][faas_type_idx][part_idx][new_res_idx].get())->get_demandWarm();
+        const auto new_res_cost = gb_cost * warm_time * part_lambda * time;
+
+        if(new_res_cost < old_res_cost)
         {
           changed_flag = true;
           local_info.modified_res[faas_type_idx][res_idx] = true;
@@ -357,7 +367,7 @@ LocalSearch::change_deployment()
     local_info.modified_res[random_resource.first][random_resource.second] = true;
   }
 
-  const CostType diff_cost = curr_sol.objective_function(*system) - best_sol.get_cost();
+  const CostType diff_cost = curr_sol.objective_function(*system, local_info) - best_sol.get_cost();
 
   if(diff_cost < -1e-12)
   {
@@ -681,7 +691,7 @@ LocalSearch::change_resource()
     curr_sol.local_constraints_check(*system, local_info) &&
     curr_sol.global_constraints_check(*system, local_info);
 
-  if(feasible && (curr_sol.objective_function(*system) < best_sol.get_cost()))
+  if(feasible && (curr_sol.objective_function(*system, local_info) < best_sol.get_cost()))
   {
     best_sol = curr_sol;
     ++change_resource_count;
@@ -806,7 +816,7 @@ LocalSearch::reduce_cluster_size(size_t res_type_idx, size_t res_idx)
 
     if(feasible)
     {
-      curr_sol.objective_function(*system);
+      curr_sol.objective_function(*system, local_info);
       best_sol = curr_sol;
     }
     else

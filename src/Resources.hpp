@@ -117,8 +117,13 @@ class Resource
       cost(cost_),
       memory(memory_),
       number_avail(number_avail_),
-      n_cores(n_cores_)
+      n_cores(n_cores_),
+      energy_cost_pct(1.0)
     {}
+
+    /** enery_cost_pct setter */
+    void
+    set_energy_cost_pct(double energy_cost_pct_) {energy_cost_pct = energy_cost_pct_;};
 
     /** name getter */
     const std::string&
@@ -134,7 +139,11 @@ class Resource
 
     /** cost getter */
     CostType
-    get_cost() const { return cost; };
+    get_cost() const { return energy_cost_pct * cost; };
+
+    /** pure cost getter */
+    CostType
+    get_pure_cost() const {return cost; };
 
     /** memory getter */
     DataType
@@ -170,6 +179,9 @@ class Resource
 
     /** Number of cores of the Resource */
     const size_t n_cores;
+
+    /** enery pct cost */
+    double energy_cost_pct;
 };
 
 /** Specialization of the template class Resource for
@@ -279,6 +291,10 @@ class AllResources
     */
     template<class T>
     void add_resource(T&& resource);
+
+    /** Set Edge energy cost */
+    void
+    set_energy_cost_pct(double energy_cost_pct_);
 
     /** Template getter that returns all the resources of type T. */
     template<ResourceType T>
@@ -417,6 +433,16 @@ AllResources::add_resource(T&& resource)
   {
     Logger::Error("Wrong type provided in *add_resource* of Resources.hpp");
     throw std::invalid_argument("Wrong type provided in *add_resource* of Resources.hpp");
+  }
+}
+
+inline
+void
+AllResources::set_energy_cost_pct(double energy_cost_pct_)
+{
+  for(auto& res : edge_resources)
+  {
+    res.set_energy_cost_pct(energy_cost_pct_);
   }
 }
 

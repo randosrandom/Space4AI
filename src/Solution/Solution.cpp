@@ -123,7 +123,7 @@ Solution::read_solution_from_file(
   std::size_t res_idx;
   Logger::Debug("solution::read_solution_from_file: Starting reading file...");
 
-  for(const auto& [comp, comp_data] : configuration_file.at("Components").items())
+  for(const auto& [comp, comp_data] : configuration_file.at("components").items())
   {
     comp_idx = comp_name_to_idx.at(comp);
 
@@ -178,7 +178,7 @@ Solution::read_solution_from_file(
     }
   }
 
-  for(const auto& [path, path_data] : configuration_file.at("Global_constraints").items())
+  for(const auto& [path, path_data] : configuration_file.at("global_constraints").items())
   {
     const std::size_t path_idx = gc_name_to_idx.at(path);
 
@@ -193,7 +193,7 @@ Solution::read_solution_from_file(
     }
   }
 
-  total_cost = configuration_file.at("Total_cost").get<CostType>();
+  total_cost = configuration_file.at("total_cost").get<CostType>();
 }
 
 nl::json
@@ -278,7 +278,7 @@ Solution::to_json(const System& system) const
     jcomponents[comp_name]["response_time_threshold"] = local_constraints[i].get_max_res_time();
   }
 
-  jsolution["Components"] = jcomponents;
+  jsolution["components"] = jcomponents;
   //Global constraints
   const auto& global_constraints = system_data.get_global_constraints();
   nl::json jgc;
@@ -310,9 +310,9 @@ Solution::to_json(const System& system) const
     jgc[path_name]["path_response_time_threshold"] = global_constraints[k].get_max_res_time();
   }
 
-  jsolution["Global_constraints"] = jgc;
+  jsolution["global_constraints"] = jgc;
   //total cost
-  jsolution["Total_cost"] = total_cost;
+  jsolution["total_cost"] = total_cost;
   return jsolution;
 }
 
@@ -575,7 +575,7 @@ Solution::local_constraints_check(const System& system, const LocalInfo& local_i
     }
   }
 
-  Logger::Warn("check_feasibility: DONE Checking local constraints ...");
+  Logger::Debug("check_feasibility: DONE Checking local constraints ...");
   return feasible;
 }
 
@@ -677,14 +677,14 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
           if(res_type_idx == ResIdxFromType(ResourceType::Edge))
           {
             const auto res_cost = all_resources.get_resource<ResourceType::Edge>(res_idx).get_cost();
-            this->res_costs[res_type_idx][res_idx] = res_cost;
-            total_cost += solution_data.n_used_resources[res_type_idx][res_idx] * res_cost;
+            this->res_costs[res_type_idx][res_idx] = solution_data.n_used_resources[res_type_idx][res_idx] * res_cost;
+            total_cost += this->res_costs[res_type_idx][res_idx];
           }
           else if(res_type_idx == ResIdxFromType(ResourceType::VM))
           {
             const auto res_cost = all_resources.get_resource<ResourceType::VM>(res_idx).get_cost();
-            this->res_costs[res_type_idx][res_idx] = res_cost;
-            total_cost += solution_data.n_used_resources[res_type_idx][res_idx] * res_cost * time;
+            this->res_costs[res_type_idx][res_idx] = solution_data.n_used_resources[res_type_idx][res_idx] * res_cost * time;
+            total_cost += this->res_costs[res_type_idx][res_idx];
           }
           else // Faas
           {

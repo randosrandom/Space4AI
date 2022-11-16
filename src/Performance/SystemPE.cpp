@@ -130,23 +130,32 @@ SystemPE::compute_global_perf(
 
     // used resources
     const auto& used_resources = solution_data.get_used_resources();
-    // resource index of the last partition
-    const auto [curr_comp_last_part_idx, res1_type_idx, res1_idx] =
-      *(used_resources[curr_comp_idx].crbegin());
+    // resource index last partition
+    const size_t curr_comp_last_part_idx = std::get<0>(used_resources[curr_comp_idx].back());
     //resource index of the first partition
     const auto [next_comp_first_part_idx, res2_type_idx, res2_idx] =
       *(used_resources[next_comp_idx].cbegin());
 
-    // different resources.
-    if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
+    const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
+    const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_next_data_sizes().at(next_comp_idx);
+
+    const auto& comp_partitions = system.get_system_data().get_component(curr_comp_idx).get_partitions();
+    TimeType delay_total_time = 0.0;
+    ProbType transition_probability = 1;
+
+    for(size_t p=0; p<used_resources[curr_comp_idx].size(); ++p)
     {
-      const auto& curr_comp = system.get_system_data().get_component(curr_comp_idx);
-      const auto data_size = curr_comp.get_partition(curr_comp_last_part_idx).get_next_data_sizes().at(next_comp_idx);
-      path_perfs[path_idx] += compute_network_delay(
-          ResTypeFromIdx(res1_type_idx), res1_idx,
-          ResTypeFromIdx(res2_type_idx), res2_idx,
-          data_size, system);
+      const auto [p_idx, res1_type_idx, res1_idx] = used_resources[curr_comp_idx][p];
+      if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
+      {
+        delay_total_time += transition_probability * compute_network_delay(
+            ResTypeFromIdx(res1_type_idx), res1_idx,
+            ResTypeFromIdx(res2_type_idx), res2_idx,
+            data_size, system);
+        transition_probability *= (1 - comp_partitions[p_idx].get_early_exit_probability());
+      }
     }
+    path_perfs[path_idx] += delay_total_time;
   }
   // last component
   path_perfs[path_idx] += comp_perfs[comp_idxs.back()];

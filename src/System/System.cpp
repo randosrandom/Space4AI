@@ -29,7 +29,7 @@ Copyright 2021 AI-SPRINT
 namespace Space4AI
 {
 void
-System::read_configuration_file(const std::string& system_file, LoadType lambda_)
+System::read_configuration_file(const std::string& system_file, LoadType lambda_, double energy_cost_pct_)
 {
   std::ifstream file(system_file);
   nl::json configuration_file;
@@ -47,7 +47,7 @@ System::read_configuration_file(const std::string& system_file, LoadType lambda_
   }
 
   Logger::Info("****** SYSTEM DATA ... ******");
-  this->system_data.read_json(configuration_file, lambda_);
+  this->system_data.read_json(configuration_file, lambda_, energy_cost_pct_);
   Logger::Info("********** DONE! **********");
 
   if(configuration_file.contains("Performance"))

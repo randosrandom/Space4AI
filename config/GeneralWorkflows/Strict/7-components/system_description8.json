@@ -454,19 +454,19 @@
         },
         "computationallayer2": {
             "EN1": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.059410633403809,
                 "memory": 229376,
                 "n_cores": 1
             },
             "EN2": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.198172505880279,
                 "memory": 229376,
                 "n_cores": 1
             },
             "EN3": {
-                "number": 1,
+                "number": 2,
                 "cost": 7.441848933375167,
                 "memory": 229376,
                 "n_cores": 1
@@ -1819,49 +1819,49 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 1.9840406473734804
+                    "demand": 0.19840406473734804
                 }
             },
             "h2": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5885080263528562
+                    "demand": 0.05885080263528562
                 }
             },
             "h3": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5916058834592711
+                    "demand": 0.05916058834592711
                 }
             },
             "h4": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5788528265536488
+                    "demand": 0.05788528265536488
                 }
             },
             "h5": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.5807747537203718
+                    "demand": 0.05807747537203718
                 }
             },
             "h6": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.7161283005228711
+                    "demand": 0.07161283005228711
                 }
             },
             "h7": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.7194855522847964
+                    "demand": 0.07194855522847964
                 }
             },
             "h8": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.7113840769299971
+                    "demand": 0.07113840769299971
                 }
             }
         },

@@ -88,11 +88,11 @@ RandomGreedy::step(const System& system)
   Logger::Debug("step: Done!");
 
   // if the solution is feasible, compute the corresponding cost before and after
-  // updating the cluster size
+  // updating the cluster sizes
   if(feasible)
   {
     Logger::Debug("step: The solution is feasible");
-    const std::vector<size_t> res_type_idxs = {ResIdxFromType(ResourceType::Edge), ResIdxFromType(ResourceType::VM)};
+    const std::vector<size_t> res_type_idxs = {ResIdxFromType(ResourceType::VM), ResIdxFromType(ResourceType::Edge)};
     const UsedResourcesNumberType& n_used_resources = sol.get_n_used_resources();
 
     // update the cluster size of edge and VM resources
@@ -318,9 +318,10 @@ RandomGreedy::create_random_initial_solution(
             number_avail = selected_edge[res_idx];
           else
             number_avail = all_resources.get_number_avail(ResTypeFromIdx(res_type_idx), res_idx);
-
-          std::uniform_int_distribution<decltype(rng)::result_type> dist(1, number_avail);
-          const size_t random_number = dist(rng);
+          #warning DECIDE HOW TO SET random_number here ...
+          // std::uniform_int_distribution<decltype(rng)::result_type> dist(1, number_avail);
+          // const size_t random_number = dist(rng);
+          const size_t random_number = number_avail;
           y_hat[comp_idx][res_type_idx][part_idx][res_idx] = random_number;
           n_used_resources[res_type_idx][res_idx] = random_number;
           Logger::Trace("create_random_initial_solution: Updated number of resources of comp " + std::to_string(comp_idx) + \
