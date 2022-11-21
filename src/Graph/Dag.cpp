@@ -52,8 +52,7 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
     {
       for(size_t i = 0; i < value.at("next").size(); ++i)
       {
-        this->dag_matrix[comp_name_to_idx.at(value.at("next")[i].get<std::string>())]
-        [comp_name_to_idx.at(key)]
+        this->dag_matrix[comp_name_to_idx.at(key)][comp_name_to_idx.at(value.at("next")[i].get<std::string>())]
           = value.at("transition_probability")[i].get<double>();
       }
     }
@@ -87,8 +86,7 @@ DAG::read_from_file(const nlohmann::json& dag_dict,
     {
       for(size_t i = 0; i < dag_dict.at(name).at("next").size(); ++i)
       {
-        dag_matrix[comp_name_to_idx.at(dag_dict.at(name).at("next")[i].get<std::string>())]
-        [idx]
+        dag_matrix[idx][comp_name_to_idx.at(dag_dict.at(name).at("next")[i].get<std::string>())]
           = dag_dict.at(name).at("transition_probability")[i].get<double>();
       }
     }
@@ -126,9 +124,9 @@ DAG::find_next_root(
     {
       bool next = true;
 
-      for(size_t j = 0; j < dag_matrix[i].size() && next; ++j)
+      for(size_t j = 0; j < index_already_permuted.size() && next; ++j)
       {
-        if(!index_already_permuted[j] && dag_matrix[i][j] != 0)
+        if(!index_already_permuted[j] && dag_matrix[j][i] != 0)
         {
           next = false;
         }
@@ -148,8 +146,28 @@ DAG::find_next_root(
   }
 }
 
-const DagMatrixType::value_type&
+DagMatrixType::value_type //using copy elision
 DAG::input_edges(size_t node) const
+{
+  if(node < this->size())
+  {
+    DagMatrixType::value_type in_edges(dag_matrix.size(), 0.0);
+    for(size_t j=0; j<dag_matrix.size(); ++j)
+    {
+      in_edges[j] = dag_matrix[j][node];
+    }
+    return in_edges;
+  }
+  else
+  {
+    const std::string err_message = "Trying to access non-existent node: " + std::to_string(node) + " in dag_matrix";
+    Logger::Error(err_message);
+    throw std::out_of_range("Accessing invalid position in dag_matrix when calling input_edges");
+  }
+}
+
+const DagMatrixType::value_type&
+DAG::output_edges(size_t node) const
 {
   if(node < this->size())
   {
@@ -159,7 +177,7 @@ DAG::input_edges(size_t node) const
   {
     const std::string err_message = "Trying to access non-existent node: " + std::to_string(node) + " in dag_matrix";
     Logger::Error(err_message);
-    throw std::out_of_range("Accessing invalid position in dag_matrix");
+    throw std::out_of_range("Accessing invalid position in dag_matrix when calling output_edges");
   }
 }
 

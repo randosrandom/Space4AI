@@ -38,7 +38,7 @@ namespace Space4AI
 *
 *   The number of rows (equal to the number of columns) represents the number of components.
 *   So, in an object of type DAG, dag[i][j] stores the probability to move
-*   from component j to component i.
+*   from component i to component j.
 *   The class has methods that automatically find the order of the components
 *   of the graph from the .json configuration file, and has data members that assign
 *   to each component a representative index.
@@ -70,7 +70,15 @@ class DAG
     *   \return Vector of the transition probabilities from all components to the
     *           input Component indexed by node
     */
-    const DagMatrixType::value_type& input_edges(size_t node) const;
+    DagMatrixType::value_type input_edges(size_t node) const;
+
+    /** Method that returns the transition probabilities from a certain node to all
+    *   the susequent components.
+    *
+    *   \param node Index of the input node
+    *   \return Vector of the transition probabilities to all the output components of component node
+    */
+    const DagMatrixType::value_type& output_edges(size_t node) const;
 
     /** dag matrix getter */
     const DagMatrixType&
@@ -109,7 +117,7 @@ class DAG
 
     /** Matrix of transition probabilities.
     *
-    *   dag_matrix[i][j] stores the transition probability from node j to node i.
+    *   dag_matrix[i][j] stores the transition probability from node i to node j.
     */
     DagMatrixType dag_matrix;
 

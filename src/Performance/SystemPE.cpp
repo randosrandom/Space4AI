@@ -36,7 +36,7 @@ SystemPE::compute_local_perf(
   const auto& used_resources_comp = solution_data.get_used_resources()[comp_idx];
   local_parts_perfs[comp_idx].resize(used_resources_comp.size(), 0.0);
   const auto& performance_comp = system.get_performance()[comp_idx];
-  Logger::Debug("Evaluating performance of component" + std::to_string(comp_idx));
+  Logger::Debug("Evaluating performance of component " + std::to_string(comp_idx));
 
   for(size_t i = 0; i < used_resources_comp.size(); ++i)
   {

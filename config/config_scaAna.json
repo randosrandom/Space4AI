@@ -1,0 +1,46 @@
+{
+  "ConfigFiles" : {
+
+    "5Components": [
+      "config/GeneralWorkflows/Strict/5-components/system_description1.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description3.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description4.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description5.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description6.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description7.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description8.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description9.json",
+      "config/GeneralWorkflows/Strict/5-components/system_description10.json"
+    ]
+  },
+
+  "DTSolutions" : {
+    "5Components": [
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins1/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins3/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins4/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins5/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins6/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins7/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins8/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins9/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins10/best_sol_1.8.json"
+    ]
+  },
+
+  "EnergyCostPct" : 0.2,
+
+  "Algorithm" : {
+    "RG_n_iterations" : 10000,
+    "LS_n_iterations" : 1666,
+    "RG_max_num_sols" : 10,
+    "LS_max_num_sols" : 1,
+    "reproducibility" : true
+  },
+
+  "Logger" : {
+    "priority" : 5,
+    "terminal_stream" : false,
+    "file_stream" : false
+  }
+}

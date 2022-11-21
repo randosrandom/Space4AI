@@ -50,6 +50,8 @@ class System
 {
   public:
 
+    #warning add method to update System if lambda is changes instead of creating a new one each time
+
     /** Method to read the .json file that describes
     *   the System and convert it to a nl::json object.
     *

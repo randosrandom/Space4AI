@@ -1,4 +1,5 @@
 from datetime import datetime
+#import matplotlib
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
@@ -7,6 +8,8 @@ import json
 from dl_utilities import dl_cumsum
 from bimodal import BimodalFun
 
+#filled_markers = matplotlib.markers.MarkerStyle().filled_markers
+plt.rcParams['font.size'] = '16'
 
 # Example parameters
 simple = True
@@ -14,10 +17,10 @@ average = True
 
 # External parameters
 times_seed = 500000
-max_n_variations = 600 # samples
+max_n_variations = 1800 # samples
 min_workload = 0.1
 max_workload = 1.8
-total_episode_length = 600
+total_episode_length = 1800
 avg_interval = round(total_episode_length / max_n_variations)
 
 np.random.seed(times_seed)
@@ -56,23 +59,23 @@ if simple:
 if average:
   w_1_2 = curve_1.eval(cumulative_events1, True)
 
-# Graph 1
-g_1 = plt.figure()
-ax = plt.gca()
-ax.set_xlim([bimodal_params_1["tmin"], bimodal_params_1["tmax"]])
-plt.title("Peaks and times random I")
-plt.xlabel("Time")
-plt.ylabel("Lambda")
-plt.plot(x, curve_1.eval(x), 'b', label = "Original curve")
-if simple:
-  plt.hlines(w_1_1[1:], cumulative_events1[:-1], cumulative_events1[1:], 'r',
-    label = "Simple sampling")
-if average:
-  plt.hlines(w_1_2[1:], cumulative_events1[:-1], cumulative_events1[1:], 'g',
-    label = "Average sampling")
-plt.legend()
-#plt.show(block = False)
-plt.savefig("g_1.png")
+# # Graph 1
+# g_1 = plt.figure()
+# ax = plt.gca()
+# ax.set_xlim([bimodal_params_1["tmin"], bimodal_params_1["tmax"]])
+# plt.title("Peaks and times random I")
+# plt.xlabel("Time")
+# plt.ylabel("Lambda")
+# plt.plot(x, curve_1.eval(x), 'b', label = "Original curve")
+# if simple:
+#   plt.hlines(w_1_1[1:], cumulative_events1[:-1], cumulative_events1[1:], 'r',
+#     label = "Simple sampling")
+# if average:
+#   plt.hlines(w_1_2[1:], cumulative_events1[:-1], cumulative_events1[1:], 'g',
+#     label = "Average sampling")
+# plt.legend()
+# #plt.show(block = False)
+# plt.savefig("g_1.png")
 
 bimodal_params_2 = copy.deepcopy(bimodal_params_1)
 bimodal_params_2["peaks"] = [0.05* bimodal_params_2["tmax"], 0.95* bimodal_params_2["tmax"]]
@@ -92,24 +95,23 @@ if simple:
 if average:
   w_2_2 = curve_2.eval(cumulative_events2, True)
 
-# Graph
-g_2 = plt.figure()
-ax = plt.gca()
-ax.set_xlim([bimodal_params_2["tmin"], bimodal_params_2["tmax"]])
-plt.title("Peaks and times deterministic")
-plt.xlabel("Time")
-plt.ylabel("Lambda")
-plt.plot(x, curve_2.eval(x), 'b', label = "Original curve")
-if simple:
-  plt.hlines(w_2_1[1:], cumulative_events2[:-1], cumulative_events2[1:], 'r',
-    label = "Simple sampling")
-if average:
-  plt.hlines(w_2_2[1:], cumulative_events2[:-1], cumulative_events2[1:], 'g',
-    label = "Average sampling")
-plt.legend()
-#plt.show(block = False)
-plt.savefig("g_2.png")
-
+# # Graph
+# g_2 = plt.figure()
+# ax = plt.gca()
+# ax.set_xlim([bimodal_params_2["tmin"], bimodal_params_2["tmax"]])
+# plt.title("Peaks and times deterministic")
+# plt.xlabel("Time")
+# plt.ylabel("Lambda")
+# plt.plot(x, curve_2.eval(x), 'b', label = "Original curve")
+# if simple:
+#   plt.hlines(w_2_1[1:], cumulative_events2[:-1], cumulative_events2[1:], 'r',
+#     label = "Simple sampling")
+# if average:
+#   plt.hlines(w_2_2[1:], cumulative_events2[:-1], cumulative_events2[1:], 'g',
+#     label = "Average sampling")
+# plt.legend()
+# #plt.show(block = False)
+# plt.savefig("g_2.png")
 
 
 np.random.seed(67676767)
@@ -137,25 +139,26 @@ if average:
   w_3_2 = curve_3.eval(cumulative_events3, True)
 
 # Graph
-g_3 = plt.figure()
-ax = plt.gca()
-ax.set_xlim([bimodal_params_3["tmin"], bimodal_params_3["tmax"]])
-plt.title("Peaks and times random II")
-plt.xlabel("Time")
-plt.ylabel("Lambda")
-plt.plot(x, curve_3.eval(x), 'b', label = "Original curve")
-if simple:
-  plt.hlines(w_3_1[1:], cumulative_events3[:-1], cumulative_events3[1:], 'r',
-    label = "Simple sampling")
+g_3, ax_g_3 = plt.subplots(figsize=(12, 8))
+ax_g_3.set_xlim([bimodal_params_3["tmin"], bimodal_params_3["tmax"]])
+#plt.title("Bi-modal workload profile")
+ax_g_3.set_xlabel("time [hours]")
+ax_g_3.set_ylabel("$\lambda$ [requests/sec]")
+ax_g_3.set_xticks([x[0], x[-1]], ["0", "T"])
+ax_g_3.set_yticks(np.arange(0.2,2,0.2))
+ax_g_3.plot(x, curve_3.eval(x), 'b', label = "Original curve")
+# if simple:
+#   ax_g_3.hlines(w_3_1[1:], cumulative_events3[:-1], cumulative_events3[1:], 'r',
+#     label = "Simple sampling")
 # if average:
-#   plt.hlines(w_3_2[1:], cumulative_events3[:-1], cumulative_events3[1:], 'g',
+#   ax_g_3.hlines(w_3_2[1:], cumulative_events3[:-1], cumulative_events3[1:], 'g',
 #     label = "Average sampling")
-plt.legend()
+#plt.legend()
 #plt.show(block = False)
-plt.savefig("g_3.png")
+plt.savefig("bimodal.png", bbox_inches='tight')
 
 # get maximum workload (.95 percentile)
-max_lam = np.percentile(w_3_1, 95)
+max_lam = 1.8
 
 #1 hour scenario: reconfiguration each 5 min => 12 total reconfig
 total_reconfig1 = 12
@@ -163,16 +166,19 @@ win_len1 = np.int32(max_n_variations / total_reconfig1)
 temp1 = np.reshape(w_3_1[1:-1], (-1, win_len1))
 means1 = np.mean(temp1, axis=1)
 means1 = np.insert(means1, 0, max_lam)
-fig1, ax1 = plt.subplots(figsize=(8, 6), layout = 'constrained')
+fig1, ax1 = plt.subplots(figsize=(12, 8))
 x1 = np.arange(0, 61, 5)
 ax1.set_xticks(x1)
-ax1.set_xlabel("Time [min]")
-ax1.set_ylabel("Worload [requests/sec]")
-ax1.set_title("Lambda profile 1 hour scenario")
-ax1.plot(x1[1:], means1[1:], 'bx-')
+ax1.set_yticks(np.arange(0.2,2,0.2))
+ax1.set_xlabel("time [minutes]")
+ax1.set_ylabel("$\lambda$ [requests/sec]")
+ax1.plot(x1[1:], means1[1:], 'o-')
 ax1.plot(x1[0], means1[0], 'ro')
-plt.savefig("hour1.png")
+plt.savefig("hour1.png", bbox_inches='tight')
 
+json_str_1hour = json.dumps({"LambdaVec": means1.tolist()})
+with open("lambda_1hour.json", 'w+') as f:
+    f.write(json_str_1hour)
 
 #2 hour scenario: reconfiguration each 5 min => 24 total reconfig
 total_reconfig2 = 24
@@ -180,21 +186,28 @@ win_len2 = np.int32(max_n_variations / total_reconfig2)
 temp2 = np.reshape(w_3_1[1:-1], (-1, win_len2))
 means2 = np.mean(temp2, axis=1)
 means2 = np.insert(means2, 0, max_lam)
-fig2, ax2 = plt.subplots(figsize=(16, 6), layout = 'constrained')
+fig2, ax2 = plt.subplots(figsize=(12, 8))
 x2 = np.arange(0, 121, 5)
 ax2.set_xticks(x2)
-ax2.set_xlabel("Time [min]")
-ax2.set_ylabel("Worload [requests/sec]")
-ax2.set_title("Lambda profile 2 hours scenario")
-ax2.plot(x2[1:], means2[1:], 'bx-')
+labels = [m if m in np.arange(10,121,10) else "" for m in np.arange(5,121,5)]
+labels = [0] + labels
+ax2.set_xticklabels(labels)
+ax2.set_yticks(np.arange(0.2,2,0.2))
+ax2.set_xlabel("time [minutes]")
+ax2.set_ylabel("$\lambda$ [requests/sec]")
+ax2.plot(x2[1:], means2[1:], 'o-')
 ax2.plot(x2[0], means2[0], 'ro')
-plt.savefig("hour2.png")
+plt.savefig("hour2.png", bbox_inches='tight')
+
+json_str_2hour = json.dumps({"LambdaVec": means2.tolist()})
+with open("lambda_2hour.json", 'w+') as f:
+    f.write(json_str_2hour)
 
 
 # save numpy array yo json
-json_str = json.dumps({"lambda": w_3_1.tolist()})
-with open("lambda.json", 'w') as f:
-    f.write(json_str)
+# json_str = json.dumps({"lambda": w_3_1.tolist()})
+# with open("lambda.json", 'w') as f:
+#     f.write(json_str)
 
 
 # np.random.seed(886655)

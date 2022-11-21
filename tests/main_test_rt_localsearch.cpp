@@ -33,8 +33,8 @@ main(int argc, char** argv)
   const size_t ls_n_iterations = basic_config.at("Algorithm").at("LS_n_iterations").get<size_t>();
   const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
-  const auto lambda = basic_json.at("Lambda").get<sp::LoadType>();
-  
+  const auto lambda = basic_config.at("Lambda").get<sp::LoadType>();
+
   #warning you should pass it in the json
   const double energy_cost_pct = 0.2;
 

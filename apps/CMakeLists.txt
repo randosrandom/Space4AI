@@ -4,11 +4,11 @@ target_link_libraries(dt_solver PRIVATE ${LIB_NAME})
 add_executable(rt_solver main_rt_solver.cpp)
 target_link_libraries(rt_solver PRIVATE ${LIB_NAME})
 
-add_executable(check main_check.cpp)
-target_link_libraries(check PRIVATE ${LIB_NAME})
+add_executable(runnEx main_runnEx_analysis.cpp)
+target_link_libraries(runnEx PRIVATE ${LIB_NAME})
 
-add_executable(lambdaProf main_rt_reconfig_test.cpp)
-target_link_libraries(lambdaProf PRIVATE ${LIB_NAME})
+add_executable(scaAna main_ScalabAnalysis.cpp)
+target_link_libraries(scaAna PRIVATE ${LIB_NAME})
 
 if(PARALLELIZATION)
 	add_executable(dt_scalability_analysis main_dt_scalability_analysis.cpp)

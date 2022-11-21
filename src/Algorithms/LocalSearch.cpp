@@ -68,6 +68,7 @@ LocalSearch::run(size_t max_it, bool reproducibility)
     change_resource();
   }
   best_sol.set_selected_resources(*system);
+  best_sol.objective_function(*system);
 }
 
 void

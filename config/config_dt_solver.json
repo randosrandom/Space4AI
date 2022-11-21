@@ -1,15 +1,15 @@
 {
   "ConfigFiles" : [
-    "config/GeneralWorkflows/Light/15-components/system_description1.json",
-    "config/GeneralWorkflows/Light/15-components/system_description2.json",
-    "config/GeneralWorkflows/Light/15-components/system_description3.json",
-    "config/GeneralWorkflows/Light/15-components/system_description4.json",
-    "config/GeneralWorkflows/Light/15-components/system_description5.json",
-    "config/GeneralWorkflows/Light/15-components/system_description6.json",
-    "config/GeneralWorkflows/Light/15-components/system_description7.json",
-    "config/GeneralWorkflows/Light/15-components/system_description8.json",
-    "config/GeneralWorkflows/Light/15-components/system_description9.json",
-    "config/GeneralWorkflows/Light/15-components/system_description10.json"
+    "config/GeneralWorkflows/Strict/10-components/system_description1.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description2.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description3.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description4.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description5.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description6.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description7.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description8.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description9.json",
+    "config/GeneralWorkflows/Strict/10-components/system_description10.json"
   ],
 
   "Lambda" : 1.8,

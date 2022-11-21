@@ -38,6 +38,15 @@ class SelectedResources
 
 public:
 
+  SelectedResources() = default;
+
+  SelectedResources(
+    const std::vector<size_t>& selected_edge_,
+    const std::vector<size_t>& selected_vms_,
+    const SelectedVMType& selected_vms_by_cl_)
+  : selected_edge(selected_edge_), selected_vms(selected_vms_),
+    selected_vms_by_cl(selected_vms_by_cl_) {}
+
   /** selected_edge getter */
   const std::vector<size_t>&
   get_selected_edge() const { return selected_edge; }

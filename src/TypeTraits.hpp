@@ -80,7 +80,7 @@ using CompatibilityMatrixType =
 /** Structure used to save the transition matrix of the DAG.
 *
 *   Two-dimensional vector of ProbType (indexed by [i][j]) storing the transition
-*   probability from component j to component i.
+*   probability from component i to component j.
 */
 using DagMatrixType = std::vector<std::vector<ProbType>>;
 

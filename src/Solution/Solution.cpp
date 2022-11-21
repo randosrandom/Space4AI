@@ -127,7 +127,29 @@ Solution::read_solution_from_file(
   {
     comp_idx = comp_name_to_idx.at(comp);
 
-    for(const auto& [part, part_data] : comp_data.items())
+    #warning Uniform Solution format! (I am not saving deployment, but Hamta yes)
+
+    std::string key;
+    nl::json::iterator it;
+    for(it = comp_data.begin(); it != comp_data.end(); ++it)
+    {
+      if((it.key() != "response_time") && (it.key() != "response_time_threshold"))
+      {
+        key = it.key();
+        break;
+      }
+    }
+    nl::json loop_data;
+    if(part_name_to_part_idx.count(comp + key) > 0)
+    {
+      loop_data = comp_data;
+    }
+    else
+    {
+      loop_data = it.value();
+    }
+
+    for(const auto& [part, part_data] : loop_data.items())
     {
       if(part == "response_time")
       {
@@ -171,7 +193,6 @@ Solution::read_solution_from_file(
               selected_resources.selected_vms[res_idx] = number;
             }
           }
-
           solution_data.used_resources[comp_idx].emplace_back(part_idx, res_type_idx, res_idx);
         }
       }
@@ -193,7 +214,8 @@ Solution::read_solution_from_file(
     }
   }
 
-  total_cost = configuration_file.at("total_cost").get<CostType>();
+  if(configuration_file.at("total_cost").is_number())
+    total_cost = configuration_file.at("total_cost").get<CostType>();
 }
 
 nl::json
@@ -660,9 +682,17 @@ Solution::objective_function(const System& system, const LocalInfo& local_info)
   const TimeType time = system.get_system_data().get_time();
   const double energy_cost_pct = system.get_system_data().get_energy_cost_pct();
 
-  for(size_t i = 0; i < res_cost_alredy_computed.size(); ++i)
+  // reset costs
+  for(size_t res_type_idx=0; res_type_idx<ResIdxFromType(ResourceType::Count); ++res_type_idx)
   {
-    res_cost_alredy_computed[i].resize(all_resources.get_number_resources(i));
+    for(size_t res_idx=0; res_idx<res_costs[res_type_idx].size(); ++res_idx)
+    {
+      if(!local_info.active || local_info.modified_res[res_type_idx][res_idx])
+      {
+        res_costs[res_type_idx][res_idx] = 0.0;
+      }
+    }
+    res_cost_alredy_computed[res_type_idx].resize(all_resources.get_number_resources(res_type_idx));
   }
 
   for(size_t comp_idx = 0; comp_idx < solution_data.used_resources.size(); ++comp_idx)
