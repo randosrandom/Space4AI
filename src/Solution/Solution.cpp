@@ -499,34 +499,102 @@ Solution::move_backward_check(const System& system)
   Logger::Debug("check_feasibility: Checking move backward ... ");
   bool feasible = true;
 
-  std::pair<size_t, size_t> last_edge = std::make_pair(solution_data.used_resources.size() , 0);
+  const auto& components = system.get_system_data().get_components();
+  const auto& dag = system.get_system_data().get_dag();
+  std::vector<bool> comp_all_parts_on_clouds(components.size(), false);
+
+  const auto vm_type_idx = ResIdxFromType(ResourceType::VM);
+  const auto faas_type_idx = ResIdxFromType(ResourceType::Faas);
+
   std::pair<size_t, size_t> first_cloud = std::make_pair(solution_data.used_resources.size(), 0);
 
-  const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
-
-  for(size_t comp_idx = 0; comp_idx < solution_data.used_resources.size() && feasible; ++comp_idx)
+  for(size_t comp_idx = 0; comp_idx < components.size() && feasible; ++comp_idx)
   {
-    for(size_t j=0; j<solution_data.used_resources[comp_idx].size(); ++j)
-    {
-      const auto [p_idx, res_type_idx, res_idx] = solution_data.used_resources[comp_idx][j];
+    bool already_found_cloud_in_comp = false;
 
-      if(res_type_idx == edge_type_idx)
+    if(comp_all_parts_on_clouds[comp_idx])
+    {
+      already_found_cloud_in_comp = true;
+
+      for(size_t j=0; j<solution_data.used_resources[comp_idx].size() && feasible; ++j)
       {
-        last_edge = std::make_pair(comp_idx, j);
+        const auto [p_idx, res_type_idx, res_idx] = solution_data.used_resources[comp_idx][j];
+
+        if((res_type_idx != vm_type_idx) && (res_type_idx != faas_type_idx))
+        {
+          feasible = false;
+        }
       }
-      else if(first_cloud.first == solution_data.used_resources.size())
+    }
+    else
+    {
+      for(size_t j=0; j<solution_data.used_resources[comp_idx].size() && feasible; ++j)
       {
-        first_cloud = std::make_pair(comp_idx, j);
+        const auto [p_idx, res_type_idx, res_idx] = solution_data.used_resources[comp_idx][j];
+        if(res_type_idx == vm_type_idx || res_type_idx == faas_type_idx)
+        {
+          already_found_cloud_in_comp = true;
+          if(first_cloud.first == solution_data.used_resources.size())
+          {
+            first_cloud = std::make_pair(comp_idx, j);
+          }
+        }
+        else if(already_found_cloud_in_comp)
+        {
+          feasible = false;
+        }
+      }
+    }
+    if(already_found_cloud_in_comp)
+    {
+      const auto& output_edges_comp_idx = dag.output_edges(comp_idx);
+      for(size_t o_idx = 0; o_idx<components.size(); ++o_idx)
+      {
+        if(output_edges_comp_idx[o_idx] > 0)
+        {
+          comp_all_parts_on_clouds[o_idx] = true;
+        }
       }
     }
   }
   solution_data.first_cloud = first_cloud;
-  if(last_edge > first_cloud)
-  {
-    feasible = false;
-  }
   return feasible;
 }
+
+// bool
+// Solution::move_backward_check(const System& system)
+// {
+//   Logger::Debug("check_feasibility: Checking move backward ... ");
+//   bool feasible = true;
+//
+//   std::pair<size_t, size_t> last_edge = std::make_pair(solution_data.used_resources.size() , 0);
+//   std::pair<size_t, size_t> first_cloud = std::make_pair(solution_data.used_resources.size(), 0);
+//
+//   const auto edge_type_idx = ResIdxFromType(ResourceType::Edge);
+//
+//   for(size_t comp_idx = 0; comp_idx < solution_data.used_resources.size() && feasible; ++comp_idx)
+//   {
+//     for(size_t j=0; j<solution_data.used_resources[comp_idx].size(); ++j)
+//     {
+//       const auto [p_idx, res_type_idx, res_idx] = solution_data.used_resources[comp_idx][j];
+//
+//       if(res_type_idx == edge_type_idx)
+//       {
+//         last_edge = std::make_pair(comp_idx, j);
+//       }
+//       else if(first_cloud.first == solution_data.used_resources.size())
+//       {
+//         first_cloud = std::make_pair(comp_idx, j);
+//       }
+//     }
+//   }
+//   solution_data.first_cloud = first_cloud;
+//   if(last_edge > first_cloud)
+//   {
+//     feasible = false;
+//   }
+//   return feasible;
+// }
 
 bool
 Solution::performance_assignment_check(

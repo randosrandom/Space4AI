@@ -101,6 +101,7 @@ LocalSearch::migrate_faas_to_vm()
   const auto& first_cloud = best_sol.solution_data.get_first_cloud();
   if(first_cloud.first == components.size())
     return;
+  #warning Improve selection of random components: you should select a component that surely has a Faas
   std::uniform_int_distribution<decltype(rng)::result_type> dist(first_cloud.first, components.size() - 1);
   const size_t comp_idx = dist(rng);
   const auto& used_resources_comp = best_sol.get_used_resources()[comp_idx];
@@ -193,6 +194,7 @@ LocalSearch::migrate_faas_to_faas()
   const auto& first_cloud = best_sol.solution_data.get_first_cloud();
   if(first_cloud.first == components.size())
     return;
+  #warning Improve selection of random components: you should select a component that surely has a Faas
   std::uniform_int_distribution<decltype(rng)::result_type> dist(first_cloud.first, components.size() - 1);
   const size_t comp_idx = dist(rng);
   local_info.reset();
