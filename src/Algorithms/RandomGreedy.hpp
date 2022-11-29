@@ -63,17 +63,6 @@ class RandomGreedy
 
   private:
 
-    /** Single step of the randomized greedy algorithm.
-    *
-    *   It randomly generates a candidate Solution, then evaluates its feasibility;
-    *   if it is feasible, it evaluates its cost and updates it by reducing the
-    *   ResourceType::Edge and ResourceType::VM devices cluster size.
-    *
-    *   \param system Object containing all the data structures of the System
-    *   \return A Solution object
-    */
-    Solution step(const System& system);
-
     /** Method to create the initial random Solution
     *
     *   It randomly generates a candidate Solution as a starting point to find a

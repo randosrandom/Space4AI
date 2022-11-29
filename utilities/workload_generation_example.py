@@ -145,8 +145,10 @@ ax_g_3.set_xlim([bimodal_params_3["tmin"], bimodal_params_3["tmax"]])
 ax_g_3.set_xlabel("time [hours]")
 ax_g_3.set_ylabel("$\lambda$ [requests/sec]")
 ax_g_3.set_xticks([x[0], x[-1]], ["0", "T"])
-ax_g_3.set_yticks(np.arange(0.2,2,0.2))
-ax_g_3.plot(x, curve_3.eval(x), 'b', label = "Original curve")
+y = curve_3.eval(x)
+ax_g_3.set_yticks([y[np.argmin(y)], y[np.argmax(y)]], ["$\lambda_{min}$", "$\lambda_{max}$"])
+#ax_g_3.set_ylim(np.arange(0.2,max_workload,0.2))
+ax_g_3.plot(x, y, label = "Original curve")
 # if simple:
 #   ax_g_3.hlines(w_3_1[1:], cumulative_events3[:-1], cumulative_events3[1:], 'r',
 #     label = "Simple sampling")
@@ -158,7 +160,7 @@ ax_g_3.plot(x, curve_3.eval(x), 'b', label = "Original curve")
 plt.savefig("bimodal.png", bbox_inches='tight')
 
 # get maximum workload (.95 percentile)
-max_lam = 1.8
+max_lam = max_workload
 
 #1 hour scenario: reconfiguration each 5 min => 12 total reconfig
 total_reconfig1 = 12
@@ -169,7 +171,7 @@ means1 = np.insert(means1, 0, max_lam)
 fig1, ax1 = plt.subplots(figsize=(12, 8))
 x1 = np.arange(0, 61, 5)
 ax1.set_xticks(x1)
-ax1.set_yticks(np.arange(0.2,2,0.2))
+#ax1.set_yticks(np.arange(0.2,2,0.2))
 ax1.set_xlabel("time [minutes]")
 ax1.set_ylabel("$\lambda$ [requests/sec]")
 ax1.plot(x1[1:], means1[1:], 'o-')
@@ -192,9 +194,10 @@ ax2.set_xticks(x2)
 labels = [m if m in np.arange(10,121,10) else "" for m in np.arange(5,121,5)]
 labels = [0] + labels
 ax2.set_xticklabels(labels)
-ax2.set_yticks(np.arange(0.2,2,0.2))
+#ax2.set_yticks(np.arange(0.2,2,0.2))
 ax2.set_xlabel("time [minutes]")
 ax2.set_ylabel("$\lambda$ [requests/sec]")
+ax2.set_yticks([means2[0], means2[np.argmin(means2)]], ["$\lambda_{max}$", "$\lambda_{min}$"])
 ax2.plot(x2[1:], means2[1:], 'o-')
 ax2.plot(x2[0], means2[0], 'ro')
 plt.savefig("hour2.png", bbox_inches='tight')

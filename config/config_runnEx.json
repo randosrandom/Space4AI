@@ -1,14 +1,10 @@
 {
   "ConfigFiles" : [
-  	"config/RunningExample/system_description_scenario1.json",
-  	"config/RunningExample/system_description_scenario2.json", 
-  	"config/RunningExample/system_description_scenario3.json"
+    "config/RunningExample/system_description_scenario1.json"
  ],
 
   "DTSolutions": [
-  	"config/DTSolutions/RunningExample/7Components/Ins1/best_sol_1.8.json",
-  	"config/DTSolutions/RunningExample/7Components/Ins2/best_sol_1.8.json",
-  	"config/DTSolutions/RunningExample/7Components/Ins3/best_sol_1.8.json"
+    "config/DTSolutions/RunningExample/7Components/Ins1/best_sol.json"
   ],
 
   "EnergyCostPct" : 1.0,

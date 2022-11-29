@@ -27,13 +27,17 @@ void eraseAllSubStr(std::string & mainStr, const std::string & toErase)
 }
 
 std::tuple<double, double, double>
-get_cost_frac(const sp::Solution& sol)
+get_cost_frac(const sp::Solution& sol, bool initial_deployment_flag = false, double energy_cost_pct = 1)
 {
-  const auto total_cost = sol.get_cost();
   const auto& res_costs = sol.get_res_costs();
-  const auto edge_total_cost = std::accumulate(res_costs[0].begin(), res_costs[0].end(), 0.0);
+  auto edge_total_cost = std::accumulate(res_costs[0].begin(), res_costs[0].end(), 0.0);
+  if(initial_deployment_flag)
+  {
+    edge_total_cost = energy_cost_pct * edge_total_cost;
+  }
   const auto vm_total_cost = std::accumulate(res_costs[1].begin(), res_costs[1].end(), 0.0);
   const auto faas_total_cost = std::accumulate(res_costs[2].begin(), res_costs[2].end(), 0.0);
+  const auto& total_cost = edge_total_cost + vm_total_cost + faas_total_cost;
 
   return std::make_tuple(edge_total_cost/total_cost, vm_total_cost/total_cost, faas_total_cost/total_cost);
 }
@@ -140,7 +144,8 @@ main(int argc, char** argv)
     throw std::runtime_error("Can't open " + lambda_config_filepath.string() + " file. Make sure that the path is correct, and the format is json");
   }
 
-  std::string output_dir = "LambdaProfileOut/GeneralWorkflows/";
+  const std::string constraints_type = basic_config.at("ConstraintsType").get<std::string>();
+  std::string output_dir = "LambdaProfileOut/GeneralWorkflows/" + constraints_type + "/";
   fs::create_directories(output_dir);
 
   const size_t rg_n_iterations = basic_config.at("Algorithm").at("RG_n_iterations").get<size_t>();
@@ -178,6 +183,8 @@ main(int argc, char** argv)
   Timings::Chrono my_chrono;
   for(const auto& [scenario_name, instances]: basic_config.at("ConfigFiles").items())
   {
+    std::cout << "Solving Scenario: " << scenario_name << std::endl;
+
     const size_t num_instances = instances.size();
     const auto& sol_instances = basic_config.at("DTSolutions").at(scenario_name);
 
@@ -193,26 +200,50 @@ main(int argc, char** argv)
 
     std::vector<double> ts(lambda_vec.size(), 0.0);
 
+    std::vector<std::string> path_names;
+    std::vector<std::vector<sp::TimeType>> path_resp_times;
+
     for(size_t ins_idx=0; ins_idx<num_instances; ++ins_idx)
     {
+      std::cout << "Solving Instance: " << ins_idx << std::endl;
+
       const std::string system_config_file = instances[ins_idx].get<std::string>();
       const std::string solution_config_file = sol_instances[ins_idx].get<std::string>();
 
       sp::System init_system;
       init_system.read_configuration_file(system_config_file, lambda_vec[0]);
 
+      const auto& gc = init_system.get_system_data().get_global_constraints();
+      if(path_names.size() == 0)
+      {
+        for(const auto& path : gc)
+        {
+          path_names.push_back(path.get_path_name());
+        }
+      }
+
+      if(path_resp_times.size()==0)
+      {
+        path_resp_times = std::vector<std::vector<sp::TimeType>>(gc.size(), std::vector<sp::TimeType>(lambda_vec.size(), 0));
+      }
+
       sp::Solution initial_deployment(init_system);
       initial_deployment.read_solution_from_file(solution_config_file, init_system);
       if(initial_deployment.check_feasibility(init_system))
       {
-        costs_by_lambda[0] += initial_deployment.objective_function(init_system);
+        initial_deployment.objective_function(init_system);
+        const auto& res_costs = initial_deployment.get_res_costs();
+        const auto edge_total_cost = std::accumulate(res_costs[0].begin(), res_costs[0].end(), 0.0) * energy_cost_pct;
+        const auto vm_total_cost = std::accumulate(res_costs[1].begin(), res_costs[1].end(), 0.0);
+        const auto faas_total_cost = std::accumulate(res_costs[2].begin(), res_costs[2].end(), 0.0);
+        costs_by_lambda[0] += edge_total_cost + vm_total_cost + faas_total_cost;
       }
       else
       {
         throw std::runtime_error("Initial solution not feasible");
       }
 
-      const auto [ec, vc, fc] = get_cost_frac(initial_deployment);
+      const auto [ec, vc, fc] = get_cost_frac(initial_deployment, true, energy_cost_pct);
       edge_cost_by_lambda[0] += ec;
       vm_cost_by_lambda[0] += vc;
       faas_cost_by_lambda[0] += fc;
@@ -267,6 +298,13 @@ main(int argc, char** argv)
         num_edge_by_lambda[j] += en;
         num_vm_by_lambda[j] += vn;
         num_faas_by_lambda[j] += fn;
+
+        const auto& path_perfs = curr_rt_sol.get_time_perfs().get_path_perfs();
+
+        for(size_t path_idx=0; path_idx<path_perfs.size(); ++path_idx)
+        {
+          path_resp_times[path_idx][j] += path_perfs[path_idx];
+        }
       }
     }
 
@@ -288,18 +326,29 @@ main(int argc, char** argv)
       num_vm_by_lambda.begin(), num_vm_by_lambda.end(), num_vm_by_lambda.begin(), lam_mean_double);
     std::transform(
       num_faas_by_lambda.begin(), num_faas_by_lambda.end(), num_faas_by_lambda.begin(), lam_mean_double);
+    for(auto& vec: path_resp_times)
+    {
+      std::transform(
+        vec.begin(), vec.end(), vec.begin(), lam_mean_double);
+    }
 
     nl::json output_json;
 
     output_json["Costs"] = costs_by_lambda;
-    output_json["CostByRes"]["Edge"] = edge_cost_by_lambda;
-    output_json["CostByRes"]["VM"] = vm_cost_by_lambda;
-    output_json["CostByRes"]["Faas"] = faas_cost_by_lambda;
+    output_json["FractionCostByRes"]["Edge"] = edge_cost_by_lambda;
+    output_json["FractionCostByRes"]["VM"] = vm_cost_by_lambda;
+    output_json["FractionCostByRes"]["FaaS"] = faas_cost_by_lambda;
     output_json["Timings"] = ts;
 
-    output_json["NumberResources"]["Edge"] = num_edge_by_lambda;
-    output_json["NumberResources"]["VM"] = num_vm_by_lambda;
-    output_json["NumberResources"]["Faas"] = num_faas_by_lambda;
+    output_json["NumberActiveResources"]["Edge"] = num_edge_by_lambda;
+    output_json["NumberActiveResources"]["VM"] = num_vm_by_lambda;
+    output_json["NumberActiveResources"]["FaaS"] = num_faas_by_lambda;
+
+    for(size_t path_idx=0; path_idx<path_names.size(); ++path_idx)
+    {
+      output_json["GlobalConstraints"][path_names[path_idx]]["response_time"] = path_resp_times[path_idx];
+      // output_json["GlobalConstraints"][gc[path_idx].get_path_name()]["threshold"] = gc[path_idx].get_max_res_time();
+    }
 
     std::string output_name = output_dir + "Sol_" + scenario_name + ".json";
     std::ofstream o(output_name);

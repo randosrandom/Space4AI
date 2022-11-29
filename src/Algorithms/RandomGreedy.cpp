@@ -56,14 +56,30 @@ RandomGreedy::random_greedy(
     for(size_t it = 0; it < max_it; ++it)
     {
       Logger::Debug("**** iteration: " + std::to_string(it) +  " ****");
-      Solution new_sol(step(system)); // using copy elision
 
-      if(new_sol.get_feasibility())
+      Solution sol(create_random_initial_solution(system));
+      if(sol.check_feasibility(system))
       {
-        new_sol.set_selected_resources(system);
+        Logger::Debug("random_greedy: the solution is feasible");
+        const std::vector<size_t> res_type_idxs = {ResIdxFromType(ResourceType::VM), ResIdxFromType(ResourceType::Edge)};
+        const UsedResourcesNumberType& n_used_resources = sol.get_n_used_resources();
+        // update the cluster size of edge and VM resources
+        // loop on edge and VM types
+        for(size_t res_type_idx : res_type_idxs)
+        {
+          //loop on resources
+          for(size_t res_idx = 0; res_idx < n_used_resources[res_type_idx].size(); ++res_idx)
+          {
+            if(n_used_resources[res_type_idx][res_idx] > 1)
+            {
+              sol = reduce_cluster_size(sol, res_type_idx, res_idx, system);
+            }
+          }
+        }
+        sol.objective_function(system);
+        sol.set_selected_resources(system);
         MY_PRAGMA(omp critical)
-        elite.add(std::move(new_sol));
-        Logger::Debug("******** NEW RESULT ADDED TO ELITE *******");
+        elite.add(std::move(sol));
       }
     }
 
@@ -76,55 +92,12 @@ RandomGreedy::random_greedy(
 }
 
 Solution
-RandomGreedy::step(const System& system)
-{
-  //generate a random solution
-  Logger::Debug("step: Creating a random initial solution...");
-  Solution sol(create_random_initial_solution(system));
-  Logger::Debug("step: RANDOM INITIAL SOLUTION CREATED");
-  //check feasibility and compute performance
-  Logger::Debug("step: Checking feasibility and computing performance");
-  bool feasible = sol.check_feasibility(system);
-  Logger::Debug("step: Done!");
-
-  // if the solution is feasible, compute the corresponding cost before and after
-  // updating the cluster sizes
-  if(feasible)
-  {
-    Logger::Debug("step: The solution is feasible");
-    const std::vector<size_t> res_type_idxs = {ResIdxFromType(ResourceType::VM), ResIdxFromType(ResourceType::Edge)};
-    const UsedResourcesNumberType& n_used_resources = sol.get_n_used_resources();
-
-    // update the cluster size of edge and VM resources
-    // loop on edge and VM types
-    for(size_t res_type_idx : res_type_idxs)
-    {
-      //loop on resources
-      for(size_t res_idx = 0; res_idx < n_used_resources[res_type_idx].size(); ++res_idx)
-      {
-        if(n_used_resources[res_type_idx][res_idx] > 1)
-        {
-          sol = reduce_cluster_size(sol, res_type_idx, res_idx, system);
-        }
-      }
-    }
-
-    // compute new cost of the solution
-    sol.objective_function(system);
-  }
-  else
-  {
-    Logger::Debug("step: The solution is NOT feasible");
-  }
-
-  return sol;
-}
-
-Solution
 RandomGreedy::create_random_initial_solution(
   const System& system
 )
 {
+  Logger::Debug("create_random_initial_solution: starting new iteration ...");
+
   Solution solution(system);
   const auto& system_data = system.get_system_data();
   const auto& components = system_data.get_components();
@@ -389,6 +362,7 @@ RandomGreedy::reduce_cluster_size(
   while(feasible && (n_used_resources_new[res_type_idx][res_idx] > 1));
 
   Logger::Debug("reduce_cluster_size: Done reducing cluster size!");
+
   return old_sol;
 }
 

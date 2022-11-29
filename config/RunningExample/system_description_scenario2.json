@@ -10,11 +10,11 @@
         },
         "c3": {
             "next": [
-                
+
                 "c4"
             ],
             "transition_probability": [
-               
+
                 0.4254309597789129
             ]
         },
@@ -339,7 +339,7 @@
         "computationallayer2": {
             "EN1": {
                 "number": 2,
-                "cost": 2.599876277065279,
+                "cost": 0.599876277065279,
                 "memory": 229376,
                 "n_cores": 1
             }
@@ -1090,7 +1090,7 @@
             "h1": {
                 "Drone1": {
                     "model": "QTedge",
-                    "demand": 0.1007996961043
+                    "demand": 0.01007996961043
                 }
             }
         },
@@ -1098,7 +1098,7 @@
             "h1": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.252434324926986856
+                    "demand": 0.9534324926986856
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1118,14 +1118,14 @@
                 },
                 "F1": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.465001481563506,
-                    "demandCold": 4.412550422958606
+                    "demandWarm": 1.265001481563506,
+                    "demandCold": 2.212550422958606
                 }
             },
             "h2": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.015774427825352444
+                    "demand": 0.23774427825352444
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1145,14 +1145,14 @@
                 },
                 "F2": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.5057262202134134,
-                    "demandCold": 4.200133072946564
+                    "demandWarm": 1.25057262202134134,
+                    "demandCold": 2.100133072946564
                 }
             },
             "h3": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.0157754533019438395
+                    "demand": 0.237754533019438395
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1172,14 +1172,14 @@
                 },
                 "F3": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.1090187640190683,
-                    "demandCold": 3.7428055246309864
+                    "demandWarm": 1.05090187640190683,
+                    "demandCold": 1.9428055246309864
                 }
             },
             "h4": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.01589019474165807
+                    "demand": 0.2389019474165807
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1199,14 +1199,14 @@
                 },
                 "F4": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.3878277890145814,
-                    "demandCold": 3.846350971333771
+                    "demandWarm": 1.1878277890145814,
+                    "demandCold": 1.846350971333771
                 }
             },
             "h5": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.0156523910555431825
+                    "demand": 0.2356523910555431825
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1226,14 +1226,14 @@
                 },
                 "F5": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.34245411984352,
-                    "demandCold": 4.188305602871198
+                    "demandWarm": 1.14245411984352,
+                    "demandCold": 2.188305602871198
                 }
             },
             "h6": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.02702805260449284
+                    "demand": 0.3202805260449284
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1253,14 +1253,14 @@
                 },
                 "F6": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.8177683936358235,
-                    "demandCold": 4.474084253985479
+                    "demandWarm": 1.4177683936358235,
+                    "demandCold": 2.274084253985479
                 }
             },
             "h7": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.024117709321208325
+                    "demand": 0.324117709321208325
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1280,14 +1280,14 @@
                 },
                 "F7": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.143423048670245,
-                    "demandCold": 3.221809948525193
+                    "demandWarm": 1.143423048670245,
+                    "demandCold": 1.621809948525193
                 }
             },
             "h8": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.0253317015433894
+                    "demand": 0.323317015433894
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1307,8 +1307,8 @@
                 },
                 "F8": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.6800191407406704,
-                    "demandCold": 4.263978932241416
+                    "demandWarm": 1.3800191407406704,
+                    "demandCold": 2.163978932241416
                 }
             }
         },
@@ -1316,7 +1316,7 @@
             "h1": {
                 "EN1": {
                     "model": "QTedge",
-                    "demand": 0.06526780431123005
+                    "demand": 0.87526780431123005
                 },
                 "VM1": {
                     "model": "QTedge",
@@ -1336,8 +1336,8 @@
                 },
                 "F9": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.1133419227675905,
-                    "demandCold": 3.1411252716162603
+                    "demandWarm": 1.0133419227675905,
+                    "demandCold": 1.5411252716162603
                 }
             }
         },
@@ -1361,8 +1361,8 @@
                 },
                 "F10": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.986942815742273,
-                    "demandCold": 4.374078245027281
+                    "demandWarm": 1.586942815742273,
+                    "demandCold": 2.274078245027281
                 }
             },
             "h2": {
@@ -1384,8 +1384,8 @@
                 },
                 "F11": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.4524048267464513,
-                    "demandCold": 3.9024915737472123
+                    "demandWarm": 1.2524048267464513,
+                    "demandCold": 1.9024915737472123
                 }
             },
             "h3": {
@@ -1407,8 +1407,8 @@
                 },
                 "F12": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.670932013347774,
-                    "demandCold": 3.7571885606435482
+                    "demandWarm": 1.370932013347774,
+                    "demandCold": 1.971885606435482
                 }
             },
             "h4": {
@@ -1430,8 +1430,8 @@
                 },
                 "F13": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.402392519857736,
-                    "demandCold": 4.307078680201359
+                    "demandWarm": 1.202392519857736,
+                    "demandCold": 2.107078680201359
                 }
             },
             "h5": {
@@ -1453,8 +1453,8 @@
                 },
                 "F14": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.6536897553047116,
-                    "demandCold": 3.6911176957153957
+                    "demandWarm": 1.3536897553047116,
+                    "demandCold": 1.8911176957153957
                 }
             },
             "h6": {
@@ -1476,8 +1476,8 @@
                 },
                 "F15": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.6185135669120854,
-                    "demandCold": 3.628877828247317
+                    "demandWarm": 1.3185135669120854,
+                    "demandCold": 1.828877828247317
                 }
             },
             "h7": {
@@ -1499,8 +1499,8 @@
                 },
                 "F16": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.1062112823353556,
-                    "demandCold": 3.386896080927638
+                    "demandWarm": 1.05062112823353556,
+                    "demandCold": 1.786896080927638
                 }
             },
             "h8": {
@@ -1522,8 +1522,8 @@
                 },
                 "F17": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.905402033702778,
-                    "demandCold": 4.701368975645048
+                    "demandWarm": 1.455402033702778,
+                    "demandCold": 2.301368975645048
                 }
             }
         },
@@ -1547,8 +1547,8 @@
                 },
                 "F18": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.145558231158397,
-                    "demandCold": 3.3032883010289305
+                    "demandWarm": 1.045558231158397,
+                    "demandCold": 1.7032883010289305
                 }
             }
         },
@@ -1572,8 +1572,8 @@
                 },
                 "F19": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.8378038676269046,
-                    "demandCold": 4.533809263470064
+                    "demandWarm": 1.4378038676269046,
+                    "demandCold": 2.233809263470064
                 }
             },
             "h2": {
@@ -1595,8 +1595,8 @@
                 },
                 "F20": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.9899551783590734,
-                    "demandCold": 4.7010776371248895
+                    "demandWarm": 1.5899551783590734,
+                    "demandCold": 2.4010776371248895
                 }
             },
             "h3": {
@@ -1618,14 +1618,17 @@
                 },
                 "F21": {
                     "model": "PACSLTK",
-                    "demandWarm": 2.9092932045442543,
-                    "demandCold": 4.310166936915375
+                    "demandWarm": 1.5092932045442543,
+                    "demandCold": 2.110166936915375
                 }
             }
         }
     },
     "Lambda": 0.1,
     "LocalConstraints": {
+        "c7": {
+          "local_res_time": 1.5
+        },
         "c6": {
             "local_res_time": 1.469098809051298
         },
@@ -1648,7 +1651,7 @@
                 "c1",
                 "c2"
             ],
-            "global_res_time": 2.572335055929248
+            "global_res_time": 1.8
         },
         "p2": {
             "components": [

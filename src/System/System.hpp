@@ -67,7 +67,7 @@ class System
 
     /** system_data getter */
     const SystemData&
-    get_system_data() const {return system_data; };
+    get_system_data() const {return system_data;};
 
   private:
 

@@ -1,5 +1,15 @@
 {
   "ConfigFiles" : [
+    "config/GeneralWorkflows/Strict/5-components/system_description1.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description2.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description3.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description4.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description5.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description6.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description7.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description8.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description9.json",
+    "config/GeneralWorkflows/Strict/5-components/system_description10.json",
     "config/GeneralWorkflows/Strict/10-components/system_description1.json",
     "config/GeneralWorkflows/Strict/10-components/system_description2.json",
     "config/GeneralWorkflows/Strict/10-components/system_description3.json",
@@ -9,17 +19,27 @@
     "config/GeneralWorkflows/Strict/10-components/system_description7.json",
     "config/GeneralWorkflows/Strict/10-components/system_description8.json",
     "config/GeneralWorkflows/Strict/10-components/system_description9.json",
-    "config/GeneralWorkflows/Strict/10-components/system_description10.json"
+    "config/GeneralWorkflows/Strict/10-components/system_description10.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description1.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description2.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description3.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description4.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description5.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description6.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description7.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description8.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description9.json",
+    "config/GeneralWorkflows/Strict/15-components/system_description10.json"
   ],
 
   "Lambda" : 1.8,
 
   "Algorithm" : {
-    "RG_n_iterations" : 5000,
-    "LS_n_iterations" : 2000,
+    "RG_n_iterations" : 10000,
+    "LS_n_iterations" : 1666,
     "RG_max_num_sols" : 10,
     "LS_max_num_sols" : 1,
-    "reproducibility" : true
+    "reproducibility" : false
   },
 
   "Logger" : {

@@ -1,0 +1,178 @@
+{
+  "Lambda": 1.8,
+  "components": {
+    "c1": {
+      "s1": {
+        "h1": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.047405495461085,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.27314251060984224
+        }
+      },
+      "response_time": 0.27314251060984224,
+      "response_time_threshold": "inf"
+    },
+    "c2": {
+      "s1": {
+        "h1": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 15.717626612271475,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 5.531430407399521
+        }
+      },
+      "response_time": 5.531430407399521,
+      "response_time_threshold": 7.002342679421527
+    },
+    "c3": {
+      "s3": {
+        "h4": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 15.717626612271475,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 1.8096782239704774
+        },
+        "h5": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 15.717626612271475,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 2.0653499356221414
+        },
+        "h6": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 15.717626612271475,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 1.9900054916445278
+        }
+      },
+      "response_time": 1.973561573886495,
+      "response_time_threshold": 9.896587937675589
+    },
+    "c4": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.9955882292346114,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 1.4341961073818457
+        }
+      },
+      "response_time": 1.4341961073818457,
+      "response_time_threshold": "inf"
+    },
+    "c5": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.9955882292346114,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 1.8524766790307612
+        }
+      },
+      "response_time": 1.8524766790307612,
+      "response_time_threshold": "inf"
+    },
+    "c6": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.9955882292346114,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 1.231503120812116
+        }
+      },
+      "response_time": 1.231503120812116,
+      "response_time_threshold": 7.443181035018341
+    },
+    "c7": {
+      "s1": {
+        "h1": {
+          "computationallayer5": {
+            "F15": {
+              "description": "No description",
+              "cost": 0.021618694428608753,
+              "memory": 229376.0,
+              "idle_time_before_kill": 600.0,
+              "transition_cost": 0.0
+            }
+          },
+          "response_time": 2.86969275385927
+        }
+      },
+      "response_time": 2.86969275385927,
+      "response_time_threshold": "inf"
+    }
+  },
+  "global_constraints": {
+    "p1": {
+      "components": [
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "global_res_time": 19.590916502464108,
+      "path_response_time": 8.945188088667862
+    },
+    "p2": {
+      "components": [
+        "c2",
+        "c5",
+        "c7"
+      ],
+      "global_res_time": 18.246492744291942,
+      "path_response_time": 10.265599840289553
+    },
+    "p3": {
+      "components": [
+        "c1",
+        "c2",
+        "c5",
+        "c7"
+      ],
+      "global_res_time": 17.43383556765618,
+      "path_response_time": 10.542242350899395
+    }
+  },
+  "total_cost": "20.87223420259542"
+}

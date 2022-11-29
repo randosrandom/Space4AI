@@ -1,0 +1,211 @@
+{
+  "Lambda": 1.8,
+  "components": {
+    "c1": {
+      "s2": {
+        "h2": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.533448490605175,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.0678234114156273
+        },
+        "h3": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.533448490605175,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.0664706519480688
+        },
+        "h4": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.533448490605175,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.06281001536873658
+        }
+      },
+      "response_time": 0.1342396652875397,
+      "response_time_threshold": "inf"
+    },
+    "c2": {
+      "s1": {
+        "h1": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 13.972238374178984,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 6.285910266672001
+        }
+      },
+      "response_time": 6.285910266672001,
+      "response_time_threshold": "inf"
+    },
+    "c3": {
+      "s2": {
+        "h2": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 13.972238374178984,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 2.7064195488838982
+        },
+        "h3": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 13.972238374178984,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 2.4257273862664053
+        },
+        "h4": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 13.972238374178984,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 2.42407788705908
+        },
+        "h5": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 13.972238374178984,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 2.4054381073138376
+        }
+      },
+      "response_time": 4.946611610185708,
+      "response_time_threshold": "inf"
+    },
+    "c4": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.8397967151502865,
+              "memory": 229376.0,
+              "number": 3
+            }
+          },
+          "response_time": 1.3217620280989073
+        }
+      },
+      "response_time": 1.3217620280989073,
+      "response_time_threshold": 8.46272311036222
+    },
+    "c5": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.8397967151502865,
+              "memory": 229376.0,
+              "number": 3
+            }
+          },
+          "response_time": 0.6220370119783013
+        }
+      },
+      "response_time": 0.6220370119783013,
+      "response_time_threshold": 9.415707514271386
+    },
+    "c6": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.8397967151502865,
+              "memory": 229376.0,
+              "number": 3
+            }
+          },
+          "response_time": 1.5044580396705904
+        }
+      },
+      "response_time": 1.5044580396705904,
+      "response_time_threshold": "inf"
+    },
+    "c7": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.8397967151502865,
+              "memory": 229376.0,
+              "number": 3
+            }
+          },
+          "response_time": 0.8196220943245779
+        }
+      },
+      "response_time": 0.8196220943245779,
+      "response_time_threshold": 7.942439564314703
+    }
+  },
+  "global_constraints": {
+    "p1": {
+      "components": [
+        "c4",
+        "c6",
+        "c7"
+      ],
+      "global_res_time": 16.238664508811773,
+      "path_response_time": 3.6458421620940755
+    },
+    "p2": {
+      "components": [
+        "c2",
+        "c3",
+        "c6",
+        "c7"
+      ],
+      "global_res_time": 19.605667906141854,
+      "path_response_time": 13.561602010852878
+    },
+    "p3": {
+      "components": [
+        "c3",
+        "c4",
+        "c6",
+        "c7"
+      ],
+      "global_res_time": 17.329038501231377,
+      "path_response_time": 8.599453772279782
+    }
+  },
+  "total_cost": "19.345483579934445"
+}

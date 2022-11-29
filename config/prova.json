@@ -1,13 +1,13 @@
 {
   "ConfigFiles" : [
-    "config/GeneralWorkflows/Strict/5-components/system_description2.json"
+    "config/RunningExample/system_description_scenario1.json"
   ],
 
-  "Lambda" : 0.1,
+  "Lambda" : 1.8,
 
   "Algorithm" : {
-    "RG_n_iterations" : 1000,
-    "LS_n_iterations" : 100,
+    "RG_n_iterations" : 10000,
+    "LS_n_iterations" : 1666,
     "RG_max_num_sols" : 10,
     "LS_max_num_sols" : 1,
     "reproducibility" : false

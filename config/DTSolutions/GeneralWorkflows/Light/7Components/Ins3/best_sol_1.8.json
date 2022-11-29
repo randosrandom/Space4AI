@@ -1,0 +1,188 @@
+{
+  "Lambda": 1.8,
+  "components": {
+    "c1": {
+      "s1": {
+        "h1": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.760578484843513,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.24149622987275812
+        }
+      },
+      "response_time": 0.24149622987275812,
+      "response_time_threshold": "inf"
+    },
+    "c2": {
+      "s2": {
+        "h2": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 6.127539597660825,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 4.274665882971288
+        },
+        "h3": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.760578484843513,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 1.0096796037085272
+        }
+      },
+      "response_time": 4.383117072111896,
+      "response_time_threshold": 96.00861075438395
+    },
+    "c3": {
+      "s1": {
+        "h1": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 6.127539597660825,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 10.061288411569578
+        }
+      },
+      "response_time": 10.061288411569578,
+      "response_time_threshold": "inf"
+    },
+    "c4": {
+      "s2": {
+        "h2": {
+          "computationallayer2": {
+            "EN1": {
+              "description": "No description",
+              "cost": 6.127539597660825,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 2.891398954151976
+        },
+        "h3": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.3621762123878334,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 5.475807327677358
+        },
+        "h4": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.3621762123878334,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 5.3150214466924774
+        }
+      },
+      "response_time": 6.939737857118439,
+      "response_time_threshold": 73.17224490178691
+    },
+    "c5": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.3621762123878334,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 6.688976580713195
+        }
+      },
+      "response_time": 6.688976580713195,
+      "response_time_threshold": "inf"
+    },
+    "c6": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM1": {
+              "description": "No description",
+              "cost": 0.7243524247756667,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 15.375915326881152
+        }
+      },
+      "response_time": 15.375915326881152,
+      "response_time_threshold": 90.14710742902832
+    },
+    "c7": {
+      "s1": {
+        "h1": {
+          "computationallayer5": {
+            "F4": {
+              "description": "No description",
+              "cost": 0.021225740697067286,
+              "memory": 229376.0,
+              "idle_time_before_kill": 600.0,
+              "transition_cost": 0.0
+            }
+          },
+          "response_time": 2.335595269394106
+        }
+      },
+      "response_time": 2.335595269394106,
+      "response_time_threshold": "inf"
+    }
+  },
+  "global_constraints": {
+    "p1": {
+      "components": [
+        "c4",
+        "c6"
+      ],
+      "global_res_time": 152.64875077468764,
+      "path_response_time": 22.315653183999594
+    },
+    "p2": {
+      "components": [
+        "c2",
+        "c5",
+        "c6"
+      ],
+      "global_res_time": 195.20062358044942,
+      "path_response_time": 26.453008979706244
+    },
+    "p3": {
+      "components": [
+        "c1",
+        "c2",
+        "c3",
+        "c5"
+      ],
+      "global_res_time": 152.84362870243578,
+      "path_response_time": 21.388378294267426
+    }
+  },
+  "total_cost": "11.701651079767055"
+}

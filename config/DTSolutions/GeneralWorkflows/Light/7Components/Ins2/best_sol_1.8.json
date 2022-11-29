@@ -1,0 +1,164 @@
+{
+  "Lambda": 1.8,
+  "components": {
+    "c1": {
+      "s1": {
+        "h1": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.517430763721469,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.22451794305065592
+        }
+      },
+      "response_time": 0.22451794305065592,
+      "response_time_threshold": "inf"
+    },
+    "c2": {
+      "s1": {
+        "h1": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 14.21453536330893,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 22.25845181432505
+        }
+      },
+      "response_time": 22.25845181432505,
+      "response_time_threshold": "inf"
+    },
+    "c3": {
+      "s1": {
+        "h1": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 14.21453536330893,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 30.811480881721746
+        }
+      },
+      "response_time": 30.811480881721746,
+      "response_time_threshold": 99.94838590515306
+    },
+    "c4": {
+      "s1": {
+        "h1": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 14.21453536330893,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 23.69485283899586
+        }
+      },
+      "response_time": 23.69485283899586,
+      "response_time_threshold": "inf"
+    },
+    "c5": {
+      "s2": {
+        "h2": {
+          "computationallayer2": {
+            "EN2": {
+              "description": "No description",
+              "cost": 14.21453536330893,
+              "memory": 229376.0,
+              "number": 2
+            }
+          },
+          "response_time": 11.413234316664813
+        },
+        "h3": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.011088838863530182,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 3.099294806097902
+        }
+      },
+      "response_time": 13.380294307989518,
+      "response_time_threshold": 86.47528397206847
+    },
+    "c6": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.011088838863530182,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 4.041457418074625
+        }
+      },
+      "response_time": 4.041457418074625,
+      "response_time_threshold": "inf"
+    },
+    "c7": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "VM2": {
+              "description": "No description",
+              "cost": 0.011088838863530182,
+              "memory": 229376.0,
+              "number": 1
+            }
+          },
+          "response_time": 7.3478360889595455
+        }
+      },
+      "response_time": 7.3478360889595455,
+      "response_time_threshold": 90.9876004916009
+    }
+  },
+  "global_constraints": {
+    "p1": {
+      "components": [
+        "c1",
+        "c3"
+      ],
+      "global_res_time": 150.2786158633233,
+      "path_response_time": 31.039998824772404
+    },
+    "p2": {
+      "components": [
+        "c1",
+        "c3",
+        "c4"
+      ],
+      "global_res_time": 162.13595601717896,
+      "path_response_time": 54.73485166376826
+    },
+    "p3": {
+      "components": [
+        "c1",
+        "c2",
+        "c5"
+      ],
+      "global_res_time": 169.494565507762,
+      "path_response_time": 35.86776406536522
+    }
+  },
+  "total_cost": "18.743054965893926"
+}

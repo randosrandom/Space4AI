@@ -142,18 +142,27 @@ SystemPE::compute_global_perf(
     const auto& comp_partitions = system.get_system_data().get_component(curr_comp_idx).get_partitions();
     TimeType delay_total_time = 0.0;
     ProbType transition_probability = 1;
-
-    for(size_t p=0; p<used_resources[curr_comp_idx].size(); ++p)
+    for(size_t p=0; p<used_resources[curr_comp_idx].size()-1; ++p)
     {
       const auto [p_idx, res1_type_idx, res1_idx] = used_resources[curr_comp_idx][p];
       if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
       {
-        delay_total_time += transition_probability * compute_network_delay(
+        const ProbType early_exit_probability = comp_partitions[p_idx].get_early_exit_probability();
+        delay_total_time += transition_probability * early_exit_probability * compute_network_delay(
             ResTypeFromIdx(res1_type_idx), res1_idx,
             ResTypeFromIdx(res2_type_idx), res2_idx,
             data_size, system);
-        transition_probability *= (1 - comp_partitions[p_idx].get_early_exit_probability());
+        transition_probability *= (1 - early_exit_probability);
       }
+    }
+    // last partition delay
+    const auto [p_idx, res1_type_idx, res1_idx] = used_resources[curr_comp_idx].back();
+    if(res1_type_idx != res2_type_idx || res1_idx != res2_idx)
+    {
+      delay_total_time += transition_probability * compute_network_delay(
+          ResTypeFromIdx(res1_type_idx), res1_idx,
+          ResTypeFromIdx(res2_type_idx), res2_idx,
+          data_size, system);
     }
     path_perfs[path_idx] += delay_total_time;
   }

@@ -590,7 +590,7 @@ LocalSearch::change_resource()
       }
     }
     // add candidate_resources by comp layer
-    // IMPORTANT: if I am at RT and I selected a VM at a layer (even if a dropped it before), I can select
+    // IMPORTANT: if I am at RT and I selected a VM at a layer (even if I dropped it before, during this same run of the LS), I can select
     // only the same old resource at that layer...
     const auto& selected_vms_by_cl = this->fixed_edge_and_curr_rt_vms->get_selected_vms_by_cl();
     for(size_t cl_idx = 0; cl_idx < cls[del_res.first].size(); ++cl_idx)

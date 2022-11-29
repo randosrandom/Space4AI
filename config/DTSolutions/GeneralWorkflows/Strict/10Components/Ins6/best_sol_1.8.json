@@ -1,0 +1,279 @@
+{
+  "Lambda": 1.8,
+  "components": {
+    "c1": {
+      "s1": {
+        "h1": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.21419413694719716
+        }
+      },
+      "response_time": 0.21419413694719716,
+      "response_time_threshold": "inf"
+    },
+    "c2": {
+      "s3": {
+        "h5": {
+          "computationallayer3": {
+            "EN8": {
+              "description": "No description",
+              "cost": 6.085465003305755,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 1.7718306022428074
+        },
+        "h6": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.9608924071812408
+        },
+        "h7": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 1.0374443785382428
+        },
+        "h8": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.9749472589975298
+        }
+      },
+      "response_time": 1.798322028891657,
+      "response_time_threshold": "inf"
+    },
+    "c3": {
+      "s2": {
+        "h2": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.7740878883883757
+        },
+        "h3": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.7500080622881512
+        },
+        "h4": {
+          "computationallayer1": {
+            "Drone1": {
+              "description": "No description",
+              "cost": 4.6079963208342924,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 0.7648197026574294
+        }
+      },
+      "response_time": 1.213990672561235,
+      "response_time_threshold": "inf"
+    },
+    "c4": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "EN8": {
+              "description": "No description",
+              "cost": 6.085465003305755,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 6.1179710509524226
+        }
+      },
+      "response_time": 6.1179710509524226,
+      "response_time_threshold": "inf"
+    },
+    "c5": {
+      "s2": {
+        "h2": {
+          "computationallayer3": {
+            "EN8": {
+              "description": "No description",
+              "cost": 6.085465003305755,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 3.655161413386809
+        },
+        "h3": {
+          "computationallayer3": {
+            "EN8": {
+              "description": "No description",
+              "cost": 6.085465003305755,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 3.495589490427116
+        }
+      },
+      "response_time": 5.357722580115238,
+      "response_time_threshold": "inf"
+    },
+    "c6": {
+      "s1": {
+        "h1": {
+          "computationallayer4": {
+            "VM4": {
+              "description": "No description",
+              "cost": 0.5022099186501139,
+              "memory": 327680.0,
+              "number": 2
+            }
+          },
+          "response_time": 0.8113379118353032
+        }
+      },
+      "response_time": 0.8113379118353032,
+      "response_time_threshold": 7.432372078990712
+    },
+    "c7": {
+      "s1": {
+        "h1": {
+          "computationallayer3": {
+            "EN8": {
+              "description": "No description",
+              "cost": 6.085465003305755,
+              "memory": 327680.0,
+              "number": 1
+            }
+          },
+          "response_time": 5.16721717449414
+        }
+      },
+      "response_time": 5.16721717449414,
+      "response_time_threshold": "inf"
+    },
+    "c8": {
+      "s1": {
+        "h1": {
+          "computationallayer6": {
+            "F1": {
+              "description": "No description",
+              "cost": 0.011605844415387367,
+              "memory": 327680.0,
+              "idle_time_before_kill": 600.0,
+              "transition_cost": 0.0
+            }
+          },
+          "response_time": 2.0251812001991203
+        }
+      },
+      "response_time": 2.0251812001991203,
+      "response_time_threshold": 7.448680599418558
+    },
+    "c9": {
+      "s1": {
+        "h1": {
+          "computationallayer4": {
+            "VM4": {
+              "description": "No description",
+              "cost": 0.5022099186501139,
+              "memory": 327680.0,
+              "number": 2
+            }
+          },
+          "response_time": 0.937696314314979
+        }
+      },
+      "response_time": 0.937696314314979,
+      "response_time_threshold": 9.784912790959021
+    },
+    "c10": {
+      "s1": {
+        "h1": {
+          "computationallayer4": {
+            "VM4": {
+              "description": "No description",
+              "cost": 0.5022099186501139,
+              "memory": 327680.0,
+              "number": 2
+            }
+          },
+          "response_time": 1.0511777375690157
+        }
+      },
+      "response_time": 1.0511777375690157,
+      "response_time_threshold": 7.293246200455981
+    }
+  },
+  "global_constraints": {
+    "p1": {
+      "components": [
+        "c4",
+        "c5",
+        "c6",
+        "c8"
+      ],
+      "global_res_time": 18.31982981335286,
+      "path_response_time": 14.32587940976875
+    },
+    "p2": {
+      "components": [
+        "c5",
+        "c6"
+      ],
+      "global_res_time": 15.994832977020915,
+      "path_response_time": 6.174727158617208
+    },
+    "p3": {
+      "components": [
+        "c1",
+        "c2"
+      ],
+      "global_res_time": 17.400851726230975,
+      "path_response_time": 2.018516165838854
+    },
+    "p4": {
+      "components": [
+        "c7",
+        "c8"
+      ],
+      "global_res_time": 19.84326418001161,
+      "path_response_time": 7.19739837469326
+    }
+  },
+  "total_cost": "11.222041402837524"
+}

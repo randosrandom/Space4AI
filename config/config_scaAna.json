@@ -2,33 +2,88 @@
   "ConfigFiles" : {
 
     "5Components": [
-      "config/GeneralWorkflows/Strict/5-components/system_description1.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description3.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description4.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description5.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description6.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description7.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description8.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description9.json",
-      "config/GeneralWorkflows/Strict/5-components/system_description10.json"
+      "config/GeneralWorkflows/Light/5-components/system_description1.json",
+      "config/GeneralWorkflows/Light/5-components/system_description2.json",
+      "config/GeneralWorkflows/Light/5-components/system_description3.json",
+      "config/GeneralWorkflows/Light/5-components/system_description4.json",
+      "config/GeneralWorkflows/Light/5-components/system_description5.json",
+      "config/GeneralWorkflows/Light/5-components/system_description6.json",
+      "config/GeneralWorkflows/Light/5-components/system_description7.json",
+      "config/GeneralWorkflows/Light/5-components/system_description8.json",
+      "config/GeneralWorkflows/Light/5-components/system_description9.json",
+      "config/GeneralWorkflows/Light/5-components/system_description10.json"
+    ],
+
+    "10Components": [
+      "config/GeneralWorkflows/Light/10-components/system_description1.json",
+      "config/GeneralWorkflows/Light/10-components/system_description2.json",
+      "config/GeneralWorkflows/Light/10-components/system_description3.json",
+      "config/GeneralWorkflows/Light/10-components/system_description4.json",
+      "config/GeneralWorkflows/Light/10-components/system_description5.json",
+      "config/GeneralWorkflows/Light/10-components/system_description6.json",
+      "config/GeneralWorkflows/Light/10-components/system_description7.json",
+      "config/GeneralWorkflows/Light/10-components/system_description8.json",
+      "config/GeneralWorkflows/Light/10-components/system_description9.json",
+      "config/GeneralWorkflows/Light/10-components/system_description10.json"
+    ],
+    "15Components": [
+      "config/GeneralWorkflows/Light/15-components/system_description1.json",
+      "config/GeneralWorkflows/Light/15-components/system_description2.json",
+      "config/GeneralWorkflows/Light/15-components/system_description3.json",
+      "config/GeneralWorkflows/Light/15-components/system_description4.json",
+      "config/GeneralWorkflows/Light/15-components/system_description5.json",
+      "config/GeneralWorkflows/Light/15-components/system_description6.json",
+      "config/GeneralWorkflows/Light/15-components/system_description7.json",
+      "config/GeneralWorkflows/Light/15-components/system_description8.json",
+      "config/GeneralWorkflows/Light/15-components/system_description9.json",
+      "config/GeneralWorkflows/Light/15-components/system_description10.json"
     ]
   },
 
   "DTSolutions" : {
     "5Components": [
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins1/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins3/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins4/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins5/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins6/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins7/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins8/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins9/best_sol_1.8.json",
-      "config/DTSolutions/GeneralWorkflows/Strict/5Components/Ins10/best_sol_1.8.json"
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins1/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins2/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins3/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins4/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins5/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins6/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins7/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins8/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins9/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/5Components/Ins10/best_sol_1.8.json"
+    ],
+
+    "10Components": [
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins1/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins2/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins3/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins4/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins5/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins6/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins7/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins8/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins9/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/10Components/Ins10/best_sol_1.8.json"
+    ],
+
+    "15Components": [
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins1/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins2/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins3/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins4/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins5/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins6/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins7/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins8/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins9/best_sol_1.8.json",
+      "config/DTSolutions/GeneralWorkflows/Light/15Components/Ins10/best_sol_1.8.json"
     ]
   },
 
-  "EnergyCostPct" : 0.2,
+  "ConstraintsType" : "Light",
+
+  "EnergyCostPct" : 0.1,
 
   "Algorithm" : {
     "RG_n_iterations" : 10000,

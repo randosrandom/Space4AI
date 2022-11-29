@@ -183,7 +183,6 @@ main(int argc, char** argv)
     std::vector<std::vector<std::string>> vm_names_by_lambda(lambda_vec.size());
     std::vector<std::vector<std::string>> faas_names_by_lambda(lambda_vec.size());
 
-
     std::vector<double> ts(lambda_vec.size(), 0.0);
 
     const std::string system_config_file = basic_config.at("ConfigFiles")[i].get<std::string>();
@@ -191,6 +190,12 @@ main(int argc, char** argv)
 
     sp::System init_system;
     init_system.read_configuration_file(system_config_file, lambda_vec[0]);
+
+    const auto& gc = init_system.get_system_data().get_global_constraints();
+    const auto& lc = init_system.get_system_data().get_local_constraints();
+
+    std::vector<std::vector<sp::TimeType>> path_resp_times(gc.size(), std::vector<sp::TimeType>(lambda_vec.size(), 0));
+    std::vector<sp::TimeType> p4_resp_time(lambda_vec.size(), 0);
 
     sp::Solution initial_deployment(init_system);
     initial_deployment.read_solution_from_file(solution_config_file, init_system);
@@ -211,6 +216,17 @@ main(int argc, char** argv)
 
     std::tie(edge_names_by_lambda.front(), vm_names_by_lambda.front(), faas_names_by_lambda.front()) =
       get_res_names(initial_deployment, init_system);
+
+    {
+      const auto& comp_perfs = initial_deployment.get_time_perfs().get_comp_perfs();
+      const auto& path_perfs = initial_deployment.get_time_perfs().get_path_perfs();
+
+      for(size_t path_idx=0; path_idx<path_perfs.size(); ++path_idx)
+      {
+        path_resp_times[path_idx][0] = path_perfs[path_idx];
+      }
+      p4_resp_time[0] = comp_perfs.back();
+    }
 
     sp::Solution curr_rt_sol(initial_deployment);
 
@@ -256,13 +272,22 @@ main(int argc, char** argv)
 
       std::tie(edge_names_by_lambda[j], vm_names_by_lambda[j], faas_names_by_lambda[j]) =
         get_res_names(curr_rt_sol, system);
+
+      const auto& comp_perfs = curr_rt_sol.get_time_perfs().get_comp_perfs();
+      const auto& path_perfs = curr_rt_sol.get_time_perfs().get_path_perfs();
+
+      for(size_t path_idx=0; path_idx<path_perfs.size(); ++path_idx)
+      {
+        path_resp_times[path_idx][j] = path_perfs[path_idx];
+      }
+      p4_resp_time[j] = comp_perfs.back();
     }
 
     nl::json output_json;
     output_json["Costs"] = costs_by_lambda;
     output_json["FractionCostByRes"]["Edge"] = edge_cost_by_lambda;
     output_json["FractionCostByRes"]["VM"] = vm_cost_by_lambda;
-    output_json["FractionCostByRes"]["Faas"] = faas_cost_by_lambda;
+    output_json["FractionCostByRes"]["FaaS"] = faas_cost_by_lambda;
     output_json["Timings"] = ts;
 
     output_json["NumberActiveResources"]["Edge"] = num_edge_by_lambda;
@@ -272,6 +297,14 @@ main(int argc, char** argv)
     output_json["Names"]["Edge"] = edge_names_by_lambda;
     output_json["Names"]["VM"] = vm_names_by_lambda;
     output_json["Names"]["FaaS"] = faas_names_by_lambda;
+
+    for(size_t path_idx=0; path_idx<gc.size(); ++path_idx)
+    {
+      output_json["GlobalConstraints"][gc[path_idx].get_path_name()]["response_time"] = path_resp_times[path_idx];
+      output_json["GlobalConstraints"][gc[path_idx].get_path_name()]["threshold"] = gc[path_idx].get_max_res_time();
+    }
+    output_json["GlobalConstraints"]["p4"]["response_time"] = p4_resp_time;
+    output_json["GlobalConstraints"]["p4"]["threshold"] = lc.back().get_max_res_time();
 
 
     std::string suffix_sol = system_config_file;
