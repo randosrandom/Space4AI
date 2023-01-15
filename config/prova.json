@@ -10,7 +10,7 @@
     "LS_n_iterations" : 1666,
     "RG_max_num_sols" : 10,
     "LS_max_num_sols" : 1,
-    "reproducibility" : false
+    "reproducibility" : true
   },
 
   "Logger" : {

@@ -78,6 +78,7 @@ RandomGreedy::random_greedy(
         }
         sol.objective_function(system);
         sol.set_selected_resources(system);
+        #warning Was it better to compute the cost afterwards?
         MY_PRAGMA(omp critical)
         elite.add(std::move(sol));
       }
