@@ -47,8 +47,6 @@ main(int argc, char** argv)
       "Error in configuration input file: *ConfigFiles* dimension does not match"
       " *OutputFilesDT* dimension. If no DT solution is present please use the dt_solver");
   }
-  // initialize pybind11
-  pybind11::scoped_interpreter guard{};
 
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {

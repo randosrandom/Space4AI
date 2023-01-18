@@ -66,9 +66,6 @@ main(int argc, char** argv)
   Logger::EnableTerminalOutput(basic_config.at("Logger").at("terminal_stream").get<bool>());
   const bool enable_file_output = basic_config.at("Logger").at("file_stream").get<bool>();
 
-  // initialize pybind11
-  pybind11::scoped_interpreter guard{};
-
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     sp::System system;

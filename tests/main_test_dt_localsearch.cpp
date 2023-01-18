@@ -33,9 +33,6 @@ main(int argc, char** argv)
   const size_t max_num_sols = basic_config.at("Algorithm").at("max_num_sols").get<size_t>();
   const bool reproducibility = basic_config.at("Algorithm").at("reproducibility").get<bool>();
 
-  // initialize pybind11
-  pybind11::scoped_interpreter guard{};
-
   for(size_t i=0; i < basic_config.at("ConfigFiles").size(); ++i)
   {
     std::cout << std::endl;

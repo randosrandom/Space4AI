@@ -34,8 +34,10 @@ cmake_minimum_required(VERSION 3.16.3)
 
 project(DesignTime_PACS VERSION 1.0 LANGUAGES CXX)
 
-find_package(pybind11 REQUIRED)
-include_directories(${pybind11_INCLUDE_DIRS})
+include(FetchContent)
+FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
+                         GIT_TAG 871ed52d350214a034f6ef8a3b8f51c5ce1bd400)
+FetchContent_MakeAvailable(cpr)
 
 if(PARALLELIZATION)
 	find_package(OpenMP REQUIRED)
@@ -50,6 +52,7 @@ add_subdirectory(src)
 add_subdirectory(apps)
 
 include(CTest)
+enable_testing() # Probablu BUILD_TESTING is deactivated by FETCH content ...
 add_subdirectory(tests)
 
 # Create Symlink to config folders (think if it is best to have hard copy ...)

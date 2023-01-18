@@ -177,9 +177,6 @@ main(int argc, char** argv)
     }
   }
 
-  // initialize pybind11
-  pybind11::scoped_interpreter guard{};
-
   Timings::Chrono my_chrono;
   for(const auto& [scenario_name, instances]: basic_config.at("ConfigFiles").items())
   {

@@ -20,41 +20,28 @@ Copyright 2021 AI-SPRINT
 * \brief Defines the classes that provide the interface between the Performance
 *        Models (C++) and the (Python) functions.
 *
-* C++/Python interface is provided by pybind11. For efficiency classes are implemented
-* through the Meyer's singleton pattern.
+* C++/Python interface is provided by a Web Server implemented with the Gunicorn WSGI.
+* The communication between the library and the server is provided by the CPR library.
 *
 * \author Randeep Singh
-* \author Giulia Mazzilli
 */
 
 #ifndef PERFORMANCEPREDICTORS_HPP_
 #define PERFORMANCEPREDICTORS_HPP_
 
-#cmakedefine PYTHONDIR "@PYTHONDIR@"
-
-#include <pybind11/embed.h>
+#cmakedefine HOST "@HOST@" // not needed: maybe pass the entrypoints and the links
 
 #include "src/TypeTraits.hpp"
 
 namespace Space4AI
 {
-namespace py = pybind11;
 
-// Disable the warning about "greater visibility" due to pybind11. In principle you can even
-// declare the class with hidden visibility, but then Doxygen can't generate
-// the documentation about it. The warning is safe (indeed only g++ complains,
-// clang++ not), so we can disable it.
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wattributes"
-
-/** Class to store the predictor from the paclstk package used for FaaS.
-*
-*   It embeds the python interpreter. The class is created following the Meyer's
-*   Singleton pattern.
-*/
-class /*__attribute__((__visibility__("hidden")))*/ Pacsltk final
+class Pacsltk final
 {
   public:
+
+    /** Default constructor */
+    Pacsltk() = default;
 
     /** Instance getter */
     static
@@ -79,39 +66,10 @@ class /*__attribute__((__visibility__("hidden")))*/ Pacsltk final
       TimeType demandWarm, TimeType demandCold, TimeType idle_time_before_kill
     );
 
-    /** time_spent getter */
-    TimeType
-    get_time_spent() const { return time_spent; }
-
     Pacsltk(const Pacsltk&) = delete;
     Pacsltk& operator=(const Pacsltk&) = delete;
 
-  private:
-
-#ifndef PYTHONDIR
-    static_assert(false, "From src/Performance/PerfromancePredictors.hpp.in: @PYTHONDIR@ path not defined: Please check your definition");
-#endif
-    Pacsltk(): pacsltk_predictor((PythonDirConfigure(PYTHONDIR), py::module_::import("PACSLTK").attr("predictor"))) {};
-
-    void
-    PythonDirConfigure(const std::string& path)
-    {
-      pybind11::module sys = pybind11::module::import("sys");
-      pybind11::cast<pybind11::list>(sys.attr("path")).append(path); // for ML-Library
-    }
-
-  private:
-    /** python object "storing" the predictor get_sls_warm_count_dist from
-    the pacsltk library */
-    const py::object pacsltk_predictor;
-
-    /** Total time spent in calling the python script */
-    inline
-    static
-    TimeType time_spent = 0;
 };
-
-#pragma GCC diagnostic pop
 
 } //namespace Space4AI
 

@@ -1,2 +1,5 @@
-Dockerfile
-build/
+*build*
+*WebServer*
+*pycache*
+*.git*
+*.gitignore*

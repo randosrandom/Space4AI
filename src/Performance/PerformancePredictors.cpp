@@ -20,24 +20,47 @@ Copyright 2021 AI-SPRINT
 * \brief definition of the methods of the class Pacsltk
 *
 * \author Randeep Singh
-* \author Giulia Mazzilli
 */
 
-#include "src/Performance/PerformancePredictors.hpp"
+#include <cpr/cpr.h>
 
 #include "external/chrono/chrono.hpp"
+#include "src/Performance/PerformancePredictors.hpp"
+#include "src/Logger.hpp"
+
 
 namespace Space4AI
 {
+
 TimeType
 Pacsltk::predict(
   LoadType part_lambda,
   TimeType demandWarm, TimeType demandCold, TimeType idle_time_before_kill
 )
 {
-  TimeType demand = pacsltk_predictor(
-      part_lambda, demandWarm, demandCold, idle_time_before_kill
-    ).cast<TimeType>();
-  return demand;
+  nlohmann::json data;
+
+  data["arrival_rate"] = part_lambda;
+  data["warm_service_time"] = demandWarm;
+  data["cold_service_time"] = demandCold;
+  data["idle_time_before_kill"] = idle_time_before_kill;
+ 
+  std::string url = HOST;
+  url += "/pacsltk";
+
+  cpr::Response r = cpr::Post(
+    cpr::Url{url},
+    cpr::Body{nlohmann::to_string(data)},
+    cpr::Header{{"Content-Type", "text/plain"}});
+
+  if(r.status_code != 200)
+  {
+    Logger::Error("Something went wrong in communication with Web Server in Pacsltk predict");
+    throw std::runtime_error("Something went wrong in communication with Web Server in Pacsltk predict");
+  }
+
+  return std::stod(r.text);
+
 }
+
 } // namespace Space4AI
